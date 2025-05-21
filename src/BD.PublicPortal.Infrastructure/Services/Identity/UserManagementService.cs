@@ -7,7 +7,7 @@ namespace BD.PublicPortal.Infrastructure.Services.Identity;
 
 public class UserManagementService(UserManager<ApplicationUser> userManager) : IUserManagementService
 {
-  public async Task<Result<string>> RegisterUserAsync(RegisterUserDto dto)
+  public async Task<Result<Guid>> RegisterUserAsync(RegisterUserDto dto)
     {
         var user = dto.ToApplicationUser();
 

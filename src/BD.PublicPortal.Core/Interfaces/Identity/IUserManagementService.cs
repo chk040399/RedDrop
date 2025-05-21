@@ -4,5 +4,5 @@ namespace BD.PublicPortal.Core.Interfaces.Identity;
 
 public interface IUserManagementService
 {
-    Task<Result<string>> RegisterUserAsync(RegisterUserDto dto);
+    Task<Result<Guid>> RegisterUserAsync(RegisterUserDto dto);
 }

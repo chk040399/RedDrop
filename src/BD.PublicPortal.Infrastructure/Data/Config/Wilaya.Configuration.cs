@@ -1,10 +1,5 @@
 ﻿#nullable disable
 
-using BD;
-
-
-#nullable disable
-
 using BD.PublicPortal.Core.Entities;
 
 namespace BD.PublicPortal.Infrastructure.Data.Config

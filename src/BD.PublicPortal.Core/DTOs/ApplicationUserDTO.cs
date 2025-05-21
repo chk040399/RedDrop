@@ -13,32 +13,32 @@ namespace BD.PublicPortal.Core.DTOs
         public ApplicationUserDTO() {
         }
 
-        public ApplicationUserDTO(string id, bool isAdmin, bool donorWantToStayAnonymous, bool donorExcludeFromPublicPortal, DonorAvailability? donorAvailability, DonorContactMethod? donorContactMethod, string donorName, DateTime donorBirthDate, BloodGroup donorBloodGroup, string donorNIN, string donorTel, string donorNotesForBTC, DateTime? donorLastDonationDate, int? communeId, List<DonorBloodTransferCenterSubscriptionsDTO> donorBloodTransferCenterSubscriptions, List<BloodDonationPledgeDTO> bloodDonationPledges, CommuneDTO commune) {
+        public ApplicationUserDTO(System.Guid id, bool isAdmin, bool donorWantToStayAnonymous, bool donorExcludeFromPublicPortal, DonorAvailability? donorAvailability, DonorContactMethod? donorContactMethod, string donorName, System.DateTime donorBirthDate, BloodGroup donorBloodGroup, string donorNIN, string donorTel, string donorNotesForBTC, System.DateTime? donorLastDonationDate, int? communeId, List<DonorBloodTransferCenterSubscriptionsDTO> donorBloodTransferCenterSubscriptions, List<BloodDonationPledgeDTO> bloodDonationPledges, CommuneDTO commune) {
 
-      Id = id;
-      IsAdmin = isAdmin;
-      DonorWantToStayAnonymous = donorWantToStayAnonymous;
-      DonorExcludeFromPublicPortal = donorExcludeFromPublicPortal;
-      DonorAvailability = donorAvailability;
-      DonorContactMethod = donorContactMethod;
-      DonorName = donorName;
-      DonorBirthDate = donorBirthDate;
-      DonorBloodGroup = donorBloodGroup;
-      DonorNIN = donorNIN;
-      DonorTel = donorTel;
-      DonorNotesForBTC = donorNotesForBTC;
-      DonorLastDonationDate = donorLastDonationDate;
-      CommuneId = communeId;
-      DonorBloodTransferCenterSubscriptions = donorBloodTransferCenterSubscriptions;
-      BloodDonationPledges = bloodDonationPledges;
-      Commune = commune;
+          this.Id = id;
+          this.IsAdmin = isAdmin;
+          this.DonorWantToStayAnonymous = donorWantToStayAnonymous;
+          this.DonorExcludeFromPublicPortal = donorExcludeFromPublicPortal;
+          this.DonorAvailability = donorAvailability;
+          this.DonorContactMethod = donorContactMethod;
+          this.DonorName = donorName;
+          this.DonorBirthDate = donorBirthDate;
+          this.DonorBloodGroup = donorBloodGroup;
+          this.DonorNIN = donorNIN;
+          this.DonorTel = donorTel;
+          this.DonorNotesForBTC = donorNotesForBTC;
+          this.DonorLastDonationDate = donorLastDonationDate;
+          this.CommuneId = communeId;
+          this.DonorBloodTransferCenterSubscriptions = donorBloodTransferCenterSubscriptions;
+          this.BloodDonationPledges = bloodDonationPledges;
+          this.Commune = commune;
         }
 
         #endregion
 
         #region Properties
 
-        public string Id { get; set; }
+        public System.Guid Id { get; set; }
 
         public bool IsAdmin { get; set; }
 
@@ -52,7 +52,7 @@ namespace BD.PublicPortal.Core.DTOs
 
         public string DonorName { get; set; }
 
-        public DateTime DonorBirthDate { get; set; }
+        public System.DateTime DonorBirthDate { get; set; }
 
         public BloodGroup DonorBloodGroup { get; set; }
 
@@ -62,7 +62,7 @@ namespace BD.PublicPortal.Core.DTOs
 
         public string DonorNotesForBTC { get; set; }
 
-        public DateTime? DonorLastDonationDate { get; set; }
+        public System.DateTime? DonorLastDonationDate { get; set; }
 
         public int? CommuneId { get; set; }
 

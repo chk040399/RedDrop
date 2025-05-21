@@ -20,7 +20,7 @@ public class Register : Endpoint<RegisterUserRequest, RegisterUserResponse>
 
     public override void Configure()
     {
-        Post("/users/register");
+        Post("/register");
         AllowAnonymous();
         Summary(s => s.Summary = "Register a new user.");
     }

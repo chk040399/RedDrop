@@ -1,5 +1,6 @@
 ﻿using BD.PublicPortal.Core.Entities;
 using BD.PublicPortal.Core.Entities.Specifications;
+using BD.SharedKernel;
 
 
 namespace BD.PublicPortal.Application.BTC;

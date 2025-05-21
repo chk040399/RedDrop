@@ -2,5 +2,5 @@
 
 public class RegisterUserResponse
 {
-    public string UserId { get; set; } = default!;
+    public Guid UserId { get; set; } = default!;
 }

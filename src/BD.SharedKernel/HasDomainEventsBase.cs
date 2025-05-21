@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Ardalis.SharedKernel;
+namespace BD.SharedKernel;
 
 public abstract class HasDomainEventsBase : IHasDomainEvents
 {

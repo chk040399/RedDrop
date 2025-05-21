@@ -13,25 +13,25 @@ namespace BD.PublicPortal.Core.DTOs
         public BloodInventoryDTO() {
         }
 
-        public BloodInventoryDTO(Guid id, Guid bloodTansfusionCenterId, BloodGroup bloodGroup, BloodDonationType bloodDonationType, int? totalQty, int? minQty, int? maxQty, BloodTansfusionCenterDTO bloodTansfusionCenter) {
+        public BloodInventoryDTO(System.Guid id, System.Guid bloodTansfusionCenterId, BloodGroup bloodGroup, BloodDonationType bloodDonationType, int? totalQty, int? minQty, int? maxQty, BloodTansfusionCenterDTO bloodTansfusionCenter) {
 
-      Id = id;
-      BloodTansfusionCenterId = bloodTansfusionCenterId;
-      BloodGroup = bloodGroup;
-      BloodDonationType = bloodDonationType;
-      TotalQty = totalQty;
-      MinQty = minQty;
-      MaxQty = maxQty;
-      BloodTansfusionCenter = bloodTansfusionCenter;
+          this.Id = id;
+          this.BloodTansfusionCenterId = bloodTansfusionCenterId;
+          this.BloodGroup = bloodGroup;
+          this.BloodDonationType = bloodDonationType;
+          this.TotalQty = totalQty;
+          this.MinQty = minQty;
+          this.MaxQty = maxQty;
+          this.BloodTansfusionCenter = bloodTansfusionCenter;
         }
 
         #endregion
 
         #region Properties
 
-        public Guid Id { get; set; }
+        public System.Guid Id { get; set; }
 
-        public Guid BloodTansfusionCenterId { get; set; }
+        public System.Guid BloodTansfusionCenterId { get; set; }
 
         public BloodGroup BloodGroup { get; set; }
 

@@ -1,4 +1,6 @@
-﻿namespace BD.PublicPortal.Application.Contributors.Create;
+﻿using BD.SharedKernel;
+
+namespace BD.PublicPortal.Application.Contributors.Create;
 
 /// <summary>
 /// Create a new Contributor.

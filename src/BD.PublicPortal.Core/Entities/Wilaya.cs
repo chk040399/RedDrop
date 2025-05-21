@@ -2,6 +2,7 @@
 
 
 using BD;
+using BD.SharedKernel;
 
 namespace BD.PublicPortal.Core.Entities
 {
@@ -9,8 +10,8 @@ namespace BD.PublicPortal.Core.Entities
 
         public Wilaya()
         {
-      BloodTansfusionCenters = new List<BloodTansfusionCenter>();
-      Communes = new List<Commune>();
+            this.BloodTansfusionCenters = new List<BloodTansfusionCenter>();
+            this.Communes = new List<Commune>();
             OnCreated();
         }
 

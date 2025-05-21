@@ -1,4 +1,6 @@
-﻿namespace BD.PublicPortal.Core.Entities.Contributors;
+﻿using BD.SharedKernel;
+
+namespace BD.PublicPortal.Core.Entities.Contributors;
 
 public class Contributor(string name) : EntityBase, IAggregateRoot
 {

@@ -1,5 +1,6 @@
 ﻿using BD.PublicPortal.Core.Entities.Contributors;
 using BD.PublicPortal.Infrastructure.Services.Contibutors;
+using BD.SharedKernel;
 
 namespace BD.PublicPortal.Application.Contributors.Update;
 

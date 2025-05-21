@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Ardalis.SharedKernel;
+namespace BD.SharedKernel;
 
 public class MediatRDomainEventDispatcher : IDomainEventDispatcher
 {
@@ -16,14 +16,14 @@ public class MediatRDomainEventDispatcher : IDomainEventDispatcher
 
   public async Task DispatchAndClearEvents(IEnumerable<IHasDomainEvents> entitiesWithEvents)
   {
-    foreach (IHasDomainEvents entity in entitiesWithEvents)
+    foreach (var entity in entitiesWithEvents)
     {
       if (entity is HasDomainEventsBase hasDomainEvents)
       {
-        DomainEventBase[] events = hasDomainEvents.DomainEvents.ToArray();
+        var events = hasDomainEvents.DomainEvents.ToArray();
         hasDomainEvents.ClearDomainEvents();
 
-        foreach (DomainEventBase domainEvent in events)
+        foreach (var domainEvent in events)
           await _mediator.Publish(domainEvent).ConfigureAwait(false);
       }
       else

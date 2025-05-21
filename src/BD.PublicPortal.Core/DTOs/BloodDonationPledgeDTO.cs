@@ -13,42 +13,42 @@ namespace BD.PublicPortal.Core.DTOs
         public BloodDonationPledgeDTO() {
         }
 
-        public BloodDonationPledgeDTO(Guid id, BloodDonationPladgeEvolutionStatus evolutionStatus, DateTime pledgeInitiatedDate, DateTime? pledgeDate, DateTime? pledgeHonoredOrCanceledDate, string pledgeNotes, string cantBeDoneReason, Guid bloodDonationRequestId, string applicationUserId, BloodDonationRequestDTO bloodDonationRequest, ApplicationUserDTO applicationUser) {
+        public BloodDonationPledgeDTO(System.Guid id, BloodDonationPladgeEvolutionStatus evolutionStatus, System.DateTime pledgeInitiatedDate, System.DateTime? pledgeDate, System.DateTime? pledgeHonoredOrCanceledDate, string pledgeNotes, string cantBeDoneReason, System.Guid bloodDonationRequestId, System.Guid applicationUserId, BloodDonationRequestDTO bloodDonationRequest, ApplicationUserDTO applicationUser) {
 
-      Id = id;
-      EvolutionStatus = evolutionStatus;
-      PledgeInitiatedDate = pledgeInitiatedDate;
-      PledgeDate = pledgeDate;
-      PledgeHonoredOrCanceledDate = pledgeHonoredOrCanceledDate;
-      PledgeNotes = pledgeNotes;
-      CantBeDoneReason = cantBeDoneReason;
-      BloodDonationRequestId = bloodDonationRequestId;
-      ApplicationUserId = applicationUserId;
-      BloodDonationRequest = bloodDonationRequest;
-      ApplicationUser = applicationUser;
+          this.Id = id;
+          this.EvolutionStatus = evolutionStatus;
+          this.PledgeInitiatedDate = pledgeInitiatedDate;
+          this.PledgeDate = pledgeDate;
+          this.PledgeHonoredOrCanceledDate = pledgeHonoredOrCanceledDate;
+          this.PledgeNotes = pledgeNotes;
+          this.CantBeDoneReason = cantBeDoneReason;
+          this.BloodDonationRequestId = bloodDonationRequestId;
+          this.ApplicationUserId = applicationUserId;
+          this.BloodDonationRequest = bloodDonationRequest;
+          this.ApplicationUser = applicationUser;
         }
 
         #endregion
 
         #region Properties
 
-        public Guid Id { get; set; }
+        public System.Guid Id { get; set; }
 
         public BloodDonationPladgeEvolutionStatus EvolutionStatus { get; set; }
 
-        public DateTime PledgeInitiatedDate { get; set; }
+        public System.DateTime PledgeInitiatedDate { get; set; }
 
-        public DateTime? PledgeDate { get; set; }
+        public System.DateTime? PledgeDate { get; set; }
 
-        public DateTime? PledgeHonoredOrCanceledDate { get; set; }
+        public System.DateTime? PledgeHonoredOrCanceledDate { get; set; }
 
         public string PledgeNotes { get; set; }
 
         public string CantBeDoneReason { get; set; }
 
-        public Guid BloodDonationRequestId { get; set; }
+        public System.Guid BloodDonationRequestId { get; set; }
 
-        public string ApplicationUserId { get; set; }
+        public System.Guid ApplicationUserId { get; set; }
 
         #endregion
 

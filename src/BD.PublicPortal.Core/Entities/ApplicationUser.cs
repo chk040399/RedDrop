@@ -4,15 +4,16 @@
 
 using BD;
 using BD.PublicPortal.Core.Entities.Enums;
+using BD.SharedKernel;
 
-namespace BD.PublicPortal.Core.Entities;
-
-    public partial class ApplicationUser : IdentityUser<string>, IAggregateRoot {
+namespace BD.PublicPortal.Core.Entities
+{
+    public partial class ApplicationUser : IdentityUser<Guid>, IAggregateRoot {
 
         public ApplicationUser()
         {
-    DonorBloodTransferCenterSubscriptions = new List<DonorBloodTransferCenterSubscriptions>();
-    BloodDonationPledges = new List<BloodDonationPledge>();
+            this.DonorBloodTransferCenterSubscriptions = new List<DonorBloodTransferCenterSubscriptions>();
+            this.BloodDonationPledges = new List<BloodDonationPledge>();
             OnCreated();
         }
 
@@ -56,3 +57,5 @@ namespace BD.PublicPortal.Core.Entities;
 
         #endregion
     }
+
+}

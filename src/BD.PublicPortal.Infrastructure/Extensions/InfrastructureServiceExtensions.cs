@@ -4,9 +4,10 @@ using BD.PublicPortal.Core.Interfaces.Contributors;
 using BD.PublicPortal.Core.Interfaces.Identity;
 using BD.PublicPortal.Core.Entities;
 using BD.PublicPortal.Infrastructure.Services.Identity;
-using BD.PublicPortal.Infrastructure.Data.Queries;
 using BD.PublicPortal.Infrastructure.Data;
 using BD.PublicPortal.Infrastructure.Services.Contibutors;
+using BD.SharedKernel;
+using BD.PublicPortal.Infrastructure.Data.Services;
 
 
 namespace BD.PublicPortal.Infrastructure.Extensions;

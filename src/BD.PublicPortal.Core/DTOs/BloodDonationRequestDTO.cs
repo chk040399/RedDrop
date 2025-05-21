@@ -13,28 +13,28 @@ namespace BD.PublicPortal.Core.DTOs
         public BloodDonationRequestDTO() {
         }
 
-        public BloodDonationRequestDTO(Guid id, BloodDonationRequestEvolutionStatus evolutionStatus, BloodDonationType donationType, BloodGroup bloodGroup, int requestedQty, DateTime requestDate, DateTime? requestDueDate, BloodDonationRequestPriority priority, string moreDetails, string serviceName, Guid bloodTansfusionCenterId, List<BloodDonationPledgeDTO> bloodDonationPledges, BloodTansfusionCenterDTO bloodTansfusionCenter) {
+        public BloodDonationRequestDTO(System.Guid id, BloodDonationRequestEvolutionStatus evolutionStatus, BloodDonationType donationType, BloodGroup bloodGroup, int requestedQty, System.DateTime requestDate, System.DateTime? requestDueDate, BloodDonationRequestPriority priority, string moreDetails, string serviceName, System.Guid bloodTansfusionCenterId, List<BloodDonationPledgeDTO> bloodDonationPledges, BloodTansfusionCenterDTO bloodTansfusionCenter) {
 
-      Id = id;
-      EvolutionStatus = evolutionStatus;
-      DonationType = donationType;
-      BloodGroup = bloodGroup;
-      RequestedQty = requestedQty;
-      RequestDate = requestDate;
-      RequestDueDate = requestDueDate;
-      Priority = priority;
-      MoreDetails = moreDetails;
-      ServiceName = serviceName;
-      BloodTansfusionCenterId = bloodTansfusionCenterId;
-      BloodDonationPledges = bloodDonationPledges;
-      BloodTansfusionCenter = bloodTansfusionCenter;
+          this.Id = id;
+          this.EvolutionStatus = evolutionStatus;
+          this.DonationType = donationType;
+          this.BloodGroup = bloodGroup;
+          this.RequestedQty = requestedQty;
+          this.RequestDate = requestDate;
+          this.RequestDueDate = requestDueDate;
+          this.Priority = priority;
+          this.MoreDetails = moreDetails;
+          this.ServiceName = serviceName;
+          this.BloodTansfusionCenterId = bloodTansfusionCenterId;
+          this.BloodDonationPledges = bloodDonationPledges;
+          this.BloodTansfusionCenter = bloodTansfusionCenter;
         }
 
         #endregion
 
         #region Properties
 
-        public Guid Id { get; set; }
+        public System.Guid Id { get; set; }
 
         public BloodDonationRequestEvolutionStatus EvolutionStatus { get; set; }
 
@@ -44,9 +44,9 @@ namespace BD.PublicPortal.Core.DTOs
 
         public int RequestedQty { get; set; }
 
-        public DateTime RequestDate { get; set; }
+        public System.DateTime RequestDate { get; set; }
 
-        public DateTime? RequestDueDate { get; set; }
+        public System.DateTime? RequestDueDate { get; set; }
 
         public BloodDonationRequestPriority Priority { get; set; }
 
@@ -54,7 +54,7 @@ namespace BD.PublicPortal.Core.DTOs
 
         public string ServiceName { get; set; }
 
-        public Guid BloodTansfusionCenterId { get; set; }
+        public System.Guid BloodTansfusionCenterId { get; set; }
 
         #endregion
 

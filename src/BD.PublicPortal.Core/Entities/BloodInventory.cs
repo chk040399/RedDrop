@@ -2,6 +2,7 @@
 
 using BD;
 using BD.PublicPortal.Core.Entities.Enums;
+using BD.SharedKernel;
 
 namespace BD.PublicPortal.Core.Entities
 {

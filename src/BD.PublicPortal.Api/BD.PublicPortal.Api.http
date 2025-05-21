@@ -52,10 +52,12 @@ DELETE {{host}}:{{port}}/Contributors/{{id_to_delete}}
 GET {{host}}:{{port}}/Wilayas
 
 
+###
+GET {{host}}:{{port}}/BTC/16
 
 
 ### Register a new user
-POST {{host}}:{{port}}/users/register
+POST {{host}}:{{port}}/register
 Content-Type: application/json
 
 {
@@ -66,13 +68,7 @@ Content-Type: application/json
   "lastName": "User",
   "phoneNumber": ""
 }
-###
-POST {{host}}:{{port}}/auth/register
-Content-Type: application/json
-{
-  "email": "cherchali@some.com",
-  "password": "testT1254@"
-}
+
 ###
 POST {{host}}:{{port}}/auth/login
 Content-Type: application/json
@@ -86,12 +82,4 @@ Content-Type: application/json
 GET {{host}}:{{port}}/auth/manage/info
 Authorization: Bearer {{token}}
 
-
-
-###
-GET {{host}}:{{port}}/Wilayas
-
-
-###
-GET {{host}}:{{port}}/BTC/16
 

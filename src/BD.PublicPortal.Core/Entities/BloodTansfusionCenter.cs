@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using BD;
+using BD.SharedKernel;
 
 namespace BD.PublicPortal.Core.Entities
 {
@@ -8,9 +9,9 @@ namespace BD.PublicPortal.Core.Entities
 
         public BloodTansfusionCenter()
         {
-      DonorBloodTransferCenterSubscriptions = new List<DonorBloodTransferCenterSubscriptions>();
-      BloodDonationRequests = new List<BloodDonationRequest>();
-      BloodInventories = new List<BloodInventory>();
+            this.DonorBloodTransferCenterSubscriptions = new List<DonorBloodTransferCenterSubscriptions>();
+            this.BloodDonationRequests = new List<BloodDonationRequest>();
+            this.BloodInventories = new List<BloodInventory>();
             OnCreated();
         }
 

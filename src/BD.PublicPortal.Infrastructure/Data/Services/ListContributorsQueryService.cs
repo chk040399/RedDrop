@@ -1,6 +1,6 @@
 ﻿using BD.PublicPortal.Infrastructure.Services.Contibutors;
 
-namespace BD.PublicPortal.Infrastructure.Data.Queries;
+namespace BD.PublicPortal.Infrastructure.Data.Services;
 
 public class ListContributorsQueryService(AppDbContext _db) : IListContributorsQueryService
 {

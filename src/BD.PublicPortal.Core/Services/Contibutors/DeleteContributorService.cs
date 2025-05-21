@@ -1,6 +1,7 @@
 ﻿using BD.PublicPortal.Core.Entities.Contributors;
 using BD.PublicPortal.Core.Entities.Contributors.Events;
 using BD.PublicPortal.Core.Interfaces.Contributors;
+using BD.SharedKernel;
 
 
 

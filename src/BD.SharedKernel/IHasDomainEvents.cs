@@ -1,4 +1,4 @@
-﻿namespace Ardalis.SharedKernel;
+﻿namespace BD.SharedKernel;
 
 public interface IHasDomainEvents
 {

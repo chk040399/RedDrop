@@ -1,4 +1,6 @@
-﻿namespace BD.PublicPortal.Application.Wilayas;
+﻿using BD.SharedKernel;
+
+namespace BD.PublicPortal.Application.Wilayas;
 
 
 

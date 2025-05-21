@@ -2,6 +2,7 @@
 
 
 using BD;
+using BD.SharedKernel;
 
 namespace BD.PublicPortal.Core.Entities
 {
@@ -15,7 +16,7 @@ namespace BD.PublicPortal.Core.Entities
 
         public Guid BloodTansfusionCenterId { get; set; }
 
-        public string ApplicationUserId { get; set; }
+        public Guid ApplicationUserId { get; set; }
 
         public virtual BloodTansfusionCenter BloodTansfusionCenter { get; set; }
 

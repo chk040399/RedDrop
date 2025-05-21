@@ -2,6 +2,7 @@
 using BD.PublicPortal.Core.Entities.Contributors;
 using BD.PublicPortal.Core.Entities.Contributors.Specifications;
 using BD.PublicPortal.Infrastructure.Services.Contibutors;
+using BD.SharedKernel;
 
 
 namespace BD.PublicPortal.Application.Contributors.Get;

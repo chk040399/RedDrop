@@ -1,4 +1,6 @@
-﻿namespace BD.PublicPortal.Core.Entities.Contributors.Events;
+﻿using BD.SharedKernel;
+
+namespace BD.PublicPortal.Core.Entities.Contributors.Events;
 
 /// <summary>
 /// A domain event that is dispatched whenever a contributor is deleted.

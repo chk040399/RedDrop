@@ -1,4 +1,5 @@
 ﻿using BD.PublicPortal.Core.Entities.Contributors;
+using BD.SharedKernel;
 
 namespace BD.PublicPortal.Application.Contributors.Create;
 

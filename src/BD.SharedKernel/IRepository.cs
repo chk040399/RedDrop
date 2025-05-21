@@ -1,6 +1,6 @@
 ﻿using Ardalis.Specification;
 
-namespace Ardalis.SharedKernel;
+namespace BD.SharedKernel;
 
 /// <summary>
 /// An abstraction for persistence, based on Ardalis.Specification

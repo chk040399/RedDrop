@@ -2,6 +2,7 @@
 
 using BD;
 using BD.PublicPortal.Core.Entities.Enums;
+using BD.SharedKernel;
 
 namespace BD.PublicPortal.Core.Entities
 {
@@ -27,7 +28,7 @@ namespace BD.PublicPortal.Core.Entities
 
         public Guid BloodDonationRequestId { get; set; }
 
-        public string ApplicationUserId { get; set; }
+        public Guid ApplicationUserId { get; set; }
 
         public virtual BloodDonationRequest BloodDonationRequest { get; set; }
 

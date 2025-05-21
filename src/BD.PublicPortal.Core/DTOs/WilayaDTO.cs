@@ -14,10 +14,10 @@ namespace BD.PublicPortal.Core.DTOs
 
         public WilayaDTO(int id, string nom, List<BloodTansfusionCenterDTO> bloodTansfusionCenters, List<CommuneDTO> communes) {
 
-      Id = id;
-      Nom = nom;
-      BloodTansfusionCenters = bloodTansfusionCenters;
-      Communes = communes;
+          this.Id = id;
+          this.Nom = nom;
+          this.BloodTansfusionCenters = bloodTansfusionCenters;
+          this.Communes = communes;
         }
 
         #endregion

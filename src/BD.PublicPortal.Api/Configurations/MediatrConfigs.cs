@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Ardalis.SharedKernel;
+using BD.SharedKernel;
 
 
 public static class MediatrConfigs

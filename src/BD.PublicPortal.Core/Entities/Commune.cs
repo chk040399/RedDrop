@@ -2,6 +2,7 @@
 
 
 using BD;
+using BD.SharedKernel;
 
 namespace BD.PublicPortal.Core.Entities
 {
@@ -9,7 +10,7 @@ namespace BD.PublicPortal.Core.Entities
 
         public Commune()
         {
-      ApplicationUsers = new List<ApplicationUser>();
+            this.ApplicationUsers = new List<ApplicationUser>();
             OnCreated();
         }
 

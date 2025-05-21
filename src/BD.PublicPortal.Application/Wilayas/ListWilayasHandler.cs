@@ -1,4 +1,5 @@
 ﻿using BD.PublicPortal.Core.Entities;
+using BD.SharedKernel;
 
 
 namespace BD.PublicPortal.Application.Wilayas;

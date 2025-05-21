@@ -2,6 +2,7 @@
 
 using BD;
 using BD.PublicPortal.Core.Entities.Enums;
+using BD.SharedKernel;
 
 namespace BD.PublicPortal.Core.Entities
 {
@@ -9,7 +10,7 @@ namespace BD.PublicPortal.Core.Entities
 
         public BloodDonationRequest()
         {
-      BloodDonationPledges = new List<BloodDonationPledge>();
+            this.BloodDonationPledges = new List<BloodDonationPledge>();
             OnCreated();
         }
 

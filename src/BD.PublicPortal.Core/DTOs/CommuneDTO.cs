@@ -14,11 +14,11 @@ namespace BD.PublicPortal.Core.DTOs
 
         public CommuneDTO(int id, string nom, int wilayaId, WilayaDTO wilaya, List<ApplicationUserDTO> applicationUsers) {
 
-      Id = id;
-      Nom = nom;
-      WilayaId = wilayaId;
-      Wilaya = wilaya;
-      ApplicationUsers = applicationUsers;
+          this.Id = id;
+          this.Nom = nom;
+          this.WilayaId = wilayaId;
+          this.Wilaya = wilaya;
+          this.ApplicationUsers = applicationUsers;
         }
 
         #endregion

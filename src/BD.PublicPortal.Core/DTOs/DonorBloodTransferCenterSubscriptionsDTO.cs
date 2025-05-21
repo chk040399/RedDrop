@@ -13,24 +13,24 @@ namespace BD.PublicPortal.Core.DTOs
         public DonorBloodTransferCenterSubscriptionsDTO() {
         }
 
-        public DonorBloodTransferCenterSubscriptionsDTO(Guid id, Guid bloodTansfusionCenterId, string applicationUserId, BloodTansfusionCenterDTO bloodTansfusionCenter, ApplicationUserDTO applicationUser) {
+        public DonorBloodTransferCenterSubscriptionsDTO(System.Guid id, System.Guid bloodTansfusionCenterId, System.Guid applicationUserId, BloodTansfusionCenterDTO bloodTansfusionCenter, ApplicationUserDTO applicationUser) {
 
-      Id = id;
-      BloodTansfusionCenterId = bloodTansfusionCenterId;
-      ApplicationUserId = applicationUserId;
-      BloodTansfusionCenter = bloodTansfusionCenter;
-      ApplicationUser = applicationUser;
+          this.Id = id;
+          this.BloodTansfusionCenterId = bloodTansfusionCenterId;
+          this.ApplicationUserId = applicationUserId;
+          this.BloodTansfusionCenter = bloodTansfusionCenter;
+          this.ApplicationUser = applicationUser;
         }
 
         #endregion
 
         #region Properties
 
-        public Guid Id { get; set; }
+        public System.Guid Id { get; set; }
 
-        public Guid BloodTansfusionCenterId { get; set; }
+        public System.Guid BloodTansfusionCenterId { get; set; }
 
-        public string ApplicationUserId { get; set; }
+        public System.Guid ApplicationUserId { get; set; }
 
         #endregion
 

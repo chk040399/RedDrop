@@ -1,6 +1,6 @@
 ﻿namespace BD.PublicPortal.Core.Entities;
 
-public class ApplicationRole : IdentityRole
+public class ApplicationRole : IdentityRole<Guid>
 {
-    // Add custom properties here if needed
+ 
 }

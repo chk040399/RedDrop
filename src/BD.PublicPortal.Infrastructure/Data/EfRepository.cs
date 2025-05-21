@@ -1,4 +1,6 @@
-﻿namespace BD.PublicPortal.Infrastructure.Data;
+﻿using BD.SharedKernel;
+
+namespace BD.PublicPortal.Infrastructure.Data;
 
 // inherit from Ardalis.Specification type
 public class EfRepository<T>(AppDbContext dbContext) :
