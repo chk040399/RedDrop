@@ -1,0 +1,20 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="CleanArchitecture.nuspec" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Folder Name="/src/">    
+	<Project Path="src/BD.SharedKernel/BD.SharedKernel.csproj" />
+    <Project Path="src/BD.PublicPortal.Core/BD.PublicPortal.Core.csproj" />
+    <Project Path="src/BD.PublicPortal.Infrastructure/BD.PublicPortal.Infrastructure.csproj" />    
+    <Project Path="src/BD.PublicPortal.Application/BD.PublicPortal.Application.csproj" />
+    <Project Path="src/BD.PublicPortal.Api/BD.PublicPortal.Api.csproj" />
+  </Folder>
+</Solution>

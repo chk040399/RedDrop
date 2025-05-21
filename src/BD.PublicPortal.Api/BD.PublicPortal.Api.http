@@ -1,0 +1,97 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@host=https://localhost
+@port=57679
+
+
+// List all contributors
+GET {{host}}:{{port}}/Contributors
+
+###
+
+// Get a specific contributor
+@id_to_get=2
+GET {{host}}:{{port}}/Contributors/{{id_to_get}}
+
+
+
+###
+
+
+
+
+// Add a new contributor
+POST {{host}}:{{port}}/Contributors
+Content-Type: application/json
+
+{
+  "name": "John Doe 2",
+  "email": "test@test.com",
+  "phoneNumber": "1234567890"
+}
+
+###
+
+// Update a contributor
+@id_to_update=3
+PUT {{host}}:{{port}}/Contributors/{{id_to_update}}
+Content-Type: application/json
+
+{
+  "id": {{id_to_update}},
+  "name": "ardalis2"
+}
+
+###
+
+// Delete a contributor
+@id_to_delete=6
+DELETE {{host}}:{{port}}/Contributors/{{id_to_delete}}
+
+
+###
+GET {{host}}:{{port}}/Wilayas
+
+
+
+
+### Register a new user
+POST {{host}}:{{port}}/users/register
+Content-Type: application/json
+
+{
+  "email": "chk040399@gmail.com",
+  "password": "123456789aaa@RRR",
+  "userName": "chk040326",
+  "firstName": "Test",
+  "lastName": "User",
+  "phoneNumber": ""
+}
+###
+POST {{host}}:{{port}}/auth/register
+Content-Type: application/json
+{
+  "email": "cherchali@some.com",
+  "password": "testT1254@"
+}
+###
+POST {{host}}:{{port}}/auth/login
+Content-Type: application/json
+{
+  "email": "cherchali@some.com",
+  "password": "testT1254@"
+}
+
+###
+@token = CfDJ8GBhgrZxL9dJtjq0u4tInOPCcRPnpOyvIrTUAmK0HIKoRQH3Yc8n9LPqL62ZNGJQeHi1XdN0LkBt8rGVspkzKBhaCmCeuEClo7d_hKVZynQgu8hRh2A9yuN6fB0RJittsINRTTk6WnAMTPmhlXgR1CYfmGfybpobVLjLI9O9xzsM-pmgDHjwg6zYic_OYh9hduGYAHTI8CaVxfuiOAqredoDYK1_qsVQK8jEF5mpp5DHJfmWxNZug_dzKK_Na78sNnpzjdLYwJ7GWgg1YoXKFjwo6p25w4JoHA4R0Oj3IuxBcRtrIXBVhEubIALemzSo6hw1S-Q1Z2YvHd3exZYk3q-GA5YIOiOT-tZXLsZD632A5PJvyHCDdXLHd3obTsmNfFww-qxl-GUV1HIPVZnhmHEUEfV6UnXTGu7d-vE7TjN6RsoR3_FROZoUncj06Sa9AX5ptKmjxJB1LIDCJtXqNhFGkB_dAPiKy-m7hgtsVeQl934mJkuF3KpSPXtp83mMc_7yUBP876H6HSmY63n6aMyboPme1P_CM8JI2RzZIKNRRMBQMJ6CbnYXin7vvvBMZTzYTwiP6tijX8OUFfU2oUxSAep-lKgqQi-oOK6r5yutniEIFKkh6Res3kHDMAZtTRbBe5sYzpSue7PCTL6IlMOnbvu5LkwDS4oILgTpEsiLWY7sSlhcDnHplIdi3n2tey7SjHbMnsb8v7W-QxDlDnE
+GET {{host}}:{{port}}/auth/manage/info
+Authorization: Bearer {{token}}
+
+
+
+###
+GET {{host}}:{{port}}/Wilayas
+
+
+###
+GET {{host}}:{{port}}/BTC/16
+
