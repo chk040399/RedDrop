@@ -23,6 +23,7 @@ namespace BD.PublicPortal.Core.DTOs
 
             // Properties
             target.Id = source.Id;
+            target.CorrelationId = source.CorrelationId;
             target.IsAdmin = source.IsAdmin;
             target.DonorWantToStayAnonymous = source.DonorWantToStayAnonymous;
             target.DonorExcludeFromPublicPortal = source.DonorExcludeFromPublicPortal;
@@ -59,6 +60,7 @@ namespace BD.PublicPortal.Core.DTOs
 
             // Properties
             target.Id = source.Id;
+            target.CorrelationId = source.CorrelationId;
             target.IsAdmin = source.IsAdmin;
             target.DonorWantToStayAnonymous = source.DonorWantToStayAnonymous;
             target.DonorExcludeFromPublicPortal = source.DonorExcludeFromPublicPortal;

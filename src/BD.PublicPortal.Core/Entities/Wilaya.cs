@@ -16,7 +16,7 @@ namespace BD.PublicPortal.Core.Entities
         }
 
 
-        public string Nom { get; set; }
+        public string Name { get; set; }
 
         public virtual IList<BloodTansfusionCenter> BloodTansfusionCenters { get; set; }
 

@@ -15,7 +15,7 @@ namespace BD.PublicPortal.Core.Entities
         }
 
 
-        public string Nom { get; set; }
+        public string Name { get; set; }
 
         public int WilayaId { get; set; }
 

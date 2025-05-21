@@ -17,6 +17,7 @@ namespace BD.PublicPortal.Infrastructure.Data.Config
         {
 
 
+            builder.Property(x => x.CorrelationId).HasColumnName(@"CorrelationId").ValueGeneratedNever();
             builder.Property(x => x.IsAdmin).HasColumnName(@"IsAdmin").IsRequired().ValueGeneratedNever();
             builder.Property(x => x.DonorWantToStayAnonymous).HasColumnName(@"DonorWantToStayAnonymous").IsRequired().ValueGeneratedNever();
             builder.Property(x => x.DonorExcludeFromPublicPortal).HasColumnName(@"DonorExcludeFromPublicPortal").IsRequired().ValueGeneratedNever();
@@ -35,7 +36,8 @@ namespace BD.PublicPortal.Infrastructure.Data.Config
             builder.HasMany(x => x.BloodDonationPledges).WithOne(op => op.ApplicationUser).HasForeignKey(@"ApplicationUserId").IsRequired(true);
             builder.HasOne(x => x.Commune).WithMany(op => op.ApplicationUsers).HasForeignKey(@"CommuneId").IsRequired(false);
 
-            CustomizeConfiguration(builder);
+
+      CustomizeConfiguration(builder);
         }
 
         #region Partial Methods

@@ -17,7 +17,7 @@ namespace BD.PublicPortal.Infrastructure.Data.Config
         {
             builder.ToTable(@"Communes");
             builder.Property(x => x.Id).HasColumnName(@"Id").IsRequired().ValueGeneratedNever();
-            builder.Property(x => x.Nom).HasColumnName(@"Nom").IsRequired().ValueGeneratedNever();
+            builder.Property(x => x.Name).HasColumnName(@"Name").IsRequired().ValueGeneratedNever();
             builder.Property(x => x.WilayaId).HasColumnName(@"WilayaId").ValueGeneratedNever();
             builder.HasKey(@"Id");
             builder.HasOne(x => x.Wilaya).WithMany(op => op.Communes).HasForeignKey(@"WilayaId").IsRequired(true);

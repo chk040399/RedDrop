@@ -15,7 +15,7 @@ namespace BD.PublicPortal.Core.Entities
         }
 
 
-        public BloodDonationRequestEvolutionStatus EvolutionStatus { get; set; }
+        public BloodDonationRequestEvolutionStatus? EvolutionStatus { get; set; }
 
         public BloodDonationType DonationType { get; set; }
 

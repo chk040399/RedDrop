@@ -23,7 +23,7 @@ namespace BD.PublicPortal.Core.DTOs
 
             // Properties
             target.Id = source.Id;
-            target.Nom = source.Nom;
+            target.Name = source.Name;
 
             // Navigation Properties
             if (level > 0) {
@@ -46,7 +46,7 @@ namespace BD.PublicPortal.Core.DTOs
 
             // Properties
             target.Id = source.Id;
-            target.Nom = source.Nom;
+            target.Name = source.Name;
 
             // User-defined partial method
             OnEntityCreating(source, target);

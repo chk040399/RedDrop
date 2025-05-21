@@ -13,9 +13,10 @@ namespace BD.PublicPortal.Core.DTOs
         public ApplicationUserDTO() {
         }
 
-        public ApplicationUserDTO(System.Guid id, bool isAdmin, bool donorWantToStayAnonymous, bool donorExcludeFromPublicPortal, DonorAvailability? donorAvailability, DonorContactMethod? donorContactMethod, string donorName, System.DateTime donorBirthDate, BloodGroup donorBloodGroup, string donorNIN, string donorTel, string donorNotesForBTC, System.DateTime? donorLastDonationDate, int? communeId, List<DonorBloodTransferCenterSubscriptionsDTO> donorBloodTransferCenterSubscriptions, List<BloodDonationPledgeDTO> bloodDonationPledges, CommuneDTO commune) {
+        public ApplicationUserDTO(System.Guid id, System.Guid? correlationId, bool isAdmin, bool donorWantToStayAnonymous, bool donorExcludeFromPublicPortal, DonorAvailability? donorAvailability, DonorContactMethod? donorContactMethod, string donorName, System.DateTime donorBirthDate, BloodGroup donorBloodGroup, string donorNIN, string donorTel, string donorNotesForBTC, System.DateTime? donorLastDonationDate, int? communeId, List<DonorBloodTransferCenterSubscriptionsDTO> donorBloodTransferCenterSubscriptions, List<BloodDonationPledgeDTO> bloodDonationPledges, CommuneDTO commune) {
 
           this.Id = id;
+          this.CorrelationId = correlationId;
           this.IsAdmin = isAdmin;
           this.DonorWantToStayAnonymous = donorWantToStayAnonymous;
           this.DonorExcludeFromPublicPortal = donorExcludeFromPublicPortal;
@@ -39,6 +40,8 @@ namespace BD.PublicPortal.Core.DTOs
         #region Properties
 
         public System.Guid Id { get; set; }
+
+        public System.Guid? CorrelationId { get; set; }
 
         public bool IsAdmin { get; set; }
 

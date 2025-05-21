@@ -12,10 +12,10 @@ namespace BD.PublicPortal.Core.DTOs
         public CommuneDTO() {
         }
 
-        public CommuneDTO(int id, string nom, int wilayaId, WilayaDTO wilaya, List<ApplicationUserDTO> applicationUsers) {
+        public CommuneDTO(int id, string name, int wilayaId, WilayaDTO wilaya, List<ApplicationUserDTO> applicationUsers) {
 
           this.Id = id;
-          this.Nom = nom;
+          this.Name = name;
           this.WilayaId = wilayaId;
           this.Wilaya = wilaya;
           this.ApplicationUsers = applicationUsers;
@@ -27,7 +27,7 @@ namespace BD.PublicPortal.Core.DTOs
 
         public int Id { get; set; }
 
-        public string Nom { get; set; }
+        public string Name { get; set; }
 
         public int WilayaId { get; set; }
 

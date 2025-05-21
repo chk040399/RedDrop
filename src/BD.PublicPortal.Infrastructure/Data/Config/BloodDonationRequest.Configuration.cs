@@ -17,7 +17,7 @@ namespace BD.PublicPortal.Infrastructure.Data.Config
         {
             builder.ToTable(@"BloodDonationRequests");
             builder.Property(x => x.Id).HasColumnName(@"Id").IsRequired().ValueGeneratedNever();
-            builder.Property(x => x.EvolutionStatus).HasColumnName(@"EvolutionStatus").IsRequired().ValueGeneratedNever();
+            builder.Property(x => x.EvolutionStatus).HasColumnName(@"EvolutionStatus").ValueGeneratedNever();
             builder.Property(x => x.DonationType).HasColumnName(@"DonationType").IsRequired().ValueGeneratedNever();
             builder.Property(x => x.BloodGroup).HasColumnName(@"BloodGroup").IsRequired().ValueGeneratedNever();
             builder.Property(x => x.RequestedQty).HasColumnName(@"RequestedQty").IsRequired().ValueGeneratedNever();

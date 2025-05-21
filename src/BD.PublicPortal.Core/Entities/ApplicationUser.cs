@@ -18,6 +18,7 @@ namespace BD.PublicPortal.Core.Entities
         }
 
 
+        public Guid? CorrelationId { get; set; }
 
         public bool IsAdmin { get; set; }
 

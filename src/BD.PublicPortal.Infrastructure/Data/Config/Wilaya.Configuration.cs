@@ -16,7 +16,7 @@ namespace BD.PublicPortal.Infrastructure.Data.Config
         {
             builder.ToTable(@"Wilayas");
             builder.Property(x => x.Id).HasColumnName(@"Id").IsRequired().ValueGeneratedNever();
-            builder.Property(x => x.Nom).HasColumnName(@"Nom").IsRequired().ValueGeneratedNever();
+            builder.Property(x => x.Name).HasColumnName(@"Name").IsRequired().ValueGeneratedNever();
             builder.HasKey(@"Id");
             builder.HasMany(x => x.BloodTansfusionCenters).WithOne(op => op.Wilaya).OnDelete(DeleteBehavior.Restrict).HasForeignKey(@"WilayaId").IsRequired(true);
             builder.HasMany(x => x.Communes).WithOne(op => op.Wilaya).HasForeignKey(@"WilayaId").IsRequired(true);

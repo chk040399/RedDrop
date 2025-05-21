@@ -23,7 +23,7 @@ namespace BD.PublicPortal.Core.DTOs
 
             // Properties
             target.Id = source.Id;
-            target.Nom = source.Nom;
+            target.Name = source.Name;
             target.WilayaId = source.WilayaId;
 
             // Navigation Properties
@@ -47,7 +47,7 @@ namespace BD.PublicPortal.Core.DTOs
 
             // Properties
             target.Id = source.Id;
-            target.Nom = source.Nom;
+            target.Name = source.Name;
             target.WilayaId = source.WilayaId;
 
             // User-defined partial method
