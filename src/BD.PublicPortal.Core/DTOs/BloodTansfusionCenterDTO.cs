@@ -12,7 +12,7 @@ namespace BD.PublicPortal.Core.DTOs
         public BloodTansfusionCenterDTO() {
         }
 
-        public BloodTansfusionCenterDTO(System.Guid id, string name, string address, string contact, string email, string tel, int wilayaId, List<DonorBloodTransferCenterSubscriptionsDTO> donorBloodTransferCenterSubscriptions, List<BloodDonationRequestDTO> bloodDonationRequests, WilayaDTO wilaya, List<BloodInventoryDTO> bloodInventories) {
+        public BloodTansfusionCenterDTO(System.Guid id, string name, string address, string contact, string email, string tel, int wilayaId, List<System.Guid> donorBloodTransferCenterSubscriptions, List<System.Guid> bloodDonationRequests) {
 
           this.Id = id;
           this.Name = name;
@@ -23,8 +23,6 @@ namespace BD.PublicPortal.Core.DTOs
           this.WilayaId = wilayaId;
           this.DonorBloodTransferCenterSubscriptions = donorBloodTransferCenterSubscriptions;
           this.BloodDonationRequests = bloodDonationRequests;
-          this.Wilaya = wilaya;
-          this.BloodInventories = bloodInventories;
         }
 
         #endregion
@@ -49,13 +47,9 @@ namespace BD.PublicPortal.Core.DTOs
 
         #region Navigation Properties
 
-        public List<DonorBloodTransferCenterSubscriptionsDTO> DonorBloodTransferCenterSubscriptions { get; set; }
+        public List<System.Guid> DonorBloodTransferCenterSubscriptions { get; set; }
 
-        public List<BloodDonationRequestDTO> BloodDonationRequests { get; set; }
-
-        public WilayaDTO Wilaya { get; set; }
-
-        public List<BloodInventoryDTO> BloodInventories { get; set; }
+        public List<System.Guid> BloodDonationRequests { get; set; }
 
         #endregion
     }

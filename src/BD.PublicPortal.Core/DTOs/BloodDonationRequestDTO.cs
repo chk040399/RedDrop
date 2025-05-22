@@ -13,7 +13,7 @@ namespace BD.PublicPortal.Core.DTOs
         public BloodDonationRequestDTO() {
         }
 
-        public BloodDonationRequestDTO(System.Guid id, BloodDonationRequestEvolutionStatus? evolutionStatus, BloodDonationType donationType, BloodGroup bloodGroup, int requestedQty, System.DateTime requestDate, System.DateTime? requestDueDate, BloodDonationRequestPriority priority, string moreDetails, string serviceName, System.Guid bloodTansfusionCenterId, List<BloodDonationPledgeDTO> bloodDonationPledges, BloodTansfusionCenterDTO bloodTansfusionCenter) {
+        public BloodDonationRequestDTO(System.Guid id, BloodDonationRequestEvolutionStatus? evolutionStatus, BloodDonationType donationType, BloodGroup bloodGroup, int requestedQty, System.DateTime requestDate, System.DateTime? requestDueDate, BloodDonationRequestPriority priority, string moreDetails, string serviceName, System.Guid bloodTansfusionCenterId, List<System.Guid> bloodDonationPledges) {
 
           this.Id = id;
           this.EvolutionStatus = evolutionStatus;
@@ -27,7 +27,6 @@ namespace BD.PublicPortal.Core.DTOs
           this.ServiceName = serviceName;
           this.BloodTansfusionCenterId = bloodTansfusionCenterId;
           this.BloodDonationPledges = bloodDonationPledges;
-          this.BloodTansfusionCenter = bloodTansfusionCenter;
         }
 
         #endregion
@@ -60,9 +59,7 @@ namespace BD.PublicPortal.Core.DTOs
 
         #region Navigation Properties
 
-        public List<BloodDonationPledgeDTO> BloodDonationPledges { get; set; }
-
-        public BloodTansfusionCenterDTO BloodTansfusionCenter { get; set; }
+        public List<System.Guid> BloodDonationPledges { get; set; }
 
         #endregion
     }

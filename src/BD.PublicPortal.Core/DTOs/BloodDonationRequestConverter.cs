@@ -36,8 +36,9 @@ namespace BD.PublicPortal.Core.DTOs
 
             // Navigation Properties
             if (level > 0) {
-              target.BloodDonationPledges = source.BloodDonationPledges.ToDtosWithRelated(level - 1);
-              target.BloodTansfusionCenter = source.BloodTansfusionCenter.ToDtoWithRelated(level - 1);
+              target.BloodDonationPledges = source.BloodDonationPledges
+                  .Select(src => src.Id)
+                  .ToList();
             }
 
             // User-defined partial method

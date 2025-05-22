@@ -32,12 +32,6 @@ namespace BD.PublicPortal.Core.DTOs
             target.BloodDonationRequestId = source.BloodDonationRequestId;
             target.ApplicationUserId = source.ApplicationUserId;
 
-            // Navigation Properties
-            if (level > 0) {
-              target.BloodDonationRequest = source.BloodDonationRequest.ToDtoWithRelated(level - 1);
-              target.ApplicationUser = source.ApplicationUser.ToDtoWithRelated(level - 1);
-            }
-
             // User-defined partial method
             OnDtoCreating(source, target);
 

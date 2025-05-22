@@ -1,7 +1,7 @@
 ﻿using Ardalis.Result;
-using BD.PublicPortal.Core.Interfaces.Identity;
 using BD.SharedKernel;
 using System.Threading;
+using BD.PublicPortal.Infrastructure.Interfaces.Identity;
 
 
 namespace BD.PublicPortal.Application.Identity.Register;

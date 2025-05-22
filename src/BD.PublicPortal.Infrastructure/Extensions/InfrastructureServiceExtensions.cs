@@ -1,10 +1,10 @@
 ﻿using BD.PublicPortal.Core;
 using BD.PublicPortal.Core.Entities;
 using BD.PublicPortal.Core.Interfaces.Contributors;
-using BD.PublicPortal.Core.Interfaces.Identity;
 using BD.PublicPortal.Core.Services.Contibutors;
 using BD.PublicPortal.Infrastructure.Data;
 using BD.PublicPortal.Infrastructure.Data.Services;
+using BD.PublicPortal.Infrastructure.Interfaces.Identity;
 using BD.PublicPortal.Infrastructure.Services.Contibutors;
 using BD.PublicPortal.Infrastructure.Services.Identity;
 using BD.SharedKernel;

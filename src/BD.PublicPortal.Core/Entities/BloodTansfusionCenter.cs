@@ -11,7 +11,6 @@ namespace BD.PublicPortal.Core.Entities
         {
             this.DonorBloodTransferCenterSubscriptions = new List<DonorBloodTransferCenterSubscriptions>();
             this.BloodDonationRequests = new List<BloodDonationRequest>();
-            this.BloodInventories = new List<BloodInventory>();
             OnCreated();
         }
 
@@ -33,8 +32,6 @@ namespace BD.PublicPortal.Core.Entities
         public virtual IList<BloodDonationRequest> BloodDonationRequests { get; set; }
 
         public virtual Wilaya Wilaya { get; set; }
-
-        public virtual IList<BloodInventory> BloodInventories { get; set; }
 
         #region Extensibility Method Definitions
 

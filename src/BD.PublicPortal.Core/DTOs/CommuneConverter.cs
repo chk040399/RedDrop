@@ -28,8 +28,9 @@ namespace BD.PublicPortal.Core.DTOs
 
             // Navigation Properties
             if (level > 0) {
-              target.Wilaya = source.Wilaya.ToDtoWithRelated(level - 1);
-              target.ApplicationUsers = source.ApplicationUsers.ToDtosWithRelated(level - 1);
+              target.ApplicationUsers = source.ApplicationUsers
+                  .Select(src => src.Id)
+                  .ToList();
             }
 
             // User-defined partial method

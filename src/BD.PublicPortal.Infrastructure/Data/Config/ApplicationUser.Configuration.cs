@@ -17,10 +17,9 @@ namespace BD.PublicPortal.Infrastructure.Data.Config
         {
 
 
-            builder.Property(x => x.CorrelationId).HasColumnName(@"CorrelationId").ValueGeneratedNever();
-            builder.Property(x => x.IsAdmin).HasColumnName(@"IsAdmin").IsRequired().ValueGeneratedNever();
-            builder.Property(x => x.DonorWantToStayAnonymous).HasColumnName(@"DonorWantToStayAnonymous").IsRequired().ValueGeneratedNever();
-            builder.Property(x => x.DonorExcludeFromPublicPortal).HasColumnName(@"DonorExcludeFromPublicPortal").IsRequired().ValueGeneratedNever();
+            builder.Property(x => x.DonorCorrelationId).HasColumnName(@"DonorCorrelationId").ValueGeneratedNever();
+            builder.Property(x => x.DonorWantToStayAnonymous).HasColumnName(@"DonorWantToStayAnonymous").ValueGeneratedNever();
+            builder.Property(x => x.DonorExcludeFromPublicPortal).HasColumnName(@"DonorExcludeFromPublicPortal").ValueGeneratedNever();
             builder.Property(x => x.DonorAvailability).HasColumnName(@"DonorAvailability").ValueGeneratedNever();
             builder.Property(x => x.DonorContactMethod).HasColumnName(@"DonorContactMethod").ValueGeneratedNever();
             builder.Property(x => x.DonorName).HasColumnName(@"DonorName").IsRequired().ValueGeneratedNever();

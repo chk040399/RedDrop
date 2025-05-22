@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 
 
-namespace BD.PublicPortal.Infrastructure.Services.Identity;
+namespace BD.PublicPortal.Infrastructure.Extensions;
 
 public static class IdentityResultExtensions
 {

@@ -48,6 +48,12 @@ Content-Type: application/json
 DELETE {{host}}:{{port}}/Contributors/{{id_to_delete}}
 
 
+
+###
+GET {{host}}:{{port}}/enums/BloodGroup,DonorAvailability,DonorContactMethod
+
+
+
 ###
 GET {{host}}:{{port}}/Wilayas
 
@@ -57,32 +63,51 @@ GET {{host}}:{{port}}/BTC/16
 
 
 ### Register a new user
-POST {{host}}:{{port}}/register
+POST {{host}}:{{port}}/auth/register2
 Content-Type: application/json
-
 {
-  "email": "chk040399@gmail.com",
-  "password": "123456789aaa@RRR",
-  "userName": "chk040326",
-  "firstName": "Test",
-  "lastName": "User",
-  "phoneNumber": ""
+  "userName": "walidozich",
+  "email": "walidozich@example.com",
+  "password": "vV@L1d@2002",
+  "confirmPassword": "vV@L1d@2002",
+  "donorWantToStayAnonymous": true,
+  "donorExcludeFromPublicPortal": false,
+  "donorAvailability": 1,
+  "donorContactMethod": 1,
+  "donorName": "CHERCHALI WALID",
+  "donorBirthDate": "2025-05-22T09:16:16.749Z",
+  "donorBloodGroup": 7,
+  "donorNIN": "123456789123456789",
+  "donorTel": "05.55.05.23.76",
+  "donorNotesForBTC": "Je suis Diabétique Type 1",
+  "donorLastDonationDate": "2025-05-22T09:16:16.749Z",
+  "communeId": 558  
+}
+
+###
+POST {{host}}:{{port}}/auth/register2
+Content-Type: application/json
+{
+  "userName": "chk",
+  "email": "walidozich@example.com",
+  "password": "vV@L1d@2002",
+  "confirmPassword": "vV@L1d@2002",
+  "donorName": "CHERCHALI KARIM",
+  "donorBirthDate": "2025-05-22T09:16:16.749Z",
+  "donorBloodGroup": 7,
+  "donorNIN": "123456789123456789"  
 }
 
 ###
 POST {{host}}:{{port}}/auth/login
 Content-Type: application/json
 {
-  "email": "cherchali@some.com",
-  "password": "testT1254@"
+  "email": "walidozich",
+  "password": "vV@L1d@2002"
 }
 
 ###
 @token = CfDJ8GBhgrZxL9dJtjq0u4tInOPCcRPnpOyvIrTUAmK0HIKoRQH3Yc8n9LPqL62ZNGJQeHi1XdN0LkBt8rGVspkzKBhaCmCeuEClo7d_hKVZynQgu8hRh2A9yuN6fB0RJittsINRTTk6WnAMTPmhlXgR1CYfmGfybpobVLjLI9O9xzsM-pmgDHjwg6zYic_OYh9hduGYAHTI8CaVxfuiOAqredoDYK1_qsVQK8jEF5mpp5DHJfmWxNZug_dzKK_Na78sNnpzjdLYwJ7GWgg1YoXKFjwo6p25w4JoHA4R0Oj3IuxBcRtrIXBVhEubIALemzSo6hw1S-Q1Z2YvHd3exZYk3q-GA5YIOiOT-tZXLsZD632A5PJvyHCDdXLHd3obTsmNfFww-qxl-GUV1HIPVZnhmHEUEfV6UnXTGu7d-vE7TjN6RsoR3_FROZoUncj06Sa9AX5ptKmjxJB1LIDCJtXqNhFGkB_dAPiKy-m7hgtsVeQl934mJkuF3KpSPXtp83mMc_7yUBP876H6HSmY63n6aMyboPme1P_CM8JI2RzZIKNRRMBQMJ6CbnYXin7vvvBMZTzYTwiP6tijX8OUFfU2oUxSAep-lKgqQi-oOK6r5yutniEIFKkh6Res3kHDMAZtTRbBe5sYzpSue7PCTL6IlMOnbvu5LkwDS4oILgTpEsiLWY7sSlhcDnHplIdi3n2tey7SjHbMnsb8v7W-QxDlDnE
 GET {{host}}:{{port}}/auth/manage/info
 Authorization: Bearer {{token}}
-
-
-###
-GET {{host}}:{{port}}/enums/BloodGroup,DonorAvailability,DonorContactMethod
 

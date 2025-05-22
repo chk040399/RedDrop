@@ -13,11 +13,9 @@ namespace BD.PublicPortal.Core.DTOs
         public ApplicationUserDTO() {
         }
 
-        public ApplicationUserDTO(System.Guid id, System.Guid? correlationId, bool isAdmin, bool donorWantToStayAnonymous, bool donorExcludeFromPublicPortal, DonorAvailability? donorAvailability, DonorContactMethod? donorContactMethod, string donorName, System.DateTime donorBirthDate, BloodGroup donorBloodGroup, string donorNIN, string donorTel, string donorNotesForBTC, System.DateTime? donorLastDonationDate, int? communeId, List<DonorBloodTransferCenterSubscriptionsDTO> donorBloodTransferCenterSubscriptions, List<BloodDonationPledgeDTO> bloodDonationPledges, CommuneDTO commune) {
+        public ApplicationUserDTO(System.Guid? donorCorrelationId, bool? donorWantToStayAnonymous, bool? donorExcludeFromPublicPortal, DonorAvailability? donorAvailability, DonorContactMethod? donorContactMethod, string donorName, System.DateTime donorBirthDate, BloodGroup donorBloodGroup, string donorNIN, string donorTel, string donorNotesForBTC, System.DateTime? donorLastDonationDate, int? communeId, List<System.Guid> donorBloodTransferCenterSubscriptions, List<System.Guid> bloodDonationPledges) {
 
-          this.Id = id;
-          this.CorrelationId = correlationId;
-          this.IsAdmin = isAdmin;
+          this.DonorCorrelationId = donorCorrelationId;
           this.DonorWantToStayAnonymous = donorWantToStayAnonymous;
           this.DonorExcludeFromPublicPortal = donorExcludeFromPublicPortal;
           this.DonorAvailability = donorAvailability;
@@ -32,22 +30,17 @@ namespace BD.PublicPortal.Core.DTOs
           this.CommuneId = communeId;
           this.DonorBloodTransferCenterSubscriptions = donorBloodTransferCenterSubscriptions;
           this.BloodDonationPledges = bloodDonationPledges;
-          this.Commune = commune;
         }
 
         #endregion
 
         #region Properties
 
-        public System.Guid Id { get; set; }
+        public System.Guid? DonorCorrelationId { get; set; }
 
-        public System.Guid? CorrelationId { get; set; }
+        public bool? DonorWantToStayAnonymous { get; set; }
 
-        public bool IsAdmin { get; set; }
-
-        public bool DonorWantToStayAnonymous { get; set; }
-
-        public bool DonorExcludeFromPublicPortal { get; set; }
+        public bool? DonorExcludeFromPublicPortal { get; set; }
 
         public DonorAvailability? DonorAvailability { get; set; }
 
@@ -73,11 +66,9 @@ namespace BD.PublicPortal.Core.DTOs
 
         #region Navigation Properties
 
-        public List<DonorBloodTransferCenterSubscriptionsDTO> DonorBloodTransferCenterSubscriptions { get; set; }
+        public List<System.Guid> DonorBloodTransferCenterSubscriptions { get; set; }
 
-        public List<BloodDonationPledgeDTO> BloodDonationPledges { get; set; }
-
-        public CommuneDTO Commune { get; set; }
+        public List<System.Guid> BloodDonationPledges { get; set; }
 
         #endregion
     }

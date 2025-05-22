@@ -12,12 +12,11 @@ namespace BD.PublicPortal.Core.DTOs
         public CommuneDTO() {
         }
 
-        public CommuneDTO(int id, string name, int wilayaId, WilayaDTO wilaya, List<ApplicationUserDTO> applicationUsers) {
+        public CommuneDTO(int id, string name, int wilayaId, List<System.Guid> applicationUsers) {
 
           this.Id = id;
           this.Name = name;
           this.WilayaId = wilayaId;
-          this.Wilaya = wilaya;
           this.ApplicationUsers = applicationUsers;
         }
 
@@ -35,9 +34,7 @@ namespace BD.PublicPortal.Core.DTOs
 
         #region Navigation Properties
 
-        public WilayaDTO Wilaya { get; set; }
-
-        public List<ApplicationUserDTO> ApplicationUsers { get; set; }
+        public List<System.Guid> ApplicationUsers { get; set; }
 
         #endregion
     }

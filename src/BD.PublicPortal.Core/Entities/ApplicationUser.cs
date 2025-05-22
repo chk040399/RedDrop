@@ -18,13 +18,12 @@ namespace BD.PublicPortal.Core.Entities
         }
 
 
-        public Guid? CorrelationId { get; set; }
 
-        public bool IsAdmin { get; set; }
+        public Guid? DonorCorrelationId { get; set; }
 
-        public bool DonorWantToStayAnonymous { get; set; }
+        public bool? DonorWantToStayAnonymous { get; set; }
 
-        public bool DonorExcludeFromPublicPortal { get; set; }
+        public bool? DonorExcludeFromPublicPortal { get; set; }
 
         public DonorAvailability? DonorAvailability { get; set; }
 

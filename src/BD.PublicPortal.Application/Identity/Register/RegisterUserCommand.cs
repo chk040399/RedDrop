@@ -1,4 +1,5 @@
 ﻿
+using BD.PublicPortal.Infrastructure.Services.Identity;
 using BD.SharedKernel;
 
 namespace BD.PublicPortal.Application.Identity.Register;

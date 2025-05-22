@@ -1,6 +1,7 @@
 ﻿using Ardalis.Result;
+using BD.PublicPortal.Infrastructure.Services.Identity;
 
-namespace BD.PublicPortal.Core.Interfaces.Identity;
+namespace BD.PublicPortal.Infrastructure.Interfaces.Identity;
 
 public interface IUserManagementService
 {
