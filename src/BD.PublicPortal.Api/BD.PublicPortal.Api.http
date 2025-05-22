@@ -83,3 +83,6 @@ GET {{host}}:{{port}}/auth/manage/info
 Authorization: Bearer {{token}}
 
 
+###
+GET {{host}}:{{port}}/enums/BloodGroup,DonorAvailability,DonorContactMethod
+

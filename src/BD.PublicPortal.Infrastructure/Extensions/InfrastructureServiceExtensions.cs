@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
-using BD.PublicPortal.Core.Services.Contibutors;
+﻿using BD.PublicPortal.Core;
+using BD.PublicPortal.Core.Entities;
 using BD.PublicPortal.Core.Interfaces.Contributors;
 using BD.PublicPortal.Core.Interfaces.Identity;
-using BD.PublicPortal.Core.Entities;
-using BD.PublicPortal.Infrastructure.Services.Identity;
+using BD.PublicPortal.Core.Services.Contibutors;
 using BD.PublicPortal.Infrastructure.Data;
-using BD.PublicPortal.Infrastructure.Services.Contibutors;
-using BD.SharedKernel;
 using BD.PublicPortal.Infrastructure.Data.Services;
+using BD.PublicPortal.Infrastructure.Services.Contibutors;
+using BD.PublicPortal.Infrastructure.Services.Identity;
+using BD.SharedKernel;
+using Microsoft.AspNetCore.Identity;
+
+
 
 
 namespace BD.PublicPortal.Infrastructure.Extensions;
@@ -42,6 +45,8 @@ public static class InfrastructureServiceExtensions
 
     services.AddScoped<IUserManagementService, UserManagementService>();
 
+    var assembly = Assembly.GetAssembly(typeof(BD.PublicPortal.Core.IAssemblyMarquer));
+    EnumHelper.RegisterAllEnums(assembly!, "BD.PublicPortal.Core.Entities.Enums");
 
 
     logger.LogInformation("{Project} services registered", "Infrastructure");

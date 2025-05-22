@@ -6,3 +6,4 @@ global using MediatR;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.AspNetCore.Identity;
 global using BD.SharedKernel;
+global using System.ComponentModel.DataAnnotations;
