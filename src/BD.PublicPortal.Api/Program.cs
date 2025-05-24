@@ -1,4 +1,7 @@
-﻿using BD.PublicPortal.Api.Configurations;
+﻿using System.Text;
+using BD.PublicPortal.Api.Configurations;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +20,40 @@ var appLogger = new SerilogLoggerFactory(logger)
 
 builder.Services.AddOptionConfigs(builder.Configuration, appLogger, builder);
 builder.Services.AddServiceConfigs(appLogger, builder);
+
+
+// Add Authentication and Authorization
+{
+  //services.AddAuthenticationCookie(validFor: TimeSpan.FromMinutes(60)); // Add this if you need cookie authentication
+
+  // Configure JWT authentication
+  var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+  var secretKey = jwtSettings["Secret"];
+  if(secretKey==null)
+  {
+     throw new ArgumentNullException("Secret key is not configured in appsettings.json");
+  }
+
+  builder.Services.AddAuthentication(o =>
+  {
+    o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+  }).AddJwtBearer(o =>
+  {
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+      ValidateIssuer = true,
+      ValidateAudience = true,
+      ValidateLifetime = true,
+      ValidateIssuerSigningKey = true,
+      ValidIssuer = jwtSettings["Issuer"],
+      ValidAudience = jwtSettings["Audience"],
+      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey!))
+    };
+  });
+
+  builder.Services.AddAuthorization();
+}
 
 
 builder.Services.AddFastEndpoints(o => o.IncludeAbstractValidators = true)

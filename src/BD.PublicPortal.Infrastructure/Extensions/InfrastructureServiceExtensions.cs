@@ -1,4 +1,5 @@
-﻿using BD.PublicPortal.Core;
+﻿using System.Text;
+using BD.PublicPortal.Core;
 using BD.PublicPortal.Core.Entities;
 using BD.PublicPortal.Core.Interfaces.Contributors;
 using BD.PublicPortal.Core.Services.Contibutors;
@@ -8,8 +9,13 @@ using BD.PublicPortal.Infrastructure.Interfaces.Identity;
 using BD.PublicPortal.Infrastructure.Services.Contibutors;
 using BD.PublicPortal.Infrastructure.Services.Identity;
 using BD.SharedKernel;
+using FastEndpoints.Security;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 
+#nullable disable
 
 
 
@@ -24,18 +30,14 @@ public static class InfrastructureServiceExtensions
     var connectionString = config.GetConnectionString("DefaultConnection");
     Guard.Against.Null(connectionString);
     services.AddDbContext<AppDbContext>(options =>
-     options.UseNpgsql(connectionString));
+     options.UseNpgsql(connectionString).EnableSensitiveDataLogging().EnableDetailedErrors());
 
     // Register Identity with custom user and role
-    //services.AddIdentity<ApplicationUser, ApplicationRole>();
-    services.AddIdentityApiEndpoints<ApplicationUser>()
-      .AddRoles<ApplicationRole>()
+    services.AddIdentity<ApplicationUser, ApplicationRole>()
       .AddEntityFrameworkStores<AppDbContext>()
-      .AddDefaultTokenProviders();
-    
-    
-    services.AddAuthorization();
+      .AddDefaultTokenProviders(); // .AddSignInManager(); // Add this if you need SignInManager
 
+    
 
 
     services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>))

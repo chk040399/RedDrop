@@ -1,6 +1,5 @@
 ﻿#nullable disable
 
-
 using BD;
 using BD.PublicPortal.Core.Entities;
 
@@ -26,6 +25,12 @@ namespace BD.PublicPortal.Core.DTOs
             target.Id = source.Id;
             target.BloodTansfusionCenterId = source.BloodTansfusionCenterId;
             target.ApplicationUserId = source.ApplicationUserId;
+
+            // Navigation Properties
+            if (level > 0) {
+              target.BloodTansfusionCenter = source.BloodTansfusionCenter.ToDtoWithRelated(level - 1);
+              target.ApplicationUser = source.ApplicationUser.ToDtoWithRelated(level - 1);
+            }
 
             // User-defined partial method
             OnDtoCreating(source, target);

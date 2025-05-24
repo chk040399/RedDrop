@@ -32,12 +32,9 @@ namespace BD.PublicPortal.Core.DTOs
 
             // Navigation Properties
             if (level > 0) {
-              target.DonorBloodTransferCenterSubscriptions = source.DonorBloodTransferCenterSubscriptions
-                  .Select(src => src.Id)
-                  .ToList();
-              target.BloodDonationRequests = source.BloodDonationRequests
-                  .Select(src => src.Id)
-                  .ToList();
+              target.DonorBloodTransferCenterSubscriptions = source.DonorBloodTransferCenterSubscriptions.ToDtosWithRelated(level - 1);
+              target.BloodDonationRequests = source.BloodDonationRequests.ToDtosWithRelated(level - 1);
+              target.Wilaya = source.Wilaya.ToDtoWithRelated(level - 1);
             }
 
             // User-defined partial method

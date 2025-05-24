@@ -1,26 +1,19 @@
 # For more info on HTTP files go to https://aka.ms/vs/httpfile
-@host=https://localhost
-@port=57679
+@host=https://localhost:57679
+
 
 
 // List all contributors
-GET {{host}}:{{port}}/Contributors
+GET {{host}}/Contributors
 
 ###
-
 // Get a specific contributor
 @id_to_get=2
-GET {{host}}:{{port}}/Contributors/{{id_to_get}}
-
-
+GET {{host}}/Contributors/{{id_to_get}}
 
 ###
-
-
-
-
 // Add a new contributor
-POST {{host}}:{{port}}/Contributors
+POST {{host}}/Contributors
 Content-Type: application/json
 
 {
@@ -30,10 +23,9 @@ Content-Type: application/json
 }
 
 ###
-
 // Update a contributor
 @id_to_update=3
-PUT {{host}}:{{port}}/Contributors/{{id_to_update}}
+PUT {{host}}/Contributors/{{id_to_update}}
 Content-Type: application/json
 
 {
@@ -42,31 +34,48 @@ Content-Type: application/json
 }
 
 ###
-
 // Delete a contributor
 @id_to_delete=6
-DELETE {{host}}:{{port}}/Contributors/{{id_to_delete}}
-
-
+DELETE {{host}}/Contributors/{{id_to_delete}}
 
 ###
-GET {{host}}:{{port}}/enums/BloodGroup,DonorAvailability,DonorContactMethod
 
 
+
+//********************************************************************//********************************************************************
+
+GET {{host}}/enums/BloodGroup,DonorAvailability,DonorContactMethod
 
 ###
-GET {{host}}:{{port}}/Wilayas
-
+GET {{host}}/Wilayas
 
 ###
-GET {{host}}:{{port}}/BTC/16
+GET {{host}}/Communes/44
+
+###
+GET {{host}}/BTC/32
+
+###
+GET {{host}}/BloodDonationRequests?&wilayaId=16&PaginationTake=10&&PaginationSkip=0&level=1
+
+###
+GET {{host}}/BloodDonationRequests?PaginationTake=10&level=1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTk3MDEzMy1lNDk5LTcxODEtYjhlYy01MzhkMjZiMWZmZDMiLCJVc2VySWQiOiIwMTk3MDEzMy1lNDk5LTcxODEtYjhlYy01MzhkMjZiMWZmZDMiLCJlbWFpbCI6InBhc19zaV9xdWVfY2FAZXhhbXBsZS5jb20iLCJuYmYiOjE3NDgwNzM5MjYsImV4cCI6MTc0ODE2MDMyNiwiaWF0IjoxNzQ4MDczOTI2LCJpc3MiOiJSZWREcm9wT3JnYW5pc2F0aW9uIiwiYXVkIjoiQmxsb2QgRG9uYXRvcnMifQ.ImbR4hhdpmriLTNJTKvg_8RBDR0QJz4dglcLB8ezNQ0
+
+###
+GET {{host}}/BloodDonationRequests?PaginationTake=10&&PaginationSkip=10&level=1
+
+###
+GET {{host}}/BloodDonationRequests?PaginationTake=10&&PaginationSkip=20&level=1
+
+###
+GET {{host}}/BloodDonationRequests?PaginationTake=10&&PaginationSkip=30&level=1
 
 
 ### Register a new user
-POST {{host}}:{{port}}/auth/register2
+POST {{host}}/auth/register
 Content-Type: application/json
 {
-  "userName": "walidozich",
   "email": "walidozich@example.com",
   "password": "vV@L1d@2002",
   "confirmPassword": "vV@L1d@2002",
@@ -85,13 +94,71 @@ Content-Type: application/json
 }
 
 ###
-POST {{host}}:{{port}}/auth/register2
+POST {{host}}/auth/register
 Content-Type: application/json
 {
-  "userName": "chk",
-  "email": "walidozich@example.com",
-  "password": "vV@L1d@2002",
-  "confirmPassword": "vV@L1d@2002",
+  "email": "salim@example.com",
+  "password": "$@L1m@1975",
+  "confirmPassword": "$@L1m@1975",
+  "donorWantToStayAnonymous": true,
+  "donorExcludeFromPublicPortal": false,
+  "donorAvailability": 1,
+  "donorContactMethod": 1,
+  "donorName": "CHERCHALI SALIM",
+  "donorBirthDate": "2025-05-22T09:16:16.749Z",
+  "donorBloodGroup": 7,
+  "donorNIN": "123456789123456789",
+  "donorTel": "05.55.05.23.76",
+  "donorNotesForBTC": "Je suis Diabétique Type 1",
+  "donorLastDonationDate": "2025-05-22T09:16:16.749Z",
+  "communeId": 558  
+}
+
+### Register a new user
+POST {{host}}/auth/register
+Content-Type: application/json
+{
+  
+  "email": "pas_si_que_ca@example.com",
+  "password": "@Vv1M1L@t0n",
+  "confirmPassword": "@Vv1M1L@t0n",
+  "donorWantToStayAnonymous": true,
+  "donorExcludeFromPublicPortal": false,
+  "donorAvailability": 1,
+  "donorContactMethod": 1,
+  "donorName": "CHERCHALI WALID",
+  "donorBirthDate": "2025-05-22T09:16:16.749Z",
+  "donorBloodGroup": 7,
+  "donorNIN": "123456789123456789",
+  "donorTel": "05.55.05.23.76",
+  "donorNotesForBTC": "Je suis Diabétique Type 1",
+  "donorLastDonationDate": "2025-05-22T09:16:16.749Z",
+  "communeId": 558  
+}
+
+### Login
+POST {{host}}/auth/login
+Content-Type: application/json
+{  
+  "email": "pas_si_que_ca@example.com",
+  "password": "@Vv1M1L@t0n"
+}
+
+###
+POST {{host}}/auth/login
+Content-Type: application/json
+{
+  "email": "salim@example.com",
+  "password": "$@L1m@1975" 
+}
+
+###
+POST {{host}}/auth/register2
+Content-Type: application/json
+{
+  "email": "chk@example.com",
+  "password": "Karim-74",
+  "confirmPassword": "Karim-74",
   "donorName": "CHERCHALI KARIM",
   "donorBirthDate": "2025-05-22T09:16:16.749Z",
   "donorBloodGroup": 7,
@@ -99,15 +166,18 @@ Content-Type: application/json
 }
 
 ###
-POST {{host}}:{{port}}/auth/login
+POST {{host}}/auth/login
 Content-Type: application/json
 {
   "email": "walidozich",
-  "password": "vV@L1d@2002"
+  "password": "vV@L1d@2002" 
 }
 
 ###
-@token = CfDJ8GBhgrZxL9dJtjq0u4tInOPCcRPnpOyvIrTUAmK0HIKoRQH3Yc8n9LPqL62ZNGJQeHi1XdN0LkBt8rGVspkzKBhaCmCeuEClo7d_hKVZynQgu8hRh2A9yuN6fB0RJittsINRTTk6WnAMTPmhlXgR1CYfmGfybpobVLjLI9O9xzsM-pmgDHjwg6zYic_OYh9hduGYAHTI8CaVxfuiOAqredoDYK1_qsVQK8jEF5mpp5DHJfmWxNZug_dzKK_Na78sNnpzjdLYwJ7GWgg1YoXKFjwo6p25w4JoHA4R0Oj3IuxBcRtrIXBVhEubIALemzSo6hw1S-Q1Z2YvHd3exZYk3q-GA5YIOiOT-tZXLsZD632A5PJvyHCDdXLHd3obTsmNfFww-qxl-GUV1HIPVZnhmHEUEfV6UnXTGu7d-vE7TjN6RsoR3_FROZoUncj06Sa9AX5ptKmjxJB1LIDCJtXqNhFGkB_dAPiKy-m7hgtsVeQl934mJkuF3KpSPXtp83mMc_7yUBP876H6HSmY63n6aMyboPme1P_CM8JI2RzZIKNRRMBQMJ6CbnYXin7vvvBMZTzYTwiP6tijX8OUFfU2oUxSAep-lKgqQi-oOK6r5yutniEIFKkh6Res3kHDMAZtTRbBe5sYzpSue7PCTL6IlMOnbvu5LkwDS4oILgTpEsiLWY7sSlhcDnHplIdi3n2tey7SjHbMnsb8v7W-QxDlDnE
-GET {{host}}:{{port}}/auth/manage/info
+@token = CfDJ8L42nD5MPzlJlHz_DbJr-S1RrWyraV7PmKE26GD-o896apRBDYK1xOQkJSBtggDxZT9mrZR-O_p4MsSWP6MN7eI6qImQ-XUaU2jD4g1IdphqFaecSRbcLnnRB7UDnVz-9f9QmY_bgFiBs-r_jRNeU50DmkJTYqdH-Kzzqmb0Ppj7xfdS16hIvvA7z7DyjStLtNnd9cX5MMLjWYePK-pD-FaKPMNtLj8uXHYPJpX7C2IRd2tVlt0CdtZThIQiqed8TKkv2gJiyJODY9NN41rFejCryTmV-fnqb6zf9bomQqu7TkiSrgHHHdoY6kS62Q2SO3cXZz6yUjeumCx6qykvT66ZGUfoZgl2jyuZGsRHsr3UkDxVK49HOlgU-6kssHWO47aiMcN9TB2fVy1w6c3OxOmdMMdTnx6cmjKJChMoDWj1y4YB4W2zX646DN_MsGQhmIb2rgxC2OkX7jvpAVIGl2UaUDyqk_HmXXlKtT1pVK8shvtt7IZ7EAXTEcAZiiVe7PctDy1_rmrISrlc_i0Dg1kMWP9kQ1_UVVNtfrcMBlkyWn419d70IkuAq0pdAicI9WdU2gWsySzvZhuf8tKcKROep9jTkGfo1tC7MfScz0a8WTUhzqT6k11zy9nleSwNMe7N3TThQumQV3CBW9kmNz1znaCWxIhXtFdVlsn9Dk5EwyY0U81Je-c7J5_EWeOFAA
+GET {{host}}/auth/manage/info
 Authorization: Bearer {{token}}
 
+
+###
+GET https://192.168.1.211:57679/BloodDonationRequests?&wilayaId=16&PaginationTake=0&&PaginationSkip=0&level=1

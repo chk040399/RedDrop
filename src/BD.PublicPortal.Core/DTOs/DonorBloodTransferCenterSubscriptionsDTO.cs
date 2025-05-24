@@ -1,6 +1,5 @@
 ﻿#nullable disable
 
-
 using BD;
 
 namespace BD.PublicPortal.Core.DTOs
@@ -13,11 +12,13 @@ namespace BD.PublicPortal.Core.DTOs
         public DonorBloodTransferCenterSubscriptionsDTO() {
         }
 
-        public DonorBloodTransferCenterSubscriptionsDTO(System.Guid id, System.Guid bloodTansfusionCenterId, System.Guid applicationUserId) {
+        public DonorBloodTransferCenterSubscriptionsDTO(System.Guid id, System.Guid bloodTansfusionCenterId, System.Guid applicationUserId, BloodTansfusionCenterDTO bloodTansfusionCenter, ApplicationUserDTO applicationUser) {
 
           this.Id = id;
           this.BloodTansfusionCenterId = bloodTansfusionCenterId;
           this.ApplicationUserId = applicationUserId;
+          this.BloodTansfusionCenter = bloodTansfusionCenter;
+          this.ApplicationUser = applicationUser;
         }
 
         #endregion
@@ -29,6 +30,14 @@ namespace BD.PublicPortal.Core.DTOs
         public System.Guid BloodTansfusionCenterId { get; set; }
 
         public System.Guid ApplicationUserId { get; set; }
+
+        #endregion
+
+        #region Navigation Properties
+
+        public BloodTansfusionCenterDTO BloodTansfusionCenter { get; set; }
+
+        public ApplicationUserDTO ApplicationUser { get; set; }
 
         #endregion
     }

@@ -271,43 +271,6 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                     b.ToTable("BloodDonationRequests", (string)null);
                 });
 
-            modelBuilder.Entity("BD.PublicPortal.Core.Entities.BloodInventory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("Id");
-
-                    b.Property<int>("BloodDonationType")
-                        .HasColumnType("integer")
-                        .HasColumnName("BloodDonationType");
-
-                    b.Property<int>("BloodGroup")
-                        .HasColumnType("integer")
-                        .HasColumnName("BloodGroup");
-
-                    b.Property<Guid>("BloodTansfusionCenterId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("BloodTansfusionCenterId");
-
-                    b.Property<int?>("MaxQty")
-                        .HasColumnType("integer")
-                        .HasColumnName("MaxQty");
-
-                    b.Property<int?>("MinQty")
-                        .HasColumnType("integer")
-                        .HasColumnName("MinQty");
-
-                    b.Property<int?>("TotalQty")
-                        .HasColumnType("integer")
-                        .HasColumnName("TotalQty");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BloodTansfusionCenterId");
-
-                    b.ToTable("BloodInventories", (string)null);
-                });
-
             modelBuilder.Entity("BD.PublicPortal.Core.Entities.BloodTansfusionCenter", b =>
                 {
                     b.Property<Guid>("Id")
@@ -571,17 +534,6 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                     b.Navigation("BloodTansfusionCenter");
                 });
 
-            modelBuilder.Entity("BD.PublicPortal.Core.Entities.BloodInventory", b =>
-                {
-                    b.HasOne("BD.PublicPortal.Core.Entities.BloodTansfusionCenter", "BloodTansfusionCenter")
-                        .WithMany("BloodInventories")
-                        .HasForeignKey("BloodTansfusionCenterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("BloodTansfusionCenter");
-                });
-
             modelBuilder.Entity("BD.PublicPortal.Core.Entities.BloodTansfusionCenter", b =>
                 {
                     b.HasOne("BD.PublicPortal.Core.Entities.Wilaya", "Wilaya")
@@ -718,8 +670,6 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
             modelBuilder.Entity("BD.PublicPortal.Core.Entities.BloodTansfusionCenter", b =>
                 {
                     b.Navigation("BloodDonationRequests");
-
-                    b.Navigation("BloodInventories");
 
                     b.Navigation("DonorBloodTransferCenterSubscriptions");
                 });

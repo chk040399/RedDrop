@@ -22,7 +22,6 @@ namespace BD.PublicPortal.Core.DTOs
             var target = new ApplicationUserDTO();
 
             // Properties
-            
             target.DonorCorrelationId = source.DonorCorrelationId;
             target.DonorWantToStayAnonymous = source.DonorWantToStayAnonymous;
             target.DonorExcludeFromPublicPortal = source.DonorExcludeFromPublicPortal;
@@ -36,16 +35,6 @@ namespace BD.PublicPortal.Core.DTOs
             target.DonorNotesForBTC = source.DonorNotesForBTC;
             target.DonorLastDonationDate = source.DonorLastDonationDate;
             target.CommuneId = source.CommuneId;
-
-            // Navigation Properties
-            if (level > 0) {
-              target.DonorBloodTransferCenterSubscriptions = source.DonorBloodTransferCenterSubscriptions
-                  .Select(src => src.Id)
-                  .ToList();
-              target.BloodDonationPledges = source.BloodDonationPledges
-                  .Select(src => src.Id)
-                  .ToList();
-            }
 
             // User-defined partial method
             OnDtoCreating(source, target);
@@ -61,7 +50,6 @@ namespace BD.PublicPortal.Core.DTOs
             var target = new ApplicationUser();
 
             // Properties
-            
             target.DonorCorrelationId = source.DonorCorrelationId;
             target.DonorWantToStayAnonymous = source.DonorWantToStayAnonymous;
             target.DonorExcludeFromPublicPortal = source.DonorExcludeFromPublicPortal;

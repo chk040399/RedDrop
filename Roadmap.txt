@@ -1,0 +1,82 @@
+Portail Public
+Pour l'anonyme / non donneur + Donneur
+. Afficher Annuaire Donneurs => Contact
+. Afficher Annuaire CTS
+. Afficher les requetes
+
+Pour Les Donneurs enregistrés
+. Profil (register/update)
+. Subscribe Requests / CTSs => Notifs, Filtre Special
+. Pledge (create / Update / Annuler)
+
+
+->
+
+. Authentication Endpoints (Auto) -> Login,Logout [,Refresh]
+
+Endpoint communs
+. Enums
+. Wilaya
+. Commune / Wilaya
+
+
+UI : Page Register
+=> EP/POST : Register   !!! no username, use only emails
+(C)=> EP/GET : Enums (BloodGroup,DonorAvailabilty,DonorContactMethod)
+(C)=> EP/GET : Wilayas (All) 
+(C)=> EP/GET : Commune (Filtre par wilaya)
+
+UI : Page Profile
+=> EP/GET : GetProfile (User Info + CTS Subscribed )
+=> EP/PUT : Update Profile
+(C)=> EP/GET : Enums (BloodGroup,DonorAvailabilty,DonorContactMethod)
+(C)=> EP/GET : Wilayas (All)
+(C)=> EP/GET : Commune (Filtre par wilaya)
+=> EP/DELETE : Subscription
+
+UI : Liste Donneurs
+=> EP/GET : Liste des donneurs (préfiltrée (ExcludeFromPublicPortal == False ) 
+, + filtres wilaya / commune + groupes ???)   + Pagination
+(C)=> EP/GET : Enums (BloodGroup,DonorAvailabilty)
+(C)=> EP/GET : Wilayas (All) 
+(C)=> EP/GET : (Filtre par wilaya)
+
+
+UI : Liste Centres
+=> EP/GET : Liste des centres (filtres wilaya)  + Pagination 
+(Includes Subscribe if logged in)
+(C)=> EP/GET : Wilayas (All) 
+=> EP/DELETE :  Subscrib
+=> EP/POST :  Subscrib
+
+UI : Liste Requetes
+=> EP/GET : Liste des requetes  + Pagination (Includes Subscribe if logged in)  
+(
+Includes Subscribed to its center, + info eligibilité) 
+)
+			(filtres wilaya,BGroup,Eligibilte,subscribed,priority,type)
+(C)=> EP/GET : Wilayas (All)
+(C)=> EP/GET : Enums (BloodGroup,...)
+=> EP/POST : Pledge
+
+UI : Profil / Liste Engagements 
+=> EP/GET : Liste Pledges	
+=> EP/PUT: Annulation
+=> EP/PUT: Update Date
+
+
+UI : Landing Page (Stats globales)
+=> EP/GET : TBD
+
+
+
+
+
+
+Nice to have: ( samed + )
+. Full Identity Endpoints
+. Reset, ....
+. 
+. Dateonly usage
+. Longueurs des champs
+. 

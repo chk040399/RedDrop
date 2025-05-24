@@ -12,7 +12,7 @@ namespace BD.PublicPortal.Core.DTOs
         public WilayaDTO() {
         }
 
-        public WilayaDTO(int id, string name, List<System.Guid> bloodTansfusionCenters, List<int> communes) {
+        public WilayaDTO(int id, string name, List<BloodTansfusionCenterDTO> bloodTansfusionCenters, List<CommuneDTO> communes) {
 
           this.Id = id;
           this.Name = name;
@@ -32,9 +32,9 @@ namespace BD.PublicPortal.Core.DTOs
 
         #region Navigation Properties
 
-        public List<System.Guid> BloodTansfusionCenters { get; set; }
+        public List<BloodTansfusionCenterDTO> BloodTansfusionCenters { get; set; }
 
-        public List<int> Communes { get; set; }
+        public List<CommuneDTO> Communes { get; set; }
 
         #endregion
     }

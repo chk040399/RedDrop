@@ -7,3 +7,5 @@ global using Microsoft.Extensions.Logging;
 global using Microsoft.AspNetCore.Identity;
 global using BD.SharedKernel;
 global using System.ComponentModel.DataAnnotations;
+global using BD.PublicPortal.Core.Entities;
+global using BD.PublicPortal.Core.Entities.Enums;

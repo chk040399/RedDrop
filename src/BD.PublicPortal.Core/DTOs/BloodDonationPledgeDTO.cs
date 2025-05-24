@@ -1,7 +1,6 @@
 ﻿#nullable disable
 
 using BD;
-using BD.PublicPortal.Core.Entities.Enums;
 
 namespace BD.PublicPortal.Core.DTOs
 {

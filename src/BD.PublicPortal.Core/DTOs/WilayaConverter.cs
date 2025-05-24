@@ -27,12 +27,8 @@ namespace BD.PublicPortal.Core.DTOs
 
             // Navigation Properties
             if (level > 0) {
-              target.BloodTansfusionCenters = source.BloodTansfusionCenters
-                  .Select(src => src.Id)
-                  .ToList();
-              target.Communes = source.Communes
-                  .Select(src => src.Id)
-                  .ToList();
+              target.BloodTansfusionCenters = source.BloodTansfusionCenters.ToDtosWithRelated(level - 1);
+              target.Communes = source.Communes.ToDtosWithRelated(level - 1);
             }
 
             // User-defined partial method

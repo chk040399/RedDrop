@@ -1,4 +1,5 @@
-﻿using Ardalis.ListStartupServices;
+﻿using System.Runtime.CompilerServices;
+using Ardalis.ListStartupServices;
 using BD.PublicPortal.Core.Entities;
 using BD.PublicPortal.Infrastructure.Data;
 using BD.PublicPortal.Infrastructure.Data.SeedData;
@@ -25,11 +26,16 @@ public static class MiddlewareConfig
 
     app.UseAuthentication();
     app.UseAuthorization();
-    app.MapGroup("/auth").WithTags("Identity").MapIdentityApi<ApplicationUser>();
+    
+    // Auto Id Endpoints removed for now
+    //app.MapGroup("/auth").WithTags("Identity").MapIdentityApi<ApplicationUser>();
 
     app.UseFastEndpoints(
       c =>
       {
+        // TODO: fixed this
+        // c.Endpoints.RoutePrefix = "api"; 
+
         c.Errors.UseProblemDetails(
           x =>
           {

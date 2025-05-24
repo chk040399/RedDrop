@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<efcore namespace="BD.BloodTransfusionCenter.Core" p1:name="Model" p1:Guid="11abec95-433c-4440-927a-5c1754677c26" p1:EntityBase="EntityBase&lt;Guid&gt;, IAggregateRoot" xmlns:p1="http://devart.com/schemas/EntityDeveloper/1.0">
+  <class name="$EnumTypes">
+    <EnumType Name="BloodGroup" class="BloodGroup" p1:Guid="c258a878-8685-4b00-83c0-2f330420a746">
+      <Member Name="AB_POSITIVE" Value="1" p1:Guid="68e5d5ab-8783-40a8-ad06-7c0dde9e57fb" />
+      <Member Name="AB_NEGATIVE" Value="2" p1:Guid="b117a68a-a389-4733-92fe-2b14f5897aa5" />
+      <Member Name="A_POSITIVE" Value="3" p1:Guid="de091254-0734-48d1-a8be-ec5525649fab" />
+      <Member Name="A_NEGATIVE" Value="4" p1:Guid="8ed0476d-18b7-4a70-b3fb-c381c15eb5d4" />
+      <Member Name="B_POSITIVE" Value="5" p1:Guid="7d933222-7e25-4471-a9a9-506fa5245df4" />
+      <Member Name="B_NEGATIVE" Value="6" p1:Guid="1076accf-98af-4819-9254-afbfbe33cb23" />
+      <Member Name="O_POSITIVE" Value="7" p1:Guid="d7e0e72a-4c2d-4a97-8187-a8cf88da550a" />
+      <Member Name="O_NEGATIVE" Value="8" p1:Guid="fa46c5fd-92f3-4dd4-a1ba-00b246b3711e" />
+    </EnumType>
+    <EnumType Name="BloodDonationType" class="BloodDonationType" p1:Guid="28c9d05e-bfb3-45c4-b6db-2760eaf13289">
+      <Member Name="WholeBlood" Value="1" p1:Guid="26ecb28f-ff08-4a72-a641-6c2bb59e6af7" />
+      <Member Name="Platelet" Value="2" p1:Guid="1335033a-e245-43b1-b7df-707c5fa7ac8e" />
+      <Member Name="Plasma" Value="3" p1:Guid="0ad82c76-6ea9-4690-9063-0e62a405298a" />
+    </EnumType>
+    <EnumType Name="BloodDonationRequestEvolutionStatus" class="BloodDonationRequestEvolutionStatus" p1:Guid="d1fe012a-1e46-49bc-a283-67ed4d6d088e">
+      <Member Name="Initiated" Value="0" p1:Guid="2d4442fb-a79b-4b46-99cc-1c409b0c56b4" />
+      <Member Name="Waiting" Value="1" p1:Guid="fbd07061-4408-4e5c-b49a-501df60430e3" />
+      <Member Name="PartiallyResolved" Value="2" p1:Guid="6c20ffaf-d362-4a32-a0ed-21c8b7fe6c2d" />
+      <Member Name="Resolved" Value="3" p1:Guid="c2f43678-616e-49b6-9d33-198e521e8e00" />
+      <Member Name="Canceled" Value="4" p1:Guid="788e447f-c5ee-4134-b5dc-62f1a2cd3f2b" />
+    </EnumType>
+    <EnumType Name="BloodDonationRequestPriority" class="BloodDonationRequestPriority" p1:Guid="b4d32c7e-8e47-4995-bde3-13fc29819377">
+      <Member Name="Low" Value="1" p1:Guid="9681bd27-42a9-4121-9aa0-8637de7f5826" />
+      <Member Name="Normal" Value="2" p1:Guid="afe7b4bf-9556-43aa-b63a-0734499851af" />
+      <Member Name="Critical" Value="3" p1:Guid="d3a77d42-36c4-4d80-bd58-13ec8d3fcd07" />
+    </EnumType>
+    <EnumType Name="BloodDonationPladgeEvolutionStatus" class="BloodDonationPladgeEvolutionStatus" p1:Guid="9dbeb034-74fa-469b-bcab-cf87c857e89b">
+      <Member Name="Initiated" Value="0" p1:Guid="19d5c685-8d0c-4d4c-9637-0d7610909353" />
+      <Member Name="Honored" Value="1" p1:Guid="e1ab9a69-dda9-41b7-a569-02a2b7d60170" />
+      <Member Name="CanceledByInitiaor" Value="2" p1:Guid="d2caedb3-b189-43fd-ba77-d63177665e6d" />
+      <Member Name="CanceledByServiceNotNeeded" Value="3" p1:Guid="0b8b1081-0760-40f7-93eb-d32f1cbe1ed9" />
+      <Member Name="CanceledByServiceCantBeDone" Value="4" p1:Guid="899e0387-9bce-4169-9e76-f2e10c690014" />
+      <Member Name="CanceledTimeout" Value="5" p1:Guid="c6368338-a99a-426d-842d-80dd12f55785" />
+    </EnumType>
+    <EnumType Name="BloodOutOperationType" class="BloodOutOperationType" p1:Guid="644fd790-4887-4335-a1a3-8ac707a5831c">
+      <Member Name="MedicalUse" Value="1" p1:Guid="7c2f0e0e-8170-4f76-8677-1a49a7775354" />
+      <Member Name="Expired" Value="2" p1:Guid="9d5e4ddf-f8ed-453d-a13e-175ddb23749b" />
+      <Member Name="Wasted" Value="3" p1:Guid="fc1c858c-cac6-4bff-adc5-041aed02bad0" />
+      <Member Name="Donated" Value="4" p1:Guid="561899e9-f5d7-4efc-a4af-2e84da5e00ab" />
+    </EnumType>
+    <EnumType Name="BloodDonationStatus" class="BloodDonationStatus" p1:Guid="4b181f4e-2ce1-4d96-8480-7a4d1a287c42">
+      <Member Name="Acquired" Value="0" p1:Guid="e0782b52-130c-4617-bf5b-4899cacf63f0" />
+      <Member Name="ReadyForUse" Value="1" p1:Guid="a97dd582-5758-4977-a44e-ee7f35fc8bc8" />
+      <Member Name="Used" Value="2" p1:Guid="d90046bf-dc02-4149-ab75-3f77f0510e62" />
+      <Member Name="OutForExpiration" Value="3" p1:Guid="cbeb4e8e-410f-463e-bf6e-952141398e3c" />
+      <Member Name="OutForOtherReason" Value="4" p1:Guid="11fceedf-b878-4883-8d53-59f91ddf718e" />
+    </EnumType>
+  </class>
+  <class name="BloodDonationRequest" entity-set="BloodDonationRequests" p1:Guid="616741c7-a99c-4fa1-9f8e-da4d3c208272" p1:DoNotImplementCloneable="True" p1:DoNotSerialize="True" p1:DoNotGenerateDefaultConstructor="True">
+    <id name="Id" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="f9fe9965-49ab-4a26-a4d8-98232360c990">
+      <column name="" />
+    </id>
+    <property name="EvolutionStatus" type="BD.BloodTransfusionCenter.Core.BloodDonationRequestEvolutionStatus" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="09be686d-65ce-4e6f-8d4a-9021634998a4">
+      <column name="" />
+    </property>
+    <property name="DonationType" type="BD.BloodTransfusionCenter.Core.BloodDonationType" p1:ValidateRequired="true" p1:Guid="7cb4f435-7b3d-452c-a9b7-793b81d20252">
+      <column name="" />
+    </property>
+    <property name="BloodGroup" type="BD.BloodTransfusionCenter.Core.BloodGroup" p1:ValidateRequired="true" p1:Guid="277808f6-6fe8-493d-be2d-ce5f4d95064c">
+      <column name="" />
+    </property>
+    <property name="RequestedQty" type="Int32" p1:ValidateRequired="true" p1:Guid="5b919678-65dc-4419-b622-57b652ef43f6">
+      <column name="" />
+    </property>
+    <property name="RequestDate" type="DateTime" p1:ValidateRequired="true" p1:Guid="b8735cc9-5bbe-44d5-a572-d78c1188d651">
+      <column name="" />
+    </property>
+    <property name="RequestDueDate" type="Date" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="2ac65941-e66f-44eb-82f7-96f60da5be4f">
+      <column name="" />
+    </property>
+    <property name="Priority" type="BD.BloodTransfusionCenter.Core.BloodDonationRequestPriority" p1:ValidateRequired="true" p1:Guid="2f5c40c2-5b8a-4a7f-b0e3-c843661b1a69">
+      <column name="" />
+    </property>
+    <property name="MoreDetails" type="String" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="a6f7bdb5-1e59-494d-a3ec-5d4fa736bdc5">
+      <column name="" />
+    </property>
+    <property name="ServiceId" type="Guid" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="5c855aba-bffa-4e5d-bffb-4bf4129b84d1">
+      <column name="" not-null="False" />
+    </property>
+  </class>
+  <class name="Service" entity-set="Services" p1:Guid="5cecb3f7-82d4-4019-99d8-c8b18d1e07e4" p1:DoNotGenerateDefaultConstructor="True">
+    <id name="Id" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="bacc58d1-14b2-4080-97a1-6b51ef3dfa5e">
+      <column name="" />
+    </id>
+    <property name="Name" type="String" p1:ValidateRequired="true" p1:Guid="b31d1d34-4b4d-4881-b9e9-ce6038e4769f">
+      <column name="" />
+    </property>
+    <property name="BloodCentralPlatformId" type="Guid" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="5907a60a-2782-472d-9fa2-4593fda2167d">
+      <column name="" />
+    </property>
+  </class>
+  <class name="Donor" entity-set="Donors" p1:Guid="c6572c5f-7dfa-4947-937a-5cdb160e75b7" p1:DoNotGenerateDefaultConstructor="True">
+    <id name="Id" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="eb92a1fa-a1db-4860-944f-fb0af0c6727a">
+      <column name="" />
+    </id>
+    <property name="Name" type="String" p1:ValidateRequired="true" p1:Guid="9a599aef-ed42-4383-970c-9460ca250656">
+      <column name="" />
+    </property>
+    <property name="BirthDate" type="Date" p1:ValidateRequired="true" p1:Guid="2e1b1a91-1491-48c3-91fb-8123a38ca49a">
+      <column name="" />
+    </property>
+    <property name="BloodGroup" type="BD.BloodTransfusionCenter.Core.BloodGroup" p1:ValidateRequired="true" p1:Guid="bab88c82-c7ce-4f94-b468-b58eb8153cc4">
+      <column name="" />
+    </property>
+    <property name="NIN" type="String" p1:ValidateRequired="true" p1:Guid="de09114a-72e5-4544-8cd9-52747fc4f5c4">
+      <column name="" />
+    </property>
+    <property name="Tel" type="String" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="e9faa3a4-dc00-47ab-b77e-58fe0776a217">
+      <column name="" />
+    </property>
+    <property name="Email" type="String" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="5e56a29f-ef24-4e2e-a4dd-b719ab838e9d">
+      <column name="" />
+    </property>
+    <property name="NotesForBTC" type="String" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="80c2b1cf-2c8d-4432-b4fc-c0b0195482a7">
+      <column name="" />
+    </property>
+    <property name="LastDonationDate" type="Date" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="1cd32b10-a47b-435b-ab01-e88a7e0b90ed">
+      <column name="" />
+    </property>
+    <property name="CommuneId" type="Int32" p1:ValidateRequired="true" p1:Guid="864e14fa-dcfa-4038-a3cf-f4e458b1274e">
+      <column name="" not-null="False" />
+    </property>
+  </class>
+  <class name="BloodDonation" entity-set="BloodDonations" p1:Guid="fcb95023-6677-4bdb-9fa0-0849548e0f9a" p1:DoNotGenerateDefaultConstructor="True">
+    <id name="Id" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="a9e74bdb-0362-4e52-b460-835d6c0273c4">
+      <column name="" />
+    </id>
+    <property name="DonationStatus" type="BD.BloodTransfusionCenter.Core.BloodDonationStatus" p1:ValidateRequired="true" p1:Guid="8d52acfb-31d4-4057-9d8e-aeadb7a00ff1">
+      <column name="" />
+    </property>
+    <property name="DonationDate" type="DateTime" p1:ValidateRequired="true" p1:Guid="d6f6083e-4a3e-4d5e-b9d4-8d356903d681">
+      <column name="" />
+    </property>
+    <property name="Type" type="BD.BloodTransfusionCenter.Core.BloodDonationType" p1:ValidateRequired="true" p1:Guid="9fe7b3b0-fd3c-4373-ac21-f59c3b21f901">
+      <column name="" />
+    </property>
+    <property name="Group" type="BD.BloodTransfusionCenter.Core.BloodGroup" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="70936f19-f216-4c45-b2f4-1ac9ce4cf12a">
+      <column name="" />
+    </property>
+    <property name="LotNumber" type="String" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="f4e9ff1f-fe76-4298-a5e0-1d93daec9d7c">
+      <column name="" />
+    </property>
+    <property name="DonorId" type="Guid" p1:ValidateRequired="true" p1:Guid="0051659b-c711-4cd1-83f6-1a7828b3fc3f">
+      <column name="" not-null="False" />
+    </property>
+    <property name="BloodDonationRequestId" type="Guid" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="187ac3d0-f049-4062-a3e7-238214b1ba29">
+      <column name="" not-null="False" />
+    </property>
+  </class>
+  <class name="BloodTansfusionCenter" entity-set="BloodTansfusionCenters" p1:Guid="3ba20d0a-d7e5-4400-8b52-1c60050864de" p1:DoNotImplementCloneable="True" p1:DoNotSerialize="True" p1:DoNotGenerateDefaultConstructor="True">
+    <id name="Id" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="f710713a-9447-4dc5-964b-8a60e1d001ec">
+      <column name="" />
+    </id>
+    <property name="Name" type="String" p1:ValidateRequired="true" p1:Guid="9cd2061b-b917-4a88-b917-3266803a7cba">
+      <column name="" />
+    </property>
+    <property name="Address" type="String" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="8572cbca-9663-4946-b39d-35fd7c749afc">
+      <column name="" />
+    </property>
+    <property name="Contact" type="String" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="21377aa4-2270-41bf-a291-4e954329bb9a">
+      <column name="" />
+    </property>
+    <property name="Email" type="String" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="787d2dd3-dc84-461c-b1d9-8b68234b2005">
+      <column name="" />
+    </property>
+    <property name="Tel" type="String" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="dc0276e0-f74f-4196-9caa-640cdb062075">
+      <column name="" />
+    </property>
+    <property name="WilayaId" type="Int32" p1:ValidateRequired="true" p1:Guid="5eb6fb61-dc79-4914-a925-9dee0646bff1">
+      <column name="" not-null="False" />
+    </property>
+  </class>
+  <class name="Wilaya" entity-set="Wilayas" p1:Guid="bf93994f-78a2-46a7-afe3-79a0981ec477" p1:DoNotImplementCloneable="True" p1:EntityBase="EntityBase&lt;int&gt;, IAggregateRoot" p1:DoNotSerialize="True" p1:DoNotGenerateDefaultConstructor="True">
+    <id name="Id" type="Int32" p1:ValidateRequired="true" p1:Guid="a04ae919-ce29-469d-92b6-d3e1d10ba326">
+      <column name="" />
+    </id>
+    <property name="Name" type="String" p1:ValidateRequired="true" p1:Guid="75fbaa14-6336-4b89-98aa-a884c79a20e7">
+      <column name="" />
+    </property>
+  </class>
+  <class name="BloodDonationPledgeExtended" entity-set="BloodDonationPledgeExtendeds" p1:Guid="1c03fad6-b298-4619-b3b5-975a6d2be373" p1:DoNotGenerateDefaultConstructor="True">
+    <id name="Id" type="Guid" p1:ValidateRequired="true" p1:Guid="3737314d-e87a-43f3-868b-05bb0466238b">
+      <column name="" />
+    </id>
+    <property name="EvolutionStatus" type="BD.BloodTransfusionCenter.Core.BloodDonationPladgeEvolutionStatus" p1:ValidateRequired="true" p1:Guid="9da19a30-10a0-4132-8f39-ba63f780bd14">
+      <column name="" />
+    </property>
+    <property name="PledgeInitiatedDate" type="Date" p1:ValidateRequired="true" p1:Guid="d98c90bb-e2f1-4bb4-b5ec-78721c033720">
+      <column name="" />
+    </property>
+    <property name="PledgeEffectiveDate" type="Date" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="9648d864-6a11-4e0b-937d-f2f951cb3d51">
+      <column name="" />
+    </property>
+    <property name="PledgeHonoredOrCanceledDate" type="Date" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="81fac030-fb7d-4d74-b7f5-247834905d6b">
+      <column name="" />
+    </property>
+    <property name="CantBeDoneReason" type="String" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="c4402321-8e08-4333-8d7b-880475e0e8f2">
+      <column name="" />
+    </property>
+    <property name="DonorId" type="Guid" p1:ValidateRequired="true" p1:Guid="1c5424d0-ea7b-4adb-af9a-e230faa58697">
+      <column name="" />
+    </property>
+    <property name="DonorName" type="String" p1:ValidateRequired="true" p1:Guid="96be95ad-7f5b-4737-a77e-f88b3f523f35">
+      <column name="" />
+    </property>
+    <property name="DonorBirthDate" type="Date" p1:ValidateRequired="true" p1:Guid="aae8a263-7ef0-4273-8aa4-c29939a03f09">
+      <column name="" />
+    </property>
+    <property name="DonorBloodGroup" type="BD.BloodTransfusionCenter.Core.BloodGroup" p1:ValidateRequired="true" p1:Guid="42e89e83-4d3d-4eb5-843d-c56ecae121f2">
+      <column name="" />
+    </property>
+    <property name="DonorNIN" type="String" p1:ValidateRequired="true" p1:Guid="ffceb7b9-7c09-4c6c-8e41-f94022c2d6a9">
+      <column name="" />
+    </property>
+    <property name="DonorTel" type="String" p1:ValidateRequired="true" p1:Guid="97aa94db-5d26-41ac-9cbb-9b977e4faf69">
+      <column name="" />
+    </property>
+    <property name="DonorEmail" type="String" p1:ValidateRequired="true" p1:Guid="0182589d-dc77-435b-a719-d95b923cbd4a">
+      <column name="" />
+    </property>
+    <property name="DonorNotes" type="String" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="2cde19e1-1fe4-4797-93cf-1bdda908b9b5">
+      <column name="" />
+    </property>
+    <property name="DonorLastDonationDate" type="Date" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="c9ecffb9-e448-4af6-b694-b41ff1e32a18">
+      <column name="" />
+    </property>
+    <property name="BloodDonationRequestId" type="Guid" p1:ValidateRequired="true" p1:Guid="b7427e55-8714-4bfa-a3f2-5995dc73352d">
+      <column name="" not-null="False" />
+    </property>
+  </class>
+  <class name="BloodInventory" entity-set="BloodInventories" p1:Guid="febdde5c-04d9-4364-8ff0-d8ce3ecb38a0" p1:DoNotImplementCloneable="True" p1:DoNotSerialize="True" p1:DoNotGenerateDefaultConstructor="True">
+    <id name="Id" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="37e03e83-e157-4f30-80a8-fa96e4c3c801">
+      <column name="" />
+    </id>
+    <property name="BloodGroup" type="BD.BloodTransfusionCenter.Core.BloodGroup" p1:ValidateRequired="true" p1:Guid="5db14abe-d37e-41a1-954b-1cd0ff9f58c1">
+      <column name="" />
+    </property>
+    <property name="BloodDonationType" type="BD.BloodTransfusionCenter.Core.BloodDonationType" p1:ValidateRequired="true" p1:Guid="09655063-9d84-4344-b621-4014b6085cdb">
+      <column name="" />
+    </property>
+    <property name="TotalQty" type="Int32" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="f390095f-645f-4056-898f-16ea6677e6fd">
+      <column name="" />
+    </property>
+    <property name="MinQty" type="Int32" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="bc0cd0c0-dcc0-4f56-a232-773667728498">
+      <column name="" />
+    </property>
+    <property name="MaxQty" type="Int32" p1:nullable="True" p1:ValidateRequired="false" p1:Guid="6f55c79f-c207-4191-945a-8696cfbd5c59">
+      <column name="" />
+    </property>
+  </class>
+  <class name="BloodOutOperation" entity-set="BloodOutOperations" p1:Guid="696abb52-9dc2-44ca-bc72-f553e4797fd9" p1:DoNotGenerateDefaultConstructor="True">
+    <id name="Id" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="0a1594cd-6474-49ec-a9e2-04d4351236cb">
+      <column name="" />
+    </id>
+    <property name="OutOperationType" type="BD.BloodTransfusionCenter.Core.BloodOutOperationType" p1:ValidateRequired="true" p1:Guid="ed61d852-7f23-477e-bf08-173b4e9638da">
+      <column name="" />
+    </property>
+    <property name="OutDate" type="Date" p1:ValidateRequired="true" p1:Guid="f15ad960-b6bb-49d2-b475-00b1d9db2a55">
+      <column name="" />
+    </property>
+    <property name="BloodDonationId" type="Guid" p1:ValidateRequired="true" p1:Guid="952b1f7b-752f-4259-90e2-d9a17ec8b1bf">
+      <column name="" />
+    </property>
+  </class>
+  <class name="Commune" entity-set="Communes" p1:Guid="066944c0-66ca-41e0-9ad6-1710d5f2f568" p1:DoNotImplementCloneable="True" p1:EntityBase="EntityBase&lt;int&gt;, IAggregateRoot" p1:DoNotSerialize="True" p1:DoNotGenerateDefaultConstructor="True">
+    <id name="Id" type="Int32" p1:ValidateRequired="true" p1:Guid="6a1b8ab7-94e6-4b78-8fde-2421977f7226">
+      <column name="" />
+    </id>
+    <property name="Name" type="String" p1:ValidateRequired="true" p1:Guid="3bd77be7-c918-4b5c-bc7e-e686b46f334b">
+      <column name="" />
+    </property>
+    <property name="WilayaId" type="Int32" p1:ValidateRequired="true" p1:Guid="fbc1dda3-918c-4dd1-bfcf-c0913b540f64">
+      <column name="" not-null="False" />
+    </property>
+  </class>
+  <associations>
+    <association name="Service_BloodDonationRequest" cardinality="OneToMany" on-delete="Restrict" p1:Guid="5d4d2afc-5d71-44a4-a1b9-9d91fa7d0a23">
+      <end1 multiplicity="ZeroOrOne" name="Service" class="BloodDonationRequest" relation-class="Service" constrained="True" lazy="False" p1:Guid="48d7350d-c39e-4fb6-9c55-bd8a6ba2e89f">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="BloodDonationRequests" class="Service" relation-class="BloodDonationRequest" lazy="False" p1:Guid="8078eb05-86b9-4c7c-9414-c1495f3fe2ed">
+        <property name="ServiceId" />
+      </end2>
+    </association>
+    <association name="Donor_BloodDonation" cardinality="OneToMany" on-delete="Restrict" p1:Guid="3d5ff140-090f-463a-9ba8-62ddd4f91ef3">
+      <end1 multiplicity="One" name="Donor" class="BloodDonation" relation-class="Donor" constrained="True" lazy="False" p1:Guid="00da68df-07a4-4ace-adae-2d31e32cddf5">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="BloodDonations" class="Donor" relation-class="BloodDonation" lazy="False" p1:Guid="1b00e369-f5aa-42d8-bbae-cf2d21090b17">
+        <property name="DonorId" />
+      </end2>
+    </association>
+    <association name="BloodDonationRequest_BloodDonationPledge" cardinality="OneToMany" on-delete="Restrict" p1:Guid="338131df-ea14-4630-966a-555cdb31b08c">
+      <end1 multiplicity="One" name="BloodDonationRequest" class="BloodDonationPledgeExtended" relation-class="BloodDonationRequest" constrained="True" lazy="False" p1:Guid="185a07da-91b6-40f7-9d10-05f307f2ff14">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="BloodDonationPledges" class="BloodDonationRequest" relation-class="BloodDonationPledgeExtended" lazy="False" p1:Guid="f888f7ed-fa03-4278-a749-c0599bf8382b">
+        <property name="BloodDonationRequestId" />
+      </end2>
+    </association>
+    <association name="BloodDonationRequest_BloodDonation" cardinality="OneToMany" on-delete="Restrict" p1:Guid="ad2bbbf1-b769-47c6-bb40-f28128c464db">
+      <end1 multiplicity="ZeroOrOne" name="BloodDonationRequest" class="BloodDonation" relation-class="BloodDonationRequest" constrained="True" lazy="False" p1:Guid="0fbb48bb-0dbf-4b71-8860-ba42fe1b68af">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="BloodDonations" class="BloodDonationRequest" relation-class="BloodDonation" lazy="False" p1:Guid="67720596-c9ac-48d7-a945-1b9963437169">
+        <property name="BloodDonationRequestId" />
+      </end2>
+    </association>
+    <association name="BloodOutOperation_BloodDonation" cardinality="OneToOne" on-delete="Restrict" p1:Guid="18696027-d301-4c2f-8c4b-06b1e778bcbc">
+      <end1 multiplicity="One" name="BloodOutOperation" class="BloodDonation" relation-class="BloodOutOperation" generate="False" constrained="False" lazy="False" p1:Guid="5b7805c9-faac-4c59-a74e-cf6f617a6c33">
+        <property name="BloodDonationId" />
+      </end1>
+      <end2 multiplicity="ZeroOrOne" name="BloodDonation" class="BloodOutOperation" relation-class="BloodDonation" constrained="True" lazy="False" p1:Guid="3c2e0e5a-5340-4bc4-b556-cfea8bef7e1c">
+        <property name="Id" />
+      </end2>
+    </association>
+    <association name="Wilaya_Commune" cardinality="OneToMany" on-delete="Restrict" p1:Guid="73dbce46-8c76-4ee3-b521-3b5c655c6f8f">
+      <end1 multiplicity="One" name="Wilaya" class="Commune" relation-class="Wilaya" constrained="True" lazy="False" p1:Guid="ac643c60-bd66-4152-b7f1-433875279db5">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="Communes" class="Wilaya" relation-class="Commune" lazy="False" p1:Guid="9be7aa42-c6e4-4d82-89a3-e3f722edb84b">
+        <property name="WilayaId" />
+      </end2>
+    </association>
+    <association name="Commune_Donor" cardinality="OneToMany" on-delete="Restrict" p1:Guid="82b60619-1d0f-496f-8f2b-51ee81372fbf">
+      <end1 multiplicity="One" name="Commune" class="Donor" relation-class="Commune" constrained="True" lazy="False" p1:Guid="df36008c-2805-4224-9c36-d27a0d3ebe3f">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="Donors" class="Commune" relation-class="Donor" lazy="False" p1:Guid="71d77d6d-2116-42d2-a3b0-ed4745f5d43d">
+        <property name="CommuneId" />
+      </end2>
+    </association>
+    <association name="Wilaya_BloodTansfusionCenter" cardinality="OneToMany" on-delete="Restrict" p1:Guid="7ba10c8a-09d5-48ed-a3fd-bbdf6c228762">
+      <end1 multiplicity="One" name="Wilaya" class="BloodTansfusionCenter" relation-class="Wilaya" constrained="True" lazy="False" p1:Guid="4b3adcdf-7540-4681-9bac-b97b443cab05">
+        <property name="Id" />
+      </end1>
+      <end2 multiplicity="Many" name="BloodTansfusionCenters" class="Wilaya" relation-class="BloodTansfusionCenter" lazy="False" p1:Guid="86c68982-5e59-4e8a-9375-85bddd64718e">
+        <property name="WilayaId" />
+      </end2>
+    </association>
+  </associations>
+</efcore>

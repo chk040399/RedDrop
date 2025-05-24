@@ -5,7 +5,6 @@ namespace BD.PublicPortal.Infrastructure.Services.Identity;
 
 public class RegisterUserDto: ApplicationUserDTO
 {
-  public string UserName { get; set; } = string.Empty;
   public string Email { get; set; } = string.Empty;
 
   public string Password { get; set; } = string.Empty;
@@ -14,7 +13,7 @@ public class RegisterUserDto: ApplicationUserDTO
   public ApplicationUser ToEntityEx()
   {
     var user = this.ToEntity();
-    user.UserName = UserName;
+    user.UserName = Email;
     user.Email = Email;
     return user;
   }

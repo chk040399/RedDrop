@@ -1,7 +1,6 @@
 ﻿#nullable disable
 
 using BD;
-using BD.PublicPortal.Core.Entities.Enums;
 
 namespace BD.PublicPortal.Core.DTOs
 {
@@ -13,7 +12,7 @@ namespace BD.PublicPortal.Core.DTOs
         public ApplicationUserDTO() {
         }
 
-        public ApplicationUserDTO(System.Guid? donorCorrelationId, bool? donorWantToStayAnonymous, bool? donorExcludeFromPublicPortal, DonorAvailability? donorAvailability, DonorContactMethod? donorContactMethod, string donorName, System.DateTime donorBirthDate, BloodGroup donorBloodGroup, string donorNIN, string donorTel, string donorNotesForBTC, System.DateTime? donorLastDonationDate, int? communeId, List<System.Guid> donorBloodTransferCenterSubscriptions, List<System.Guid> bloodDonationPledges) {
+        public ApplicationUserDTO(System.Guid? donorCorrelationId, bool? donorWantToStayAnonymous, bool? donorExcludeFromPublicPortal, DonorAvailability? donorAvailability, DonorContactMethod? donorContactMethod, string donorName, System.DateTime donorBirthDate, BloodGroup donorBloodGroup, string donorNIN, string donorTel, string donorNotesForBTC, System.DateTime? donorLastDonationDate, int? communeId) {
 
           this.DonorCorrelationId = donorCorrelationId;
           this.DonorWantToStayAnonymous = donorWantToStayAnonymous;
@@ -28,8 +27,6 @@ namespace BD.PublicPortal.Core.DTOs
           this.DonorNotesForBTC = donorNotesForBTC;
           this.DonorLastDonationDate = donorLastDonationDate;
           this.CommuneId = communeId;
-          this.DonorBloodTransferCenterSubscriptions = donorBloodTransferCenterSubscriptions;
-          this.BloodDonationPledges = bloodDonationPledges;
         }
 
         #endregion
@@ -61,14 +58,6 @@ namespace BD.PublicPortal.Core.DTOs
         public System.DateTime? DonorLastDonationDate { get; set; }
 
         public int? CommuneId { get; set; }
-
-        #endregion
-
-        #region Navigation Properties
-
-        public List<System.Guid> DonorBloodTransferCenterSubscriptions { get; set; }
-
-        public List<System.Guid> BloodDonationPledges { get; set; }
 
         #endregion
     }
