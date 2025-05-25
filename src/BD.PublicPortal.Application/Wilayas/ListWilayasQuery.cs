@@ -1,4 +1,4 @@
-﻿using BD.SharedKernel;
+﻿using BD.PublicPortal.Core.DTOs;
 
 namespace BD.PublicPortal.Application.Wilayas;
 

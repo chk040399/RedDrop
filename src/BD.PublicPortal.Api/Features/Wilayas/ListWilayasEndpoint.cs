@@ -1,5 +1,6 @@
 ﻿
 using BD.PublicPortal.Application.Wilayas;
+using BD.PublicPortal.Core.DTOs;
 
 
 namespace BD.PublicPortal.Api.Features.Wilayas;

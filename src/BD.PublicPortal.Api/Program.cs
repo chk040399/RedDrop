@@ -60,6 +60,15 @@ builder.Services.AddFastEndpoints(o => o.IncludeAbstractValidators = true)
                 .SwaggerDocument(o =>o.ShortSchemaNames = true);
 
 
+#if DEBUG
+builder.WebHost.ConfigureKestrel(options =>
+{
+  options.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(30);
+  options.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(30);
+});
+#endif
+
+
 var app = builder.Build();
 
 

@@ -1,5 +1,5 @@
-﻿using BD.PublicPortal.Core.Entities;
-using BD.SharedKernel;
+﻿using BD.PublicPortal.Core.DTOs;
+using BD.PublicPortal.Core.Entities;
 
 
 namespace BD.PublicPortal.Application.Wilayas;
@@ -9,6 +9,7 @@ public class ListWilayasHandler(IReadRepository<Wilaya> _wilayasRepo) : IQueryHa
   public async Task<Result<IEnumerable<WilayaDTO>>> Handle(ListWilayasQuery request, CancellationToken cancellationToken)
   {
     var lst = await _wilayasRepo.ListAsync(cancellationToken);
-    return Result<IEnumerable<WilayaDTO>>.Success(lst.Select(w => new WilayaDTO(w.Id, w.Name)).OrderBy(w=>w.Id));
+    var result = lst.OrderBy(w => w.Id).ToDtosWithRelated(0);
+    return Result<IEnumerable<WilayaDTO>>.Success(result);
   }
 }

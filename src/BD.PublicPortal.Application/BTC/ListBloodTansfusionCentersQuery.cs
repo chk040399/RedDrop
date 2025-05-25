@@ -1,5 +1,7 @@
-﻿using BD.SharedKernel;
+﻿using BD.PublicPortal.Core.DTOs;
+using BD.PublicPortal.Core.Entities.Specifications;
 
 namespace BD.PublicPortal.Application.BTC;
 
-public record ListBloodTansfusionCentersQuery(int? WilayaId):IQuery<Result<IEnumerable<BloodTansfusionCenterDTO>>>;
+public record ListBloodTansfusionCentersQuery(BloodTransfusionCenterSpecificationFilter? filter = null, Guid? LoggedUserID = null, int? Level = null)
+  :IQuery<Result<IEnumerable<BloodTansfusionCenterDTO>>>;

@@ -1,0 +1,2 @@
+uninstall aspire work load
+dotnet new install Aspire.ProjectTemplates

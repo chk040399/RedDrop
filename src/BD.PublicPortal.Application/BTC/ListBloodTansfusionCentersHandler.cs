@@ -1,6 +1,6 @@
-﻿using BD.PublicPortal.Core.Entities;
+﻿using BD.PublicPortal.Core.DTOs;
+using BD.PublicPortal.Core.Entities;
 using BD.PublicPortal.Core.Entities.Specifications;
-using BD.SharedKernel;
 
 
 namespace BD.PublicPortal.Application.BTC;
@@ -9,11 +9,9 @@ public class ListBloodTansfusionCentersHandler(IReadRepository<BloodTansfusionCe
 {
   public async Task<Result<IEnumerable<BloodTansfusionCenterDTO>>> Handle(ListBloodTansfusionCentersQuery request, CancellationToken cancellationToken)
   {
-    var spec = new BloodTansfusionCenterSpecification(request.WilayaId);
+    BloodTansfusionCenterSpecification spec = new BloodTansfusionCenterSpecification(filter:request.filter,loggedUserId:request.LoggedUserID,level:request.Level);
     var lst = await _btcRepo.ListAsync(spec,cancellationToken);
-    
-    return Result<IEnumerable<BloodTansfusionCenterDTO>>.Success(
-      lst.Select(btc => new BloodTansfusionCenterDTO(btc.Name,btc.Address,btc.Contact,btc.Email,btc.Tel,btc.WilayaId))
-      );
+    var level = (request.Level == null) ? 0 : (int)request.Level;
+    return Result<IEnumerable<BloodTansfusionCenterDTO>>.Success(lst.ToDtosWithRelated(level));
   }
 }
