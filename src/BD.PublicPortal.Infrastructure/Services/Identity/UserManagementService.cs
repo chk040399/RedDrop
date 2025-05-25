@@ -42,6 +42,7 @@ public class UserManagementService(UserManager<ApplicationUser> userManager, ICo
       Subject = new ClaimsIdentity(new[]
       {
         new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim("UserId", user.Id.ToString()),
         new Claim(ClaimTypes.Email, user.Email!)
       }),
       Expires = DateTime.UtcNow.AddDays(1),
