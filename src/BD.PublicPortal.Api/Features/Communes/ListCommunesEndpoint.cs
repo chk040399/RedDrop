@@ -1,4 +1,5 @@
 ﻿using BD.PublicPortal.Application.Communes;
+using BD.PublicPortal.Core.DTOs;
 
 namespace BD.PublicPortal.Api.Features.Communes;
 

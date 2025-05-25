@@ -1,9 +1,5 @@
 ﻿#nullable disable
 
-
-using BD;
-using BD.SharedKernel;
-
 namespace BD.PublicPortal.Core.Entities
 {
     public partial class DonorBloodTransferCenterSubscriptions : EntityBase<Guid>, IAggregateRoot {
