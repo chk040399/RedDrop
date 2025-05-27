@@ -11,7 +11,9 @@ using BD.PublicPortal.Infrastructure.Services.Identity;
 using BD.SharedKernel;
 using FastEndpoints.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -24,21 +26,21 @@ public static class InfrastructureServiceExtensions
 {
   public static IServiceCollection AddInfrastructureServices(
     this IServiceCollection services,
-    ConfigurationManager config,
+    WebApplicationBuilder builder,
     ILogger logger)
   {
-    var connectionString = config.GetConnectionString("DefaultConnection");
-    Guard.Against.Null(connectionString);
-    services.AddDbContext<AppDbContext>(options =>
-     options.UseNpgsql(connectionString).EnableSensitiveDataLogging().EnableDetailedErrors());
+
+    builder.AddNpgsqlDbContext<AppDbContext>(connectionName: "PublicPortalDatabase", configureDbContextOptions:
+      options => { options.EnableSensitiveDataLogging().EnableDetailedErrors();}
+    );
 
     // Register Identity with custom user and role
     services.AddIdentity<ApplicationUser, ApplicationRole>()
       .AddEntityFrameworkStores<AppDbContext>()
       .AddDefaultTokenProviders(); // .AddSignInManager(); // Add this if you need SignInManager
 
-    
 
+    services.AddScoped<AppDbContext>();
 
     services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
            .AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>))

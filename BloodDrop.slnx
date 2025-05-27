@@ -11,7 +11,9 @@
     <File Path="Directory.Packages.props" />
   </Folder>
   <Folder Name="/src/">    
-	<Project Path="src/BD.SharedKernel/BD.SharedKernel.csproj" />
+	<Project Path="src/AppHost/AppHost.csproj" />
+	<Project Path="src/ServiceDefaults/ServiceDefaults.csproj" />
+	<Project Path="src/BD.SharedKernel/BD.SharedKernel.csproj" />	
     <Project Path="src/BD.PublicPortal.Core/BD.PublicPortal.Core.csproj" />
     <Project Path="src/BD.PublicPortal.Infrastructure/BD.PublicPortal.Infrastructure.csproj" />    
     <Project Path="src/BD.PublicPortal.Application/BD.PublicPortal.Application.csproj" />

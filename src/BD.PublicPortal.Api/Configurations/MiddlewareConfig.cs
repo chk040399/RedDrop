@@ -3,6 +3,7 @@ using Ardalis.ListStartupServices;
 using BD.PublicPortal.Core.Entities;
 using BD.PublicPortal.Infrastructure.Data;
 using BD.PublicPortal.Infrastructure.Data.SeedData;
+using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
 
 namespace BD.PublicPortal.Api.Configurations;
 
@@ -21,9 +22,6 @@ public static class MiddlewareConfig
       app.UseHsts();
     }
 
-    //app.UseFastEndpoints(x => x.Errors.UseProblemDetails())
-    //    .UseSwaggerGen(); // Includes AddFileServer and static files middleware
-
     app.UseAuthentication();
     app.UseAuthorization();
     
@@ -37,7 +35,7 @@ public static class MiddlewareConfig
       {
         // TODO: fixed this
         // c.Endpoints.RoutePrefix = "api"; 
-
+        // Includes AddFileServer and static files middleware
         c.Errors.UseProblemDetails(
           x =>
           {
@@ -57,27 +55,31 @@ public static class MiddlewareConfig
 
     app.UseHttpsRedirection(); // Note this will drop Authorization headers
 
+    // Temporary DISABLED
     await SeedDatabase(app);
 
     return app;
   }
 
-  static async Task SeedDatabase(WebApplication app)
+  static Task SeedDatabase(WebApplication app)
   {
-    using var scope = app.Services.CreateScope();
-    var services = scope.ServiceProvider;
+    return Task.CompletedTask;
+    
+    // Temporary DISABLED
+    //using var scope = app.Services.CreateScope();
+    //var services = scope.ServiceProvider;
 
-    try
-    {
-      var context = services.GetRequiredService<AppDbContext>();
-      //          context.Database.Migrate();
-      context.Database.EnsureCreated();
-      await ContributorsSeedData.InitializeAsync(context);
-    }
-    catch (Exception ex)
-    {
-      var logger = services.GetRequiredService<ILogger<Program>>();
-      logger.LogError(ex, "An error occurred seeding the DB. {exceptionMessage}", ex.Message);
-    }
+    //try
+    //{
+    //  var context = services.GetRequiredService<AppDbContext>();
+    //  //          context.Database.Migrate();
+    //  context.Database.EnsureCreated();
+    //  await ContributorsSeedData.InitializeAsync(context);
+    //}
+    //catch (Exception ex)
+    //{
+    //  var logger = services.GetRequiredService<ILogger<Program>>();
+    //  logger.LogError(ex, "An error occurred seeding the DB. {exceptionMessage}", ex.Message);
+    //}
   }
 }

@@ -11,13 +11,19 @@ var publicPortalPostgres =
     .WithPgAdmin()
     .WithPgWeb();
 
-publicPortalPostgres.AddDatabase(name:"PublicPortalDatabase",databaseName: "PublicPortalDatabase");// name => la resource ! 
+var publicPortalDatabase = publicPortalPostgres.AddDatabase(name:"PublicPortalDatabase",databaseName: "PublicPortalDatabase");// name => la resource ! 
+
+var migrationService = builder.AddProject<Projects.BD_MigrationService>("PublicPortalDatabaseMigrationService")
+  .WithReference(publicPortalDatabase)
+  .WithParentRelationship(publicPortalPostgres)
+  .WaitFor(publicPortalDatabase);
+
 
 
 
 var publicPortalApi = builder.AddProject<Projects.BD_PublicPortal_Api>("publicPortalApi")
-  .WithReference(publicPortalPostgres)
-  .WaitFor(publicPortalPostgres);
+  .WithReference(publicPortalDatabase)
+  .WaitForCompletion(migrationService);
 
 
 publicPortalApi.WithExternalHttpEndpoints();//TODO : disable if nno external acces is needed

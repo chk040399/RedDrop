@@ -26,7 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\ServiceDefaults\ServiceDefaults.csproj" />
+    <ProjectReference Include="..\ServiceDefaults\ServiceDefaults.csproj" />
     <ProjectReference Include="..\BD.PublicPortal.Infrastructure\BD.PublicPortal.Infrastructure.csproj" />
     <ProjectReference Include="..\BD.PublicPortal.Application\BD.PublicPortal.Application.csproj" />
   </ItemGroup>
