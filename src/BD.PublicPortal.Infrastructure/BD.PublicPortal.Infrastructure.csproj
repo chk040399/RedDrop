@@ -1,10 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.1.3" />
-
+  
   <ItemGroup>
     <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" />
     <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
     <PackageReference Include="Azure.Identity" />
+    <PackageReference Include="dbup-postgresql" />
     <PackageReference Include="FastEndpoints" />
     <PackageReference Include="FastEndpoints.Security" />
     <PackageReference Include="MailKit" />
@@ -24,8 +25,9 @@
     <ProjectReference Include="..\BD.PublicPortal.Core\BD.PublicPortal.Core.csproj" />
   </ItemGroup>
   
+  
+  
   <ItemGroup>
-    <Folder Include="Interfaces\Database\" />
-    <Folder Include="Services\Database\" />
+    <EmbeddedResource Include="Data\sql_migrations\**\*.sql" />
   </ItemGroup>
 </Project>

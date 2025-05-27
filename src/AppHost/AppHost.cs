@@ -6,7 +6,7 @@ var publicPortalPostgresUser = builder.AddParameter("PublicPortalPostgresUser", 
 var publicPortalPostgresPassword = builder.AddParameter("PublicPortalPostgresPassword", "walidozich");
 
 var publicPortalPostgres =
-  builder.AddPostgres("PublicPortalPostgres",userName:publicPortalPostgresUser,password:publicPortalPostgresPassword,port: 5432)
+  builder.AddPostgres("PublicPortalPostgres",userName:publicPortalPostgresUser,password:publicPortalPostgresPassword)
     .WithLifetime(ContainerLifetime.Persistent)
     .WithPgAdmin()
     .WithPgWeb();

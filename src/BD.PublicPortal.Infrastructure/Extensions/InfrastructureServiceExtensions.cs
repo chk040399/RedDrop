@@ -56,7 +56,7 @@ public static class InfrastructureServiceExtensions
     services.AddScoped<IUserManagementService, UserManagementService>();
     services.AddScoped<IDatabaseManagementService, DatabaseManagementService>();
 
-    var assembly = Assembly.GetAssembly(typeof(BD.PublicPortal.Core.IAssemblyMarquer));
+    var assembly = Assembly.GetAssembly(typeof(IAssemblyMarquer));
     EnumHelper.RegisterAllEnums(assembly!, "BD.PublicPortal.Core.Entities.Enums");
 
 

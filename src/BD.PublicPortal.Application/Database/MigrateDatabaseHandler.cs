@@ -8,14 +8,6 @@ public class MigrateDatabaseHandler(IDatabaseManagementService databaseManagemen
 {
   public async Task<Result> Handle(MigrateDatabaseCommand request, CancellationToken cancellationToken)
   {
-    try
-    {
-      await databaseManagementService.ExecuteAsync(dbContext, cancellationToken);
-      return Result.SuccessWithMessage("Database successfully migrated");
-    }
-    catch (Exception e)
-    {
-      return Result.Error(e.Message);
-    }
+      return await databaseManagementService.ExecuteDbUp(dbContext, cancellationToken);
   }
 }
