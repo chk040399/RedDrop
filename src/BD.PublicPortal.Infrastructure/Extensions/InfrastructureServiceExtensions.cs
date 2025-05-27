@@ -5,8 +5,10 @@ using BD.PublicPortal.Core.Interfaces.Contributors;
 using BD.PublicPortal.Core.Services.Contibutors;
 using BD.PublicPortal.Infrastructure.Data;
 using BD.PublicPortal.Infrastructure.Data.Services;
+using BD.PublicPortal.Infrastructure.Interfaces.Database;
 using BD.PublicPortal.Infrastructure.Interfaces.Identity;
 using BD.PublicPortal.Infrastructure.Services.Contibutors;
+using BD.PublicPortal.Infrastructure.Services.Database;
 using BD.PublicPortal.Infrastructure.Services.Identity;
 using BD.SharedKernel;
 using FastEndpoints.Security;
@@ -31,7 +33,11 @@ public static class InfrastructureServiceExtensions
   {
 
     builder.AddNpgsqlDbContext<AppDbContext>(connectionName: "PublicPortalDatabase", configureDbContextOptions:
-      options => { options.EnableSensitiveDataLogging().EnableDetailedErrors();}
+      options =>
+      {
+        options.EnableSensitiveDataLogging().EnableDetailedErrors();
+
+      }
     );
 
     // Register Identity with custom user and role
@@ -48,6 +54,7 @@ public static class InfrastructureServiceExtensions
            .AddScoped<IDeleteContributorService, DeleteContributorService>();
 
     services.AddScoped<IUserManagementService, UserManagementService>();
+    services.AddScoped<IDatabaseManagementService, DatabaseManagementService>();
 
     var assembly = Assembly.GetAssembly(typeof(BD.PublicPortal.Core.IAssemblyMarquer));
     EnumHelper.RegisterAllEnums(assembly!, "BD.PublicPortal.Core.Entities.Enums");

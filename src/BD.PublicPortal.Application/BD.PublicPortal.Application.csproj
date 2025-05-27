@@ -9,5 +9,4 @@
     <ProjectReference Include="..\BD.PublicPortal.Core\BD.PublicPortal.Core.csproj" />
     <ProjectReference Include="..\BD.PublicPortal.Infrastructure\BD.PublicPortal.Infrastructure.csproj" />
   </ItemGroup>
-
 </Project>

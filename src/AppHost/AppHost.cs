@@ -13,24 +13,13 @@ var publicPortalPostgres =
 
 var publicPortalDatabase = publicPortalPostgres.AddDatabase(name:"PublicPortalDatabase",databaseName: "PublicPortalDatabase");// name => la resource ! 
 
-var migrationService = builder.AddProject<Projects.BD_MigrationService>("PublicPortalDatabaseMigrationService")
-  .WithReference(publicPortalDatabase)
-  .WithParentRelationship(publicPortalPostgres)
-  .WaitFor(publicPortalDatabase);
-
-
-
 
 var publicPortalApi = builder.AddProject<Projects.BD_PublicPortal_Api>("publicPortalApi")
   .WithReference(publicPortalDatabase)
-  .WaitForCompletion(migrationService);
+  .WaitFor(publicPortalDatabase);
 
+publicPortalApi.WithHttpCommand(path: "/dbadmin/migrate","Migrate Database",commandOptions:new HttpCommandOptions(){IconName = "HttpCommandOptions" });
 
 publicPortalApi.WithExternalHttpEndpoints();//TODO : disable if nno external acces is needed
-
-
-
-
-
 
 builder.Build().Run();
