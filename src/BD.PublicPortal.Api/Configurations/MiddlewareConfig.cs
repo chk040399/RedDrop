@@ -30,6 +30,8 @@ public static class MiddlewareConfig
     // Auto Id Endpoints removed for now
     //app.MapGroup("/auth").WithTags("Identity").MapIdentityApi<ApplicationUser>();
 
+    app.MapDefaultEndpoints();// ASPIRE
+
     app.UseFastEndpoints(
       c =>
       {

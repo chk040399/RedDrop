@@ -29,6 +29,8 @@ public static class ServiceConfigs
 
     logger.LogInformation("{Project} services registered", "Mediatr and Email Sender");
 
+    builder.AddServiceDefaults();// For ASPIRE
+
     return services;
   }
 
