@@ -50,27 +50,51 @@ namespace BD.PublicPortal.Core.DTOs
             var target = new ApplicationUser();
 
             // Properties
-            target.DonorCorrelationId = source.DonorCorrelationId;
-            target.DonorWantToStayAnonymous = source.DonorWantToStayAnonymous;
-            target.DonorExcludeFromPublicPortal = source.DonorExcludeFromPublicPortal;
-            target.DonorAvailability = source.DonorAvailability;
-            target.DonorContactMethod = source.DonorContactMethod;
-            target.DonorName = source.DonorName;
-            target.DonorBirthDate = source.DonorBirthDate;
-            target.DonorBloodGroup = source.DonorBloodGroup;
-            target.DonorNIN = source.DonorNIN;
-            target.DonorTel = source.DonorTel;
-            target.DonorNotesForBTC = source.DonorNotesForBTC;
-            target.DonorLastDonationDate = source.DonorLastDonationDate;
-            target.CommuneId = source.CommuneId;
+              target.DonorCorrelationId = source.DonorCorrelationId;
+              target.DonorWantToStayAnonymous = source.DonorWantToStayAnonymous;
+              target.DonorExcludeFromPublicPortal = source.DonorExcludeFromPublicPortal;
+              target.DonorAvailability = source.DonorAvailability;
+              target.DonorContactMethod = source.DonorContactMethod;
+              target.DonorName = source.DonorName;
+              target.DonorBirthDate = source.DonorBirthDate;
+              target.DonorBloodGroup = source.DonorBloodGroup;
+              target.DonorNIN = source.DonorNIN;
+              target.DonorTel = source.DonorTel;
+              target.DonorNotesForBTC = source.DonorNotesForBTC;
+              target.DonorLastDonationDate = source.DonorLastDonationDate;
+              target.CommuneId = source.CommuneId;
 
-            // User-defined partial method
-            OnEntityCreating(source, target);
-
+              // User-defined partial method
+              OnEntityCreating(source, target);
             return target;
         }
 
-        public static List<ApplicationUserDTO> ToDtos(this IEnumerable<ApplicationUser> source)
+        public static ApplicationUser UpdateEntity(this UpdateUserDTO source, ApplicationUser userEntityToUpdate)
+        {
+          if (source == null)
+            return null;
+
+          var target = userEntityToUpdate;
+
+          // Properties
+          //target.DonorCorrelationId = source.DonorCorrelationId;
+          target.DonorWantToStayAnonymous = source.DonorWantToStayAnonymous?? target.DonorWantToStayAnonymous;
+          target.DonorExcludeFromPublicPortal = source.DonorExcludeFromPublicPortal?? target.DonorExcludeFromPublicPortal;
+          target.DonorAvailability = source.DonorAvailability??target.DonorAvailability;
+          target.DonorContactMethod = source.DonorContactMethod?? target.DonorContactMethod;
+          target.DonorName = source.DonorName ?? target.DonorName;
+          target.DonorBirthDate = source.DonorBirthDate ?? target.DonorBirthDate;
+          target.DonorBloodGroup = source.DonorBloodGroup?? target.DonorBloodGroup;
+          //target.DonorNIN = source.DonorNIN;
+          target.DonorTel = source.DonorTel ?? target.DonorTel;
+          target.DonorNotesForBTC = source.DonorNotesForBTC ?? target.DonorNotesForBTC;
+          //target.DonorLastDonationDate = source.DonorLastDonationDate;
+          target.CommuneId = source.CommuneId ?? target.CommuneId;
+          
+          return target;
+        }
+
+    public static List<ApplicationUserDTO> ToDtos(this IEnumerable<ApplicationUser> source)
         {
             if (source == null)
               return null;
