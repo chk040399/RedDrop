@@ -12,6 +12,7 @@
     <PackageReference Include="Ardalis.ListStartupServices" />
     <PackageReference Include="Ardalis.Result" />
     <PackageReference Include="Ardalis.Result.AspNetCore" />
+    <PackageReference Include="Aspire.Confluent.Kafka" />
     <PackageReference Include="FastEndpoints" />
     <PackageReference Include="FastEndpoints.Security" />
     <PackageReference Include="FastEndpoints.Swagger" />
@@ -29,6 +30,10 @@
     <ProjectReference Include="..\ServiceDefaults\ServiceDefaults.csproj" />
     <ProjectReference Include="..\BD.PublicPortal.Infrastructure\BD.PublicPortal.Infrastructure.csproj" />
     <ProjectReference Include="..\BD.PublicPortal.Application\BD.PublicPortal.Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\InternalUse\" />
   </ItemGroup>
 
 </Project>

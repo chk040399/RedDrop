@@ -1,4 +1,5 @@
-﻿using BD.PublicPortal.Core.Interfaces;
+﻿using BD.PublicPortal.Api.Kafka;
+using BD.PublicPortal.Core.Interfaces;
 using BD.PublicPortal.Infrastructure.Email;
 using BD.PublicPortal.Infrastructure.Extensions;
 
@@ -26,6 +27,8 @@ public static class ServiceConfigs
     {
       services.AddScoped<IEmailSender, MimeKitEmailSender>();
     }
+
+    services.AddKafkaServiceConfigs(builder);
 
     logger.LogInformation("{Project} services registered", "Mediatr and Email Sender");
 

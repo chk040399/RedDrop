@@ -14,12 +14,31 @@ var publicPortalPostgres =
 var publicPortalDatabase = publicPortalPostgres.AddDatabase(name:"PublicPortalDatabase",databaseName: "PublicPortalDatabase");// name => la resource ! 
 
 
+// kafka
+var kafka = builder.AddKafka("kafka")
+  .WithDataVolume(isReadOnly: false)// pour la persistence hors session
+  .WithKafkaUI();// pour verifier
+
+
+
+// email server
+
+// api Portail Public
+
 var publicPortalApi = builder.AddProject<Projects.BD_PublicPortal_Api>("publicPortalApi")
   .WithReference(publicPortalDatabase)
-  .WaitFor(publicPortalDatabase);
+  .WithReference(kafka)
+  .WaitFor(publicPortalDatabase)
+  .WaitFor(kafka);
 
-publicPortalApi.WithHttpCommand(path: "/dbadmin/migrate","Migrate Database",commandOptions:new HttpCommandOptions(){IconName = "HttpCommandOptions" });
+
+publicPortalApi.WithHttpCommand(path: "/dbadmin/migrate","Migrate Database",commandOptions:new HttpCommandOptions(){IconName = "DatabaseArrowUpRegular" });
 
 publicPortalApi.WithExternalHttpEndpoints();//TODO : disable if nno external acces is needed
+
+
+// api Central
+
+// 
 
 builder.Build().Run();

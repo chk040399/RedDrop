@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using BD.PublicPortal.Api.Configurations;
+using Confluent.Kafka;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -74,7 +75,6 @@ var app = builder.Build();
 
 
 await app.UseAppMiddlewareAndSeedDatabase();
-
 
 
 app.Run();
