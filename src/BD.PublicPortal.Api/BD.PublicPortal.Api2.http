@@ -258,7 +258,7 @@ PUT {{host}}:{{port}}/Pledges/019701b1-540d-7d52-b2c7-d63d09e3b814
 Content-Type: application/json
 {
   "ApplicationUserId":"0196fd7f-3618-71fc-a348-680923b64576",
-  "pledgeDate": "2025-05-26T01:26:27.739Z"
+  "pledgeDate": "2025-05-30T01:26:27.739Z"
 }
 ###
 

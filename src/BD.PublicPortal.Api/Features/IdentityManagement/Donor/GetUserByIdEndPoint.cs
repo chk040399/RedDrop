@@ -4,7 +4,7 @@ using BD.PublicPortal.Core.DTOs;
 
 namespace BD.PublicPortal.Api.Features.IdentityManagement.Users.GetById;
 
-public record GetUserByIdEndpointRequest(Guid? UserId);
+public record GetUserByIdEndpointRequest(Guid UserId);
 public class GetUserByIdEndpointResponse
 {
   public ApplicationUserDTO? User { get; set; } = null!;
