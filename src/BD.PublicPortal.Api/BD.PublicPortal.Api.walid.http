@@ -72,6 +72,35 @@ Content-Type: application/json
 }
 ###
 
+POST {{host}}:{{port}}/auth/register
+Content-Type: application/json
+{
+  "userName": "ozich",
+  "email": "ozich@example.com",
+  "password": "Ozich-2025",
+  "confirmPassword": "Ozich-2025",
+  "donorName": "ozich ozich",
+  "donorBirthDate": "2000-05-22T09:16:16.749Z",
+  "donorBloodGroup": 2,
+  "donorNIN": "125555879123512346"  
+}
+###
+
+
+POST {{host}}:{{port}}/auth/register
+Content-Type: application/json
+{
+  "userName": "ozich1",
+  "email": "ozich1@example.com",
+  "password": "Ozich-2025",
+  "confirmPassword": "Ozich-2025",
+  "donorName": "ozich1 ozich1",
+  "donorBirthDate": "2000-05-22T09:16:16.749Z",
+  "donorBloodGroup": 2,
+  "donorNIN": "125555879123512346"  
+}
+###
+
 
 ### Login:
 
@@ -99,7 +128,7 @@ Content-Type: application/json
 }
 ###
 
-@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJVc2VySWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJlbWFpbCI6IlppbW91QGV4YW1wbGUuY29tIiwibmJmIjoxNzQ4NTIzMzM2LCJleHAiOjE3NDg2MDk3MzYsImlhdCI6MTc0ODUyMzMzNiwiaXNzIjoiUmVkRHJvcE9yZ2FuaXNhdGlvbiIsImF1ZCI6IkJsb29kIERvbmF0b3JzIn0.8PuuD5Jz0kpdSyG4n-IwlgFSy0lyAfJahNkKJfKFZtI
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJVc2VySWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJlbWFpbCI6IlppbW91QGV4YW1wbGUuY29tIiwibmJmIjoxNzQ4NTUwMzU0LCJleHAiOjE3NDg2MzY3NTQsImlhdCI6MTc0ODU1MDM1NCwiaXNzIjoiUmVkRHJvcE9yZ2FuaXNhdGlvbiIsImF1ZCI6IkJsb29kIERvbmF0b3JzIn0.eUV5teVYJoouncCdnLDJeO0IdOORZC_APNBUrX0CnXY
 
 
 GET {{host}}:{{port}}/auth/manage/info
@@ -224,7 +253,12 @@ GET {{host}}:{{port}}/BloodDonationRequests?PaginationTake=10&&PaginationSkip=30
 GET {{host}}:{{port}}/BTC/
 ###
 
-GET {{host}}:{{port}}/BTC?&wilayaId=9&PaginationTake=10&level=1
+
+GET {{host}}:{{port}}/BTC/
+Authorization: Bearer {{token}}
+###
+
+GET {{host}}:{{port}}/BTC?&wilayaId=16&PaginationTake=10&level=1
 ###
 
 GET {{host}}:{{port}}/BTC?PaginationTake=10&level=1
@@ -304,7 +338,7 @@ POST {{host}}:{{port}}/subscriptions
 Authorization: Bearer {{token}}
 Content-Type: application/json
 {
-  "BloodTansfusionCenterId": "04a90fb1-dd65-b703-2355-ab4aa6b41bb1"
+  "BloodTansfusionCenterId": "12daf261-1f92-82eb-81c9-e77d22b34692"
 }
 ###
 
@@ -332,3 +366,10 @@ GET {{host}}:{{port}}/BTC/subscribed?level=2
 Authorization: Bearer {{token}}
 
 ###
+
+
+GET {{host}}:{{port}}/Dashboard/stats  
+
+###
+
+

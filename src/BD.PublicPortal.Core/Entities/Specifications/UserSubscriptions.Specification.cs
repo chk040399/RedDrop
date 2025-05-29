@@ -26,4 +26,9 @@ public class UserSubscriptionsSpecification : Specification<DonorBloodTransferCe
 
     Query.OrderBy(x => x.BloodTansfusionCenter.Name);
   }
+
+  public UserSubscriptionsSpecification(Guid userGuid)
+  {
+    Query.Where(x => x.ApplicationUserId == userGuid);
+  }
 }

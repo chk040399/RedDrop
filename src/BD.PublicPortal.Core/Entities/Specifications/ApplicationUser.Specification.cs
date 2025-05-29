@@ -5,7 +5,6 @@
 public record ApplicationUserSpecificationFilter(
   int? CommuneId = null,
   int? WilayaId = null,
-  bool? DonorExcludedFromPublicPortal = null,
   BloodGroup? DonorBloodGroup=null,
   DonorContactMethod? DonorContactMethod=null,
   int? PaginationTake = null,
@@ -17,14 +16,16 @@ public class ApplicationUserSpecification:Specification<ApplicationUser>
   public ApplicationUserSpecification(ApplicationUserSpecificationFilter filter = null,
     Guid? loggedUserId = null, int? level = null)
   {
+    Query.Where(x =>  x.DonorExcludeFromPublicPortal ==null || x.DonorExcludeFromPublicPortal == false);
+    
     if (level > 0)
       Query.Include(x => x.Commune);
     if (filter != null && filter.CommuneId != null)
       Query.Where(x => x.CommuneId == filter.CommuneId);
     if (filter != null && filter.WilayaId != null)
       Query.Where(x => x.Commune.WilayaId == filter.WilayaId);
-    if (filter != null && filter.DonorExcludedFromPublicPortal != null)
-      Query.Where(x => x.DonorExcludeFromPublicPortal == filter.DonorExcludedFromPublicPortal);
+    
+      
     if (filter != null && filter.DonorBloodGroup != null)
       Query.Where(x => x.DonorBloodGroup == filter.DonorBloodGroup);
     if (filter != null && filter.DonorContactMethod != null)
@@ -46,5 +47,10 @@ public class ApplicationUserSpecification:Specification<ApplicationUser>
       Query.Where(x => x.Id == ApplicationUserId);
     }
 
+  }
+
+  public ApplicationUserSpecification(string nin)
+  {
+    Query.Where(x => x.DonorNIN == nin);
   }
 }
