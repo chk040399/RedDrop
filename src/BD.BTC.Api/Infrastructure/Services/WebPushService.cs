@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -31,9 +31,9 @@ namespace Infrastructure.Services
             _notificationRepository = notificationRepository;
             _logger = logger;
             
-            _publicKey = configuration["WebPush:PublicKey"];
-            _privateKey = configuration["WebPush:PrivateKey"];
-            _subject = configuration["WebPush:Subject"];
+            _publicKey = configuration["WebPush:PublicKey"]!;
+            _privateKey = configuration["WebPush:PrivateKey"]!;
+            _subject = configuration["WebPush:Subject"]!;
             
             if (string.IsNullOrEmpty(_publicKey) || string.IsNullOrEmpty(_privateKey) || string.IsNullOrEmpty(_subject))
             {

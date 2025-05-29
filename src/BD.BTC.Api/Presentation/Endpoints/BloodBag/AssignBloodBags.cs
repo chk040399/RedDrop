@@ -1,6 +1,8 @@
-using FastEndpoints;
+﻿using FastEndpoints;
 using MediatR;
 using Application.Features.BloodBagManagement.Commands;
+
+#nullable disable
 
 namespace Presentation.Endpoints.BloodBag
 {

@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using Polly;
 using Domain.Events;
 using Domain.Repositories;
@@ -66,7 +66,7 @@ namespace Application.Features.EventHandling.Handlers
                 return await policy.ExecuteAsync(async () => 
                 {
                     await ProcessPledge(command.Payload, ct);
-                    return Unit.Value;
+                    return await Task<Unit>.FromResult(Unit.Value);
                 });
             }
             catch (Exception ex)

@@ -1,8 +1,10 @@
-using MediatR;
+﻿using MediatR;
 using FastEndpoints;
 using Application.Features.BloodRequests.Commands;
 using Application.DTOs;
 using Domain.ValueObjects;
+
+
 namespace Presentation.Endpoints.BloodRequests
 {
     public class UpdateRequest : Endpoint<UpdateRequestRequest,UpdateRequestResponse>
@@ -28,7 +30,7 @@ namespace Presentation.Endpoints.BloodRequests
         }
         public override async Task HandleAsync(UpdateRequestRequest req, CancellationToken ct)
         {
-            var Command = new UpdateRequestCommand(req.id,req.BloodBagType ==null?BloodBagType.Convert(req.BloodBagType):null,req.Priority==null?Priority.Convert(req.Priority):null,req.DueDate,req.MoreDetails,req.RequiredQty);
+            var Command = new UpdateRequestCommand(req.id,BloodBagType.Convert(req.BloodBagType!),req.Priority==null?Priority.Convert(req.Priority!):null,req.DueDate,req.MoreDetails,req.RequiredQty);
             var (result,err) = await _mediator.Send(Command,ct);
             if(err != null)
             {

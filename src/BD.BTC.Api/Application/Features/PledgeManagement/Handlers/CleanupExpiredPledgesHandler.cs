@@ -1,4 +1,4 @@
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.ValueObjects;
 using Application.Features.PledgeManagement.Commands;
 using MediatR;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Features.PledgeManagement.Handlers
 {
-    public class CleanupExpiredPledgesHandler : IRequestHandler<CleanupExpiredPledgesCommand>
+    public class CleanupExpiredPledgesHandler : IRequestHandler<CleanupExpiredPledgesCommand,Unit>
     {
         private readonly IPledgeRepository _pledgeRepository;
         private readonly IRequestRepository _requestRepository;
@@ -42,7 +42,7 @@ namespace Application.Features.PledgeManagement.Handlers
             if (!pledges.Any())
             {
                 _logger.LogInformation("No active pledges found to check");
-                return Unit.Value;
+                return await Task<Unit>.FromResult(Unit.Value);
             }
 
             // Current date for comparison
@@ -93,8 +93,8 @@ namespace Application.Features.PledgeManagement.Handlers
             }
             
             _logger.LogInformation("Pledge expiration check completed. Updated {Count} pledges", expiredPledges.Count);
-            
-            return Unit.Value;
-        }
+
+            return await Task<Unit>.FromResult(Unit.Value);
+}
     }
 }

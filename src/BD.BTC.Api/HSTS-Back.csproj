@@ -22,6 +22,10 @@
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Kafka" />
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />

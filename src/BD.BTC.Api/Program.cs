@@ -1,4 +1,4 @@
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +13,7 @@ using Application.Features.EventHandling.Commands;
 using Infrastructure.BackgroundServices;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using HSTS_Back;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Presentation.Middlewares;
 using Infrastructure.Services;
@@ -73,7 +74,11 @@ builder.Services.SwaggerDocument(o =>
 });
 
 // MediatR
-builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
+
+
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+  
 
 // FluentValidation
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
@@ -165,8 +170,11 @@ app.UseAuthorization();
 app.UseMiddleware<JwtMiddleware>();
 
 // Register your topic handlers with the dispatcher
+//TODO : Temproary disabled
+/*
 var topicDispatcher = app.Services.GetRequiredService<ITopicDispatcher>();
 topicDispatcher.Register<DonorPledgeCommand>("donors-pledges");
+*/
 
 Console.WriteLine("Starting web server on port 5000...");
 app.Logger.LogInformation("Web server is ready to accept requests at http://0.0.0.0:5000");

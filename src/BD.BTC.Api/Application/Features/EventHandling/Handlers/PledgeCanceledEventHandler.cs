@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using Domain.Events;
 using Domain.Repositories;
@@ -13,7 +13,7 @@ using Infrastructure.Configuration;
 
 namespace Application.Features.EventHandling.Handlers
 {
-    public class PledgeCanceledEventHandler : IRequestHandler<PledgeCanceledCommand>
+    public class PledgeCanceledEventHandler : IRequestHandler<PledgeCanceledCommand,Unit>
     {
         private readonly IPledgeRepository _pledgeRepository;
         private readonly ILogger<PledgeCanceledEventHandler> _logger;

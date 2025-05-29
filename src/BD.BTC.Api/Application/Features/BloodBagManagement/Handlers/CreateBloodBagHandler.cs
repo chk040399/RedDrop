@@ -1,4 +1,4 @@
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
 using Application.DTOs;
@@ -10,6 +10,8 @@ using Application.Interfaces;
 using Infrastructure.ExternalServices.Kafka;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+
+
 namespace Application.Features.BloodBagManagement.Handlers
 {
     public class CreateBloodBagHandler : IRequestHandler<CreateBloodBagCommand, (BloodBagDTO? bloodBag, BaseException? err)> 
@@ -59,7 +61,7 @@ namespace Application.Features.BloodBagManagement.Handlers
                     {
                         throw new NotFoundException("Request not found", "fetching request updating pledge status");
                     }
-                    var pledge = await _pledgeRepository.GetByDonorAndRequestIdAsync(newBloodBag.DonorId.Value, newBloodBag.RequestId.Value);
+                    var pledge = await _pledgeRepository.GetByDonorAndRequestIdAsync(newBloodBag.DonorId!.Value, newBloodBag.RequestId.Value);
                     if (pledge != null)
                     {
                         pledge.UpdateStatus(PledgeStatus.Fulfilled);
@@ -118,7 +120,7 @@ namespace Application.Features.BloodBagManagement.Handlers
                         throw new NotFoundException("Global stock not found", "updating global stock");
                     }
                     stock?.IncrementAvailableCount(1);
-                    await _globalStockRepository.UpdateAsync(stock);
+                    await _globalStockRepository.UpdateAsync(stock!);
                     var topic = _kafkaSettings.Value.Topics["GlobalStock"];
                     var subMessage = new GlobalStockData(
                         newBloodBag.BloodType,
@@ -129,7 +131,7 @@ namespace Application.Features.BloodBagManagement.Handlers
                         stock?.CountExpired ?? 0);
                     var hospital = await _centerRepository.GetPrimaryAsync();
                     var message = new GlobalStockEvent(
-                        hospital.Id, 
+                        hospital!.Id, 
                         subMessage
                     );
                     await _eventProducer.ProduceAsync(topic, JsonSerializer.Serialize(message));

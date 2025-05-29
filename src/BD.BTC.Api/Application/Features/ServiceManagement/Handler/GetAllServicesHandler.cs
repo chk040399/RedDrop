@@ -1,4 +1,4 @@
-using Domain.Repositories;
+﻿using Domain.Repositories;
 using MediatR;
 using Domain.ValueObjects;
 using Application.Features.ServiceManagement.Queries;
@@ -33,7 +33,7 @@ namespace Application.Features.ServiceManagement.Handler
                 }
                 var serviceDtos = services.Select(s => new ServiceDTO
                 {
-                    Id = s.Id,
+                    Id = s!.Id,
                     Name = s.Name
                 }).ToList();
                 return (serviceDtos, null);

@@ -1,4 +1,4 @@
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.ValueObjects;
 using Application.Features.BloodRequests.Commands;
 using MediatR;
@@ -12,7 +12,7 @@ using System.Text.Json;
 
 namespace Application.Features.BloodRequests.Handlers
 { 
-    public class CleanupExpiredBloodRequestsHandler : IRequestHandler<CleanupExpiredRequestsCommand>
+    public class CleanupExpiredBloodRequestsHandler : IRequestHandler<CleanupExpiredRequestsCommand,Unit>
     {
         private readonly IRequestRepository _bloodRequestRepository;
         private readonly IPledgeRepository _pledgeRepository;
@@ -99,7 +99,7 @@ namespace Application.Features.BloodRequests.Handlers
                     expiredRequests.Count, expiredPledgesCount);
             }
 
-            return Unit.Value;
-        }
+            return await Task<Unit>.FromResult(Unit.Value);
+}
     }
 }

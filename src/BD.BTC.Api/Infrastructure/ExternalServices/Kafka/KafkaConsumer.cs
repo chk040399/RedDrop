@@ -1,4 +1,4 @@
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using Confluent.Kafka;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -151,7 +151,7 @@ namespace Infrastructure.ExternalServices.Kafka
                 }
 
                 await _mediator.Send(mediatorRequest);
-                _consumer.Commit(result);
+                _consumer!.Commit(result);
             }
             catch (Exception ex)
             {
@@ -219,7 +219,7 @@ namespace Infrastructure.ExternalServices.Kafka
                         // Use the FromString factory method on your value object
                         return Domain.ValueObjects.PledgeStatus.FromString(stringValue);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         //_logger.LogWarning(ex, "Failed to parse PledgeStatus from '{Status}', using default value", stringValue);
                         return Domain.ValueObjects.PledgeStatus.Pledged; // Default to Pledged on failure

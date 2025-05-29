@@ -1,13 +1,15 @@
+﻿using System.Reflection;
+using Application.Features.EventHandling.Commands;
 using Application.Interfaces;
 using Domain.Repositories;
+using HSTS_Back;
+using Infrastructure.Configuration;
+using Infrastructure.ExternalServices;
 using Infrastructure.ExternalServices.Kafka;
 using Infrastructure.Repositories;
-using MediatR;
-using Infrastructure.ExternalServices;
-using Application.Features.EventHandling.Commands;
-using Microsoft.Extensions.DependencyInjection;
 using Infrastructure.Services;
-using Infrastructure.Configuration;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 
 
 namespace Infrastructure.DependencyInjection
@@ -52,12 +54,10 @@ namespace Infrastructure.DependencyInjection
             // Bind Kafka configuration
             services.Configure<KafkaSettings>(
                 configuration.GetSection(KafkaSettings.SectionName));
+            ;
 
-            // Register MediatR with explicit handler assembly
-            services.AddMediatR(typeof(DonorPledgeCommand).Assembly);
-
-            // Kafka infrastructure components
-            services.AddSingleton<ITopicDispatcher, TopicDispatcher>();
+// Kafka infrastructure components
+      services.AddSingleton<ITopicDispatcher, TopicDispatcher>();
             services.AddSingleton<KafkaTopicInitializer>();
             services.AddScoped<IEventProducer, KafkaEventPublisher>();
             services.AddHostedService<KafkaConsumerService>();
@@ -68,7 +68,7 @@ namespace Infrastructure.DependencyInjection
                 { 
                     BootstrapServers = configuration.GetSection("Kafka:BootstrapServers").Value 
                 })
-                .AddNpgSql(configuration.GetConnectionString("DefaultConnection"));
+                .AddNpgSql(configuration.GetConnectionString("DefaultConnection")!);
 
             return services;
         }

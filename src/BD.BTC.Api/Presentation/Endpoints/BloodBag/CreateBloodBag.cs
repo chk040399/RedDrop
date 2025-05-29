@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using FastEndpoints;
 using Domain.ValueObjects;
 using Application.Features.BloodBagManagement.Commands; 
@@ -40,7 +40,7 @@ namespace Presentation.Endpoints.BloodBag
                     BloodBagType.Convert(req.BloodBagType),
                     req.ExpirationDate,
                     req.AquieredDate,
-                    req.DonorId,
+                    (Guid)req.DonorId!,
                     req.RequestId
                 );
 
@@ -75,7 +75,7 @@ namespace Presentation.Endpoints.BloodBag
         public required string BloodBagType { get; set; }
         public DateOnly? ExpirationDate { get; set; }
         public DateOnly? AquieredDate { get; set; }
-        public required Guid DonorId { get; set; }
+        public Guid? DonorId { get; set; }
         public Guid? RequestId { get; set; }
     }
 

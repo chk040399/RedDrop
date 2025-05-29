@@ -1,5 +1,7 @@
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.ValueObjects;
+
+
 namespace Domain.Events
 {
     public class RequestCreatedEvent
@@ -16,7 +18,7 @@ namespace Domain.Events
             MoreDetails = moreDetails;
             RequiredQty = requiredQty;
             AquiredQty = aquiredQty;
-            Name = name;
+            ServiceName = name;
         }
 
         public Guid Id { get; set; }
@@ -29,7 +31,7 @@ namespace Domain.Events
         public string? MoreDetails { get; set; }
         public int RequiredQty { get; set; }
         public int AquiredQty { get; set; }
-        public string  ServiceName { get; set; }
-        public string Name { get; }
+        public string?  ServiceName { get; set; }
+        
     }
 }

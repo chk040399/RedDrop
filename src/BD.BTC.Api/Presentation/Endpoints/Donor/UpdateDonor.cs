@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using FastEndpoints;
 using Application.Features.DonorManagement.Commands;
 using Application.DTOs;
@@ -39,7 +39,7 @@ namespace Presentation.Endpoints.Donor
                 req.NotesBTC,
                 req.PhoneNumber,
                 req.Address,   
-                BloodType.FromString(req.BloodType),
+                BloodType.FromString(req.BloodType!),
                 req.LastDonationDate,
                 req.NIN,
                 req.DateOfBirth);

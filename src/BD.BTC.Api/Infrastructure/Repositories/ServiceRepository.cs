@@ -1,4 +1,4 @@
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Repositories;
 using Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
@@ -57,18 +57,19 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<(List<Service>, int)> GetAllAsync(int page, int pageSize, ServiceFilter filter)
+        public async Task<(List<Service?>, int)> GetAllAsync(int page, int pageSize, ServiceFilter filter)
         {
             var query = _context.Services.AsQueryable();
 
             if (!string.IsNullOrEmpty(filter.Name))
-            query = query.Where(s => s.Name.Contains(filter.Name));
+              query = query.Where(s => s.Name.Contains(filter.Name));
 
             var total = await query.CountAsync();
 
             var services = await query
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
+            .Cast<Service?>()
             .ToListAsync();
 
             return (services, total);

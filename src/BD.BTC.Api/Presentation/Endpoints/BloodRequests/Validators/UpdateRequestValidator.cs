@@ -1,4 +1,4 @@
-using FastEndpoints;
+﻿using FastEndpoints;
 using FluentValidation;
 using Domain.ValueObjects;
 
@@ -18,13 +18,13 @@ namespace Presentation.Endpoints.BloodRequests.Validators
             // Add null checks for optional properties
             When(x => x.BloodBagType != null, () => {
                 RuleFor(x => x.BloodBagType)
-                    .Must(x => BloodBagType.Convert(x) != null)
+                    .Must(x => BloodBagType.Convert(x!) != null)
                     .WithMessage("Invalid BloodBagType.");
             });
 
             When(x => x.Priority != null, () => {
                 RuleFor(x => x.Priority)
-                    .Must(x => Priority.Convert(x) != null)
+                    .Must(x => Priority.Convert(x!) != null)
                     .WithMessage("Invalid Priority.");
             });
 

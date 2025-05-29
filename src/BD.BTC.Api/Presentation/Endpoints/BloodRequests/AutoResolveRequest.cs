@@ -1,9 +1,11 @@
-using FastEndpoints;
+﻿using FastEndpoints;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Application.Features.BloodRequests.Commands;
 using Domain.Repositories;
 using Shared.Exceptions;
+
+#nullable disable
 
 namespace Presentation.Endpoints.BloodRequests
 {

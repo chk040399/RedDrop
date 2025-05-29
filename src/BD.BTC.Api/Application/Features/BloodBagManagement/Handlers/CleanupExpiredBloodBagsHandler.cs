@@ -11,7 +11,7 @@ using Infrastructure.ExternalServices.Kafka;
 
 namespace Application.Features.BloodBagManagement.Handlers
 {
-    public class CleanupExpiredBloodBagsHandler : IRequestHandler<CleanupExpiredBloodBagsCommand>
+    public class CleanupExpiredBloodBagsHandler : IRequestHandler<CleanupExpiredBloodBagsCommand,Unit>
     {
         private readonly IBloodBagRepository _bloodBagRepository;
         private readonly ILogger<CleanupExpiredBloodBagsHandler> _logger;
