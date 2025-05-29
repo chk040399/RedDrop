@@ -7,11 +7,11 @@ namespace BD.PublicPortal.Api.Features.Pledges;
 
 public class UpdatePledgeRequest
 {
-  [FromClaim(claimType: "UserId", isRequired: false)]
+  [FromClaim(claimType: "UserId", isRequired: true)]
+  public Guid ApplicationUserId { get; set; }
   public Guid PledgeId { get; set; }
   public BloodDonationPladgeEvolutionStatus? EvolutionStatus { get; set; }
   public DateTime? PledgeDate { get; set; }
-  public Guid ApplicationUserId { get; set; }
 }
 
 public class UpdatePledgeResponse
@@ -43,7 +43,6 @@ public class UpdatePledgeEndpoint(IMediator _mediator) : Endpoint<UpdatePledgeRe
   public override void Configure()
   {
     Put("/Pledges/{PledgeId:guid}");
-    AllowAnonymous();
   }
 
   public override async Task HandleAsync(UpdatePledgeRequest req, CancellationToken cancellationToken)

@@ -2,8 +2,9 @@
 
 public class DeleteSubscriptionRequest
 {
-  public Guid SubscriptionId { get; set; }
+  [FromClaim(claimType: "UserId", isRequired: true)]
   public Guid ApplicationUserId { get; set; }
+  public Guid SubscriptionId { get; set; }
 }
 
 public class DeleteSubscriptionEndpoint(IMediator _mediator) : Endpoint<DeleteSubscriptionRequest>
@@ -11,7 +12,6 @@ public class DeleteSubscriptionEndpoint(IMediator _mediator) : Endpoint<DeleteSu
   public override void Configure()
   {
     Delete("/subscriptions/{SubscriptionId:guid}");
-    AllowAnonymous();
   }
 
   public override async Task HandleAsync(DeleteSubscriptionRequest req, CancellationToken cancellationToken)

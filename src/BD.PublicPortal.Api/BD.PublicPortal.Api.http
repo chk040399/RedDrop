@@ -172,15 +172,27 @@ Content-Type: application/json
 POST {{host}}/auth/login
 Content-Type: application/json
 {
-  "email": "walidozich",
+  "email": "walidozich@example.com",
   "password": "vV@L1d@2002" 
 }
 
 ###
-@token = CfDJ8L42nD5MPzlJlHz_DbJr-S1RrWyraV7PmKE26GD-o896apRBDYK1xOQkJSBtggDxZT9mrZR-O_p4MsSWP6MN7eI6qImQ-XUaU2jD4g1IdphqFaecSRbcLnnRB7UDnVz-9f9QmY_bgFiBs-r_jRNeU50DmkJTYqdH-Kzzqmb0Ppj7xfdS16hIvvA7z7DyjStLtNnd9cX5MMLjWYePK-pD-FaKPMNtLj8uXHYPJpX7C2IRd2tVlt0CdtZThIQiqed8TKkv2gJiyJODY9NN41rFejCryTmV-fnqb6zf9bomQqu7TkiSrgHHHdoY6kS62Q2SO3cXZz6yUjeumCx6qykvT66ZGUfoZgl2jyuZGsRHsr3UkDxVK49HOlgU-6kssHWO47aiMcN9TB2fVy1w6c3OxOmdMMdTnx6cmjKJChMoDWj1y4YB4W2zX646DN_MsGQhmIb2rgxC2OkX7jvpAVIGl2UaUDyqk_HmXXlKtT1pVK8shvtt7IZ7EAXTEcAZiiVe7PctDy1_rmrISrlc_i0Dg1kMWP9kQ1_UVVNtfrcMBlkyWn419d70IkuAq0pdAicI9WdU2gWsySzvZhuf8tKcKROep9jTkGfo1tC7MfScz0a8WTUhzqT6k11zy9nleSwNMe7N3TThQumQV3CBW9kmNz1znaCWxIhXtFdVlsn9Dk5EwyY0U81Je-c7J5_EWeOFAA
-GET {{host}}/auth/manage/info
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTk3MTdlNi00YmM0LTcwOWMtODhhZS1hMmNmMmJmNGMxOTMiLCJVc2VySWQiOiIwMTk3MTdlNi00YmM0LTcwOWMtODhhZS1hMmNmMmJmNGMxOTMiLCJlbWFpbCI6Imhpa2lAZXhhbXBsZS5jb20iLCJuYmYiOjE3NDg0NzUwODUsImV4cCI6MTc0ODU2MTQ4NSwiaWF0IjoxNzQ4NDc1MDg1LCJpc3MiOiJSZWREcm9wT3JnYW5pc2F0aW9uIiwiYXVkIjoiQmxvb2QgRG9uYXRvcnMifQ.2McbY1bBCYcn5ya374Ye3EXUKCFD_RT-qbDT5NchVls
+
+###
+PATCH {{host}}/donor/profile
 Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  
+    "donorWantToStayAnonymous": true,
+    "donorExcludeFromPublicPortal": true,
+    "donorAvailability": 3
+}
 
 
 ###
 GET https://192.168.1.211:57679/BloodDonationRequests?&wilayaId=16&PaginationTake=0&&PaginationSkip=0&level=1
+
+
+###

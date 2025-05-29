@@ -7,7 +7,7 @@ namespace BD.PublicPortal.Api.Features.Pledges;
 public class CreatePledgeRequest
 {
 
-  [FromClaim(claimType: "UserId", isRequired: false)]
+  [FromClaim(claimType: "UserId", isRequired: true)]
   public Guid ApplicationUserId { get; set; }
   public Guid BloodDonationRequestId { get; set; }
   public DateTime? PledgeDate { get; set; }
@@ -34,7 +34,6 @@ public class CreatePledgeEndpoint(IMediator _mediator) : Endpoint<CreatePledgeRe
   public override void Configure()
   {
     Post("/Pledges/");
-    AllowAnonymous();
   }
 
   public override async Task HandleAsync(CreatePledgeRequest req, CancellationToken cancellationToken)
@@ -56,6 +55,5 @@ public class CreatePledgeEndpoint(IMediator _mediator) : Endpoint<CreatePledgeRe
         BloodDonationPledge = res.Value
       };
     }
-    // Handle error cases as needed  
   }
 }

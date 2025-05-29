@@ -4,7 +4,12 @@ using BD.PublicPortal.Core.DTOs;
 
 namespace BD.PublicPortal.Api.Features.IdentityManagement.Users.GetById;
 
-public record GetUserByIdEndpointRequest(Guid UserId);
+public class GetUserByIdEndpointRequest
+{
+  [FromClaim(claimType: "UserId", isRequired: false)]
+  public Guid UserId { get; set; }
+};
+
 public class GetUserByIdEndpointResponse
 {
   public ApplicationUserDTO? User { get; set; } = null!;
@@ -14,8 +19,7 @@ public class GetUserByIdEndpoint(IMediator _mediator) : Endpoint<GetUserByIdEndp
 {
   public override void Configure()
   {
-    Get("/user/{UserId:guid}");
-    AllowAnonymous();
+    Get("/user/");
   }
   public override async Task HandleAsync(GetUserByIdEndpointRequest req, CancellationToken cancellationToken)
   {
