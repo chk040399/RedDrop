@@ -4,13 +4,23 @@ using BD.PublicPortal.Core.Entities.Specifications;
 
 namespace BD.PublicPortal.Application.BTCsubscribed;
 
-public class GetBTCsubscribedHandler(IReadRepository<DonorBloodTransferCenterSubscriptions> _btcRepo) : IQueryHandler<GetBTCsubscribedQuery, Result<IEnumerable<DonorBloodTransferCenterSubscriptionsDTO>>>
+public class GetBTCsubscribedHandler(
+  IReadRepository<DonorBloodTransferCenterSubscriptions> subscriptionsRepo)
+  : IQueryHandler<GetBTCsubscribedQuery, Result<IEnumerable<DonorBloodTransferCenterSubscriptionsDTO>>>
 {
-  public async Task<Result<IEnumerable<DonorBloodTransferCenterSubscriptionsDTO>>> Handle(GetBTCsubscribedQuery request, CancellationToken cancellationToken)
+  public async Task<Result<IEnumerable<DonorBloodTransferCenterSubscriptionsDTO>>> Handle(
+    GetBTCsubscribedQuery request,
+    CancellationToken cancellationToken)
   {
-    BTCSubscribedSpecification spec = new BTCSubscribedSpecification(filter: request.filter, loggedUserId: request.LoggedUserID, level: request.Level);
-    var lst = await _btcRepo.ListAsync(spec, cancellationToken);
-    var level = (request.Level == null) ? 0 : (int)request.Level;
-    return Result<IEnumerable<DonorBloodTransferCenterSubscriptionsDTO>>.Success(lst.ToDtosWithRelated(level));
+    var spec = new UserSubscriptionsSpecification(
+      userId: request.LoggedUserId,
+      paginationTake: request.PaginationTake,
+      level: request.Level);
+
+    var subscriptions = await subscriptionsRepo.ListAsync(spec, cancellationToken);
+    var level = request.Level ?? 0;
+
+    return Result<IEnumerable<DonorBloodTransferCenterSubscriptionsDTO>>.Success(
+      subscriptions.ToDtosWithRelated(level));
   }
 }

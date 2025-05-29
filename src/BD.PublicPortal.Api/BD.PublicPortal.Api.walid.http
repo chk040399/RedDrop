@@ -99,7 +99,7 @@ Content-Type: application/json
 }
 ###
 
-@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJVc2VySWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJlbWFpbCI6IlppbW91QGV4YW1wbGUuY29tIiwibmJmIjoxNzQ4NDkyNjM5LCJleHAiOjE3NDg1NzkwMzksImlhdCI6MTc0ODQ5MjYzOSwiaXNzIjoiUmVkRHJvcE9yZ2FuaXNhdGlvbiIsImF1ZCI6IkJsb29kIERvbmF0b3JzIn0.2sCOcGvFXH7DhWe_IPgbGbVXhuCMlPX798FVA4WAk00
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJVc2VySWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJlbWFpbCI6IlppbW91QGV4YW1wbGUuY29tIiwibmJmIjoxNzQ4NTIzMzM2LCJleHAiOjE3NDg2MDk3MzYsImlhdCI6MTc0ODUyMzMzNiwiaXNzIjoiUmVkRHJvcE9yZ2FuaXNhdGlvbiIsImF1ZCI6IkJsb29kIERvbmF0b3JzIn0.8PuuD5Jz0kpdSyG4n-IwlgFSy0lyAfJahNkKJfKFZtI
 
 
 GET {{host}}:{{port}}/auth/manage/info
@@ -152,6 +152,16 @@ Content-Type: application/json
     "donorExcludeFromPublicPortal": true,
     "donorAvailability": 3
 }
+###
+
+PATCH {{host}}:{{port}}/donor/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+    "donorBloodGroup": 2
+}
+
+###
 
 ### Enums:
 
@@ -181,6 +191,16 @@ GET {{host}}:{{port}}/BloodDonationRequests?&wilayaId=16&PaginationTake=10&level
 
 
 GET {{host}}:{{port}}/BloodDonationRequests?level=2
+###
+
+
+GET {{host}}:{{port}}/BloodDonationRequests?SubscriptionsOnly=true&level=1
+Authorization: Bearer {{token}}
+###
+
+
+GET {{host}}:{{port}}/BloodDonationRequests?IlligibilityOnly=true&level=1
+Authorization: Bearer {{token}}
 ###
 
 //Initiated = 0,Waiting = 1,PartiallyResolved = 2,Resolved = 3, Canceled = 4
@@ -222,7 +242,7 @@ GET {{host}}:{{port}}/BTC?PaginationTake=10&&PaginationSkip=30&level=1
 
 ### BTC subscribed
 
-@UserId = 0196fa27-4ca5-740f-ae1f-2620600d913e
+@UserId = 019719fa-671c-7953-84d3-c2fb402afbd9
 GET {{host}}:{{port}}/BTC/subscribed?ApplicationUserId={{UserId}}&PaginationTake=10&level=1
 ###
 
@@ -284,7 +304,7 @@ POST {{host}}:{{port}}/subscriptions
 Authorization: Bearer {{token}}
 Content-Type: application/json
 {
-  "BloodTansfusionCenterId": "895bc690-3f2a-66c2-456f-ec56ae482558"
+  "BloodTansfusionCenterId": "04a90fb1-dd65-b703-2355-ab4aa6b41bb1"
 }
 ###
 
@@ -298,3 +318,17 @@ Authorization: Bearer {{token}}
 ###
 
 
+@UserId = 019719fa-671c-7953-84d3-c2fb402afbd9
+GET {{host}}:{{port}}/BTC/subscribed?ApplicationUserId={{UserId}}&PaginationTake=10&level=1
+###
+
+@BtcId=895bc690-3f2a-66c2-456f-ec56ae482558
+DELETE {{host}}:{{port}}/Subscriptions/btc/{{BtcId}}
+Authorization: Bearer {{token}}
+
+###
+
+GET {{host}}:{{port}}/BTC/subscribed?level=2
+Authorization: Bearer {{token}}
+
+###
