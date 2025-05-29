@@ -39,9 +39,15 @@ public class ApplicationUserSpecification:Specification<ApplicationUser>
       Query.Skip((int)filter.PaginationSkip);
   }
 
-  public ApplicationUserSpecification(Guid? ApplicationUserId)
+  public ApplicationUserSpecification(Guid? ApplicationUserId,bool bIncludeSubscrs = false)
   {
-    if(ApplicationUserId != null)
+    if(bIncludeSubscrs)
+      Query.Include(x => x.DonorBloodTransferCenterSubscriptions);
+
+    if (ApplicationUserId != null)
+    {
       Query.Where(x => x.Id == ApplicationUserId);
+    }
+
   }
 }

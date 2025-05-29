@@ -45,30 +45,3 @@ public class BloodDonationPledgeSpecification : Specification<BloodDonationPledg
   }
 }
 
-
-
-
-
-
-
-
-
-
-  //public BloodDonationPledgeSpecification(BloodDonationPledgeSpecificationFilter filter = null,
-  //  Guid? loggedUserId = null, int? level = null)
-  //{
-  //  if (level > 0)
-  //    Query.Include(x => x.BloodDonationRequest ).Include(x => x.ApplicationUser);
-  //  if (filter != null && filter.EvolutionStatus != null)
-  //    Query.Where(x => x.EvolutionStatus == filter.EvolutionStatus);
-
-
-  //  if (filter != null && filter.UserId != null)
-  //    Query.Where(x => x.ApplicationUserId == filter.UserId);
-  //  Query.OrderBy(x => x.PledgeInitiatedDate);
-  //  if (filter != null && filter.PaginationTake != null)
-  //    Query.Take((int)filter.PaginationTake);
-  //  if (filter != null && filter.PaginationSkip != null)
-  //    Query.Skip((int)filter.PaginationSkip);
-  //}
-

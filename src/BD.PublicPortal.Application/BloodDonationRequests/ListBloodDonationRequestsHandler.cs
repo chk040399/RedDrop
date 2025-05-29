@@ -23,7 +23,9 @@ public class ListBloodDonationRequestsHandler(IReadRepository<BloodDonationReque
         )
        )
     {
-      user = await usersRepo.GetByIdAsync<Guid>(request.LoggedUserID.Value, cancellationToken);
+      user = await usersRepo.FirstOrDefaultAsync(new ApplicationUserSpecification(request.LoggedUserID, true),
+        cancellationToken);
+
     }
 
       
