@@ -43,5 +43,10 @@ public class BloodDonationPledgeSpecification : Specification<BloodDonationPledg
 
     Query.OrderByDescending(x => x.PledgeInitiatedDate);
   }
+
+  public BloodDonationPledgeSpecification(Guid userId)
+  {
+    Query.Where(x => x.ApplicationUserId == userId && x.EvolutionStatus==BloodDonationPladgeEvolutionStatus.Initiated);
+  }
 }
 

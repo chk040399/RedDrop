@@ -1,4 +1,6 @@
-﻿using BD.PublicPortal.Application.Pledges;
+﻿using Ardalis.Result;
+using BD.PublicPortal.Api.Extensions;
+using BD.PublicPortal.Application.Pledges;
 using BD.PublicPortal.Core.DTOs;
 using FluentValidation;
 
@@ -54,6 +56,14 @@ public class CreatePledgeEndpoint(IMediator _mediator) : Endpoint<CreatePledgeRe
       {
         BloodDonationPledge = res.Value
       };
+    }
+    else
+    {
+      //var pd = result.ToProblemDetails(HttpContext);
+      //await SendAsync(pd, pd.Status);
+      var pd = res.ToProblemDetails(HttpContext);
+      HttpContext.Response.StatusCode = pd.Status;
+      await HttpContext.Response.WriteAsJsonAsync(pd, cancellationToken);
     }
   }
 }
