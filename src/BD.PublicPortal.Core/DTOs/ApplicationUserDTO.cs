@@ -13,7 +13,7 @@ namespace BD.PublicPortal.Core.DTOs
         }
 
         public ApplicationUserDTO(System.Guid? donorCorrelationId, bool? donorWantToStayAnonymous, bool? donorExcludeFromPublicPortal, DonorAvailability? donorAvailability, DonorContactMethod? donorContactMethod, string donorName, System.DateTime donorBirthDate, BloodGroup donorBloodGroup, string donorNIN, string donorTel, string donorNotesForBTC, System.DateTime? donorLastDonationDate, int? communeId) {
-
+          
           this.DonorCorrelationId = donorCorrelationId;
           this.DonorWantToStayAnonymous = donorWantToStayAnonymous;
           this.DonorExcludeFromPublicPortal = donorExcludeFromPublicPortal;
@@ -61,5 +61,14 @@ namespace BD.PublicPortal.Core.DTOs
 
         #endregion
     }
+
+    public class LoginUserCommandResultDTO
+    {
+      public ApplicationUserDTO UserDTO { get; set; } = null!;
+      public string JwToken { get; set; } = null!;
+
+      public Guid UserId { get; set; }
+    }
+
 
 }

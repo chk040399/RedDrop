@@ -14,6 +14,8 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace BD.PublicPortal.Infrastructure.Services.Identity;
 
+
+
 public class UserManagementService(UserManager<ApplicationUser> userManager, IConfiguration configuration) : IUserManagementService
 {
   public async Task<Result> RegisterAsync(RegisterUserDto userDto)
@@ -23,15 +25,17 @@ public class UserManagementService(UserManager<ApplicationUser> userManager, ICo
     return result.ToSmartResult();
   }
 
-  public async Task<Result<string>> AuthenticateAsync(string email, string password)
+  public async Task<Result<LoginUserCommandResultDTO>> AuthenticateAsync(string email, string password)
   {
+    var loginUserCommandResultDTO = new LoginUserCommandResultDTO();
+    
     var user = await userManager.FindByEmailAsync(email);
     if (user == null)
-      return Result<string>.NotFound();
+      return Result.NotFound();
 
     if (!await userManager.CheckPasswordAsync(user, password))
     {
-      return Result<string>.Invalid(new []{new ValidationError("Incorrect Password")});
+      return Result.Invalid(new ValidationError("Incorrect Password"));
     }
 
     var tokenHandler = new JwtSecurityTokenHandler();
@@ -51,7 +55,15 @@ public class UserManagementService(UserManager<ApplicationUser> userManager, ICo
       SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
     };
 
+
     var token = tokenHandler.CreateToken(tokenDescriptor);
-    return Result<string>.Success(tokenHandler.WriteToken(token));
+
+    loginUserCommandResultDTO.JwToken = tokenHandler.WriteToken(token);
+
+    loginUserCommandResultDTO.UserDTO = user.ToDto();
+    loginUserCommandResultDTO.UserId = user.Id;
+
+
+    return Result<LoginUserCommandResultDTO>.Success(loginUserCommandResultDTO);
   }
 }
