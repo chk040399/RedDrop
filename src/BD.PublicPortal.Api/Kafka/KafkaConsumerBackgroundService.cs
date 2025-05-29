@@ -23,7 +23,7 @@ public class KafkaConsumerBackgroundService<TKey, TValue> : BackgroundService
   {
     return Task.Run(() =>
     {
-      _consumer.Subscribe(_options.Topics);
+      _consumer.Subscribe(_options.ConsumerTopics);
 
       while (!stoppingToken.IsCancellationRequested)
       {

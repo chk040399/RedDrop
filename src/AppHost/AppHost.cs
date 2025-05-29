@@ -36,6 +36,8 @@ publicPortalApi.WithHttpCommand(path: "/dbadmin/migrate","Migrate Database",comm
 
 publicPortalApi.WithExternalHttpEndpoints();//TODO : disable if nno external acces is needed
 
+// api cts
+
 
 // api Central
 

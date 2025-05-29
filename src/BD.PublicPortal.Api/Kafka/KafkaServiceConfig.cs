@@ -3,7 +3,9 @@
 
 public class KafkaConsumerOptions
 {
-  public string[] Topics { get; set; } = [];
+  public string[] ConsumerTopics { get; set; } = [];
+  public Dictionary<string, Type> KeyToEventType { get; set; } = new();
+
 }
 
 public static class KafkaServiceConfig
@@ -16,7 +18,22 @@ public static class KafkaServiceConfig
       o.Config.AllowAutoCreateTopics = true;
     });
 
-    services.Configure<KafkaConsumerOptions>(o => { o.Topics =  ["NewBloodRequests", "PledgesUpdates", "DonnorsUpdate"]; });
+    // 
+    //
+    //services.Configure<KafkaConsumerOptions>(o => { o.ConsumerTopics =  ["NewBloodRequests", "PledgesUpdates", "DonnorsUpdate"]; });
+
+    builder.Services.PostConfigure<KafkaConsumerOptions>(config =>
+    {
+      {
+        config.ConsumerTopics = ["Poztzt", "zzzz"];
+      //config.KeyToEventType = new Dictionary<string, Type>
+      //{
+      //  { "BloodRequestCreated", typeof() },
+      //  { "BloodRequestStatusUpdated", typeof() },
+      //  { "PledgeStatusUpdated", typeof() },
+      //  { "CtsCreated", typeof() }
+      };
+    });
 
     services.AddHostedService<KafkaConsumerBackgroundService<string, string>>();
 
