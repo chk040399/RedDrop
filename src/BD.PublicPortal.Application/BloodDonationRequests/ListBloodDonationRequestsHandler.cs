@@ -36,7 +36,7 @@ public class ListBloodDonationRequestsHandler(IReadRepository<BloodDonationReque
 
     if (user != null && (request.filter?.IlligibilityOnly != null && request.filter.IlligibilityOnly.Value))
     {
-      request.filter.IlligibilityGloups =  EligibilityHelper.DonnorGroupToReceiverGroups(user.DonorBloodGroup).ToList();
+      request.filter.IlligibilityGroups =  EligibilityHelper.DonnorGroupToReceiverGroups(user.DonorBloodGroup).ToList();
     }
 
     BloodDonationRequestSpecification spec = new BloodDonationRequestSpecification(filter:request.filter,loggedUserId:request.LoggedUserID,level:request.Level);

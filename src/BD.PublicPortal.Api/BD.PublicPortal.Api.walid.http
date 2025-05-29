@@ -58,6 +58,21 @@ Content-Type: application/json
 ###
 
 
+POST {{host}}:{{port}}/auth/register
+Content-Type: application/json
+{
+  "userName": "Zimou",
+  "email": "Zimou@example.com",
+  "password": "Zimou-2025",
+  "confirmPassword": "Zimou-2025",
+  "donorName": "Zimou Zimou",
+  "donorBirthDate": "2001-05-22T09:16:16.749Z",
+  "donorBloodGroup": 8,
+  "donorNIN": "125555879123412346"  
+}
+###
+
+
 ### Login:
 
 POST {{host}}:{{port}}/auth/login
@@ -76,8 +91,15 @@ Content-Type: application/json
 }
 ###
 
+POST {{host}}:{{port}}/auth/login
+Content-Type: application/json
+{
+  "email": "Zimou@example.com",
+  "password": "Zimou-2025" 
+}
+###
 
-@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTk3MTk0ZS01ZDU1LTczYjMtYjJmNy1jZDM5ZDBiZDg5YjgiLCJVc2VySWQiOiIwMTk3MTk0ZS01ZDU1LTczYjMtYjJmNy1jZDM5ZDBiZDg5YjgiLCJlbWFpbCI6Imhpa2loaWtpQGV4YW1wbGUuY29tIiwibmJmIjoxNzQ4NDc4NTIyLCJleHAiOjE3NDg1NjQ5MjIsImlhdCI6MTc0ODQ3ODUyMiwiaXNzIjoiUmVkRHJvcE9yZ2FuaXNhdGlvbiIsImF1ZCI6IkJsb29kIERvbmF0b3JzIn0.dpUCuJ5HRuhWGaIqZcKasUQwlgJXvGxLO7LEWFpvKjw
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJVc2VySWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJlbWFpbCI6IlppbW91QGV4YW1wbGUuY29tIiwibmJmIjoxNzQ4NDkyNjM5LCJleHAiOjE3NDg1NzkwMzksImlhdCI6MTc0ODQ5MjYzOSwiaXNzIjoiUmVkRHJvcE9yZ2FuaXNhdGlvbiIsImF1ZCI6IkJsb29kIERvbmF0b3JzIn0.2sCOcGvFXH7DhWe_IPgbGbVXhuCMlPX798FVA4WAk00
 
 
 GET {{host}}:{{port}}/auth/manage/info
@@ -88,14 +110,11 @@ Authorization: Bearer {{token}}
 
 ### User:
 
-GET {{host}}:{{port}}/user/
-Authorization: Bearer {{token}}
-###
 
 ###Users
 
 GET {{host}}:{{port}}/users/
-###
+### not needed
 
 GET {{host}}:{{port}}/users/?PaginationTake=5&level=1
 ###
@@ -120,11 +139,15 @@ GET {{host}}:{{port}}/users/?DonorExcludedFromPublicPortal=false&PaginationTake=
 
 ###Profile
 
+
+GET {{host}}:{{port}}/user/
+Authorization: Bearer {{token}}
+###
+
 PATCH {{host}}:{{port}}/donor/profile
 Authorization: Bearer {{token}}
 Content-Type: application/json
 {
-    "donorName": "hikiHiki ozichozich",
     "donorWantToStayAnonymous": true,
     "donorExcludeFromPublicPortal": true,
     "donorAvailability": 3
@@ -133,7 +156,7 @@ Content-Type: application/json
 ### Enums:
 
 //Enums
-GET {{host}}:{{port}}/enums/BloodGroup,DonorAvailability,DonorContactMethod
+GET {{host}}:{{port}}/enums/BloodGroup,DonorAvailability,DonorContactMethod,donorContactMethod
 ###
 
 
@@ -154,6 +177,10 @@ GET {{host}}:{{port}}/BloodDonationRequests
 ###
 
 GET {{host}}:{{port}}/BloodDonationRequests?&wilayaId=16&PaginationTake=10&level=1
+###
+
+
+GET {{host}}:{{port}}/BloodDonationRequests?level=2
 ###
 
 //Initiated = 0,Waiting = 1,PartiallyResolved = 2,Resolved = 3, Canceled = 4
@@ -204,10 +231,6 @@ GET {{host}}:{{port}}/BTC/subscribed?ApplicationUserId={{UserId}}&PaginationTake
 ### Pledges:
 
 
-@User1Id=0196fa27-4ca5-740f-ae1f-2620600d913e
-@User2Id=0196fd7e-2d78-75ff-92ab-8c7f590e598c
-@User3Id=0196fd7f-3618-71fc-a348-680923b64576
-
 
 GET {{host}}:{{port}}/Pledges
 Authorization: Bearer {{token}}
@@ -222,9 +245,9 @@ POST {{host}}:{{port}}/Pledges
 Authorization: Bearer {{token}}
 Content-Type: application/json
 {
-  "bloodDonationRequestId": "facbb57b-1c39-c154-269c-d7323a866f1c",
-  "pledgeDate": "2025-05-28T01:26:27.739Z",
-  "pledgeNotes": "Notes"
+  "bloodDonationRequestId": "a0e69be0-1a29-edf3-bc65-6e12a6d78412",
+  "pledgeDate": "2025-08-28T01:26:27.739Z",
+  "pledgeNotes": "pppppppppppppp"
 }
 ### 0196fd7e-2d78-75ff-92ab-8c7f590e598c
 
@@ -233,12 +256,21 @@ Content-Type: application/json
 // UserID: 0196fd7f-3618-71fc-a348-680923b64576
 // Pid:    019701b1-540d-7d52-b2c7-d63d09e3b814
 
-PUT {{host}}:{{port}}/Pledges/01971971-d207-71fb-bca7-cacce40f370f
+PUT {{host}}:{{port}}/Pledges/01971a4e-82cf-74ed-aabf-115864279304
 Authorization: Bearer {{token}}
 Content-Type: application/json
 {
   "evolutionStatus": 2,
   "pledgeDate": "2025-06-30T01:26:27.739Z"
+}
+###
+
+
+PUT {{host}}:{{port}}/Pledges/01971a4e-82cf-74ed-aabf-115864279304
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "pledgeDate": "2030-06-30T01:26:27.739Z"
 }
 ###
 

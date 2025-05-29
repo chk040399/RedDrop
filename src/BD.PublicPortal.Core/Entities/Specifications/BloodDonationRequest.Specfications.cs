@@ -12,7 +12,7 @@ public class BloodDonationRequestSpecificationFilter(
   bool? onlySubscriptions = null,
   List<Guid> userSubscribedCenters = null,
   bool? illigibility = null,
-  List<BloodGroup> illigibilityGloups = null,
+  List<BloodGroup> illigibilityGroups = null,
 
   int? paginationTake = null,
   int? paginationSkip = null)
@@ -24,7 +24,7 @@ public class BloodDonationRequestSpecificationFilter(
   public bool? SubscriptionsOnly { get; init; } = onlySubscriptions;
   public List<Guid> UserSubscribedCenters { get; set; } = userSubscribedCenters;
   public bool? IlligibilityOnly { get; init; } = illigibility;
-  public List<BloodGroup> IlligibilityGloups { get; set; } = illigibilityGloups;
+  public List<BloodGroup> IlligibilityGroups { get; set; } = illigibilityGroups;
   public int? PaginationTake { get; init; } = paginationTake;
   public int? PaginationSkip { get; init; } = paginationSkip;
 
@@ -44,7 +44,7 @@ public class BloodDonationRequestSpecification:Specification<BloodDonationReques
       return;
     }
 
-    if (level > 0) Query.Include(x => x.BloodTansfusionCenter);
+    if (level > 0) Query.Include(x => x.BloodTansfusionCenter).Include(x => x.BloodTansfusionCenter.Wilaya);
 
     if (filter != null)
     {
@@ -55,9 +55,9 @@ public class BloodDonationRequestSpecification:Specification<BloodDonationReques
       }
 
 
-      if (filter.IlligibilityOnly != null && filter.IlligibilityOnly.Value && filter.IlligibilityGloups != null)
+      if (filter.IlligibilityOnly != null && filter.IlligibilityOnly.Value && filter.IlligibilityGroups != null)
       {
-        Query.Where(x => filter.IlligibilityGloups.Contains(x.BloodGroup));
+        Query.Where(x => filter.IlligibilityGroups.Contains(x.BloodGroup));
       }
 
       if (filter.WilayaId != null)
