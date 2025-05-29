@@ -5,7 +5,6 @@
 public record ApplicationUserSpecificationFilter(
   int? CommuneId = null,
   int? WilayaId = null,
-  bool? DonorWantToStayAnonymous = null,
   bool? DonorExcludedFromPublicPortal = null,
   BloodGroup? DonorBloodGroup=null,
   DonorContactMethod? DonorContactMethod=null,
@@ -24,8 +23,6 @@ public class ApplicationUserSpecification:Specification<ApplicationUser>
       Query.Where(x => x.CommuneId == filter.CommuneId);
     if (filter != null && filter.WilayaId != null)
       Query.Where(x => x.Commune.WilayaId == filter.WilayaId);
-    if (filter != null && filter.DonorWantToStayAnonymous != null)
-      Query.Where(x => x.DonorWantToStayAnonymous == filter.DonorWantToStayAnonymous);
     if (filter != null && filter.DonorExcludedFromPublicPortal != null)
       Query.Where(x => x.DonorExcludeFromPublicPortal == filter.DonorExcludedFromPublicPortal);
     if (filter != null && filter.DonorBloodGroup != null)
