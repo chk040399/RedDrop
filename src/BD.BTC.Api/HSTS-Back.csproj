@@ -29,7 +29,6 @@
   <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Kafka" />
     <PackageReference Include="AspNetCore.HealthChecks.NpgSql" />
-    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" />
     <PackageReference Include="BCrypt.Net-Next" />
     <PackageReference Include="Confluent.Kafka" />
     <PackageReference Include="FastEndpoints" />
@@ -56,6 +55,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" />
     <PackageReference Include="WebPush" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ServiceDefaults\ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>
