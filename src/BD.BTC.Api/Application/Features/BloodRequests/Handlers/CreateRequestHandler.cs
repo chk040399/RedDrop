@@ -16,6 +16,7 @@ namespace Application.Features.BloodRequests.Handlers
     {
         private readonly IRequestRepository _requestRepository;
         private readonly IEventProducer _eventProducer;
+        private readonly IBloodTransferCenterRepository _centerRepository;
         private readonly IServiceRepository _serviceRepository;
         private readonly IOptions<KafkaSettings> _kafkaSettings;
         private readonly ILogger<CreateRequestHandler> _logger;
@@ -24,9 +25,11 @@ namespace Application.Features.BloodRequests.Handlers
             IRequestRepository requestRepository,
             ILogger<CreateRequestHandler> logger,
             IEventProducer eventProducer,
+            IBloodTransferCenterRepository centerRepository,
             IOptions<KafkaSettings> kafkaSettings,
             IServiceRepository serviceRepository)
         {
+            _centerRepository = centerRepository;
             _serviceRepository = serviceRepository;
             _eventProducer = eventProducer;
             _kafkaSettings = kafkaSettings;
@@ -68,11 +71,27 @@ namespace Application.Features.BloodRequests.Handlers
                     _logger.LogError("Service not found");
                     throw new NotFoundException("Service not found", "CreateRequestHandler");
                 }
-
-                await new AutoReuqestResolverEvent(newRequest).PublishAsync(Mode.WaitForNone); // Create and publish the event
+                var hospital = await _centerRepository.GetPrimaryAsync();
+                var message = new RequestCreatedEvent(
+                    hospital.Id,
+                    newRequest.Id,
+                    newRequest.BloodType,
+                    newRequest.Priority,
+                    newRequest.BloodBagType,
+                    newRequest.RequestDate,
+                    newRequest.DueDate,
+                    newRequest.Status,  // Changed from newRequest.Status.Value
+                    newRequest.MoreDetails,
+                    newRequest.RequiredQty,
+                    newRequest.AquiredQty,
+                    service.Name);
+                var topic = _kafkaSettings.Value.Topics["BloodRequests"];
+                //await new AutoReuqestResolverEvent(newRequest).PublishAsync(Mode.WaitForNone); // Create and publish the event
                 _logger.LogInformation("Request created successfully");
-
                 // Return the DTO
+                await  _eventProducer.ProduceAsync(
+                    topic,
+                    message);
                 return new RequestDto
                 {
                     Id = newRequest.Id,
@@ -88,6 +107,7 @@ namespace Application.Features.BloodRequests.Handlers
                     ServiceId = newRequest.ServiceId,
                     DonorId = newRequest.DonorId
                 };
+               // Publish the event to Kafka
             }
             catch (Exception ex)
             {

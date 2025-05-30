@@ -3,6 +3,7 @@
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,19 +18,15 @@ namespace HSTS_Back.Infrastructure.BackgroundServices
         private readonly ILogger<DailySchedulerService> _logger;
         private readonly IServiceScopeFactory _scopeFactory; // Needed to create scopes for MediatR dispatching
 
-    // Define your scheduled tasks and their times
-    // You could even load these from configuration or a database if they change frequently
-    
-    private static readonly (TimeSpan Time, Func<IRequest> CommandFactory)[] ScheduledTasks = null!
-    //TODO : disabled
-    //= new (TimeSpan, Func<IRequest>)[]
-    //{
-    //    (new TimeSpan(2, 0, 0), () => new CleanupExpiredBloodBagsCommand()), // Example for 2 AM
-    //    (new TimeSpan(4, 30, 0), () => new CleanupExpiredRequestsCommand()), // Example for 4:30 AM
-    //    (new TimeSpan(23, 0, 0), () => new CleanupExpiredPledgesCommand()) // Example for 11 PM
-    //}
-    ;
-    public DailySchedulerService(ILogger<DailySchedulerService> logger, IServiceScopeFactory scopeFactory)
+        // Option 1: Use IRequest<Unit>
+        private static readonly (TimeSpan Time, Func<IRequest<Unit>> CommandFactory)[] ScheduledTasks = new (TimeSpan, Func<IRequest<Unit>>)[]
+        {
+            (new TimeSpan(2, 0, 0), () => new CleanupExpiredBloodBagsCommand()), // Example for 2 AM
+            (new TimeSpan(4, 30, 0), () => new CleanupExpiredRequestsCommand()), // Example for 4:30 AM
+            (new TimeSpan(23, 0, 0), () => new CleanupExpiredPledgesCommand()) // Example for 11 PM
+        };
+
+        public DailySchedulerService(ILogger<DailySchedulerService> logger, IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
             _scopeFactory = scopeFactory;
@@ -79,25 +76,21 @@ namespace HSTS_Back.Infrastructure.BackgroundServices
             var currentTime = DateTime.Now;
             var currentMinute = currentTime.TimeOfDay.Subtract(TimeSpan.FromSeconds(currentTime.Second)).Subtract(TimeSpan.FromMilliseconds(currentTime.Millisecond));
 
-            if (ScheduledTasks != null)
+            foreach (var task in ScheduledTasks)
             {
-              foreach (var task in ScheduledTasks)
-              {
                 // Compare only up to the minute for scheduling accuracy
                 var scheduledMinute = task.Time.Subtract(TimeSpan.FromSeconds(task.Time.Seconds)).Subtract(TimeSpan.FromMilliseconds(task.Time.Milliseconds));
 
                 // Check if the current minute matches the scheduled minute
                 if (currentMinute == scheduledMinute)
                 {
-                  _logger.LogInformation("Daily Scheduler: Attempting to dispatch command for {Time}", task.Time);
-                  await DispatchCommandInScope(task.CommandFactory(), stoppingToken);
+                    _logger.LogInformation("Daily Scheduler: Attempting to dispatch command for {Time}", task.Time);
+                    await DispatchCommandInScope(task.CommandFactory(), stoppingToken);
                 }
-              }
             }
-            
         }
 
-        private async Task DispatchCommandInScope(IRequest command, CancellationToken stoppingToken)
+        private async Task DispatchCommandInScope(IRequest<Unit> command, CancellationToken stoppingToken)
         {
             // IMPORTANT: Create a new scope for each command dispatch.
             // This is crucial because MediatR handlers (and their dependencies like DbContext)

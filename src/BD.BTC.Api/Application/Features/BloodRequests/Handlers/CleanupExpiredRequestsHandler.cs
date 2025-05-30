@@ -16,6 +16,7 @@ namespace Application.Features.BloodRequests.Handlers
     {
         private readonly IRequestRepository _bloodRequestRepository;
         private readonly IPledgeRepository _pledgeRepository;
+        private readonly IBloodTransferCenterRepository _centerRepository; // Add this
         private readonly IEventProducer _eventProducer;
         private readonly IOptions<KafkaSettings> _kafkaSettings;
         private readonly ILogger<CleanupExpiredBloodRequestsHandler> _logger;
@@ -23,10 +24,14 @@ namespace Application.Features.BloodRequests.Handlers
         public CleanupExpiredBloodRequestsHandler(
             IRequestRepository bloodRequestRepository,
             IPledgeRepository pledgeRepository,
-            ILogger<CleanupExpiredBloodRequestsHandler> logger, IOptions<KafkaSettings> kafkaSettings, IEventProducer eventProducer)
+            IBloodTransferCenterRepository centerRepository, // Add this
+            ILogger<CleanupExpiredBloodRequestsHandler> logger, 
+            IOptions<KafkaSettings> kafkaSettings, 
+            IEventProducer eventProducer)
         {
             _bloodRequestRepository = bloodRequestRepository;
             _pledgeRepository = pledgeRepository;
+            _centerRepository = centerRepository; // Add this
             _logger = logger;
             _kafkaSettings = kafkaSettings;
             _eventProducer = eventProducer;
@@ -34,6 +39,14 @@ namespace Application.Features.BloodRequests.Handlers
 
         public async Task<Unit> Handle(CleanupExpiredRequestsCommand command, CancellationToken cancellationToken)
         {
+            // Get the primary blood transfer center
+            var primaryCenter = await _centerRepository.GetPrimaryAsync();
+            if (primaryCenter == null)
+            {
+                _logger.LogError("No primary blood transfer center found, cannot process expired requests");
+                return Unit.Value;
+            }
+
             var bloodRequests = await _bloodRequestRepository.GetAllAsync();
             var now = DateOnly.FromDateTime(DateTime.Now);
             var expiredRequests = bloodRequests
@@ -68,8 +81,15 @@ namespace Application.Features.BloodRequests.Handlers
                     // Update to canceled status (since the request expired)
                     pledge.UpdateStatus(PledgeStatus.Canceled);
                     await _pledgeRepository.UpdateAsync(pledge);
+                    
                     var topic = _kafkaSettings.Value.Topics["PledgeCanceled"];
-                    var @event = new PledgeCanceledEvent(pledge.DonorId, pledge.RequestId);
+                    // Updated constructor with hospital ID and null for PledgeDate
+                    var @event = new PledgeCanceledEvent(
+                        primaryCenter.Id,  // Include the hospital ID
+                        pledge.DonorId, 
+                        pledge.RequestId,
+                        null  // No need to update the date when canceling due to expiration
+                    );
                     await _eventProducer.ProduceAsync(topic, JsonSerializer.Serialize(@event));
                     expiredPledgesCount++;
                     

@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BD.PublicPortal.Api", "BD.PublicPortal.Api.csproj", "{69FBF3D6-8076-0EBC-B777-5E561D13B750}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{69FBF3D6-8076-0EBC-B777-5E561D13B750}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69FBF3D6-8076-0EBC-B777-5E561D13B750}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69FBF3D6-8076-0EBC-B777-5E561D13B750}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69FBF3D6-8076-0EBC-B777-5E561D13B750}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0995374-3706-4E87-BD9D-C3E2C68FBB15}
+	EndGlobalSection
+EndGlobal

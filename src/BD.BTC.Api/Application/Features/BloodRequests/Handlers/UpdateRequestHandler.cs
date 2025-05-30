@@ -16,6 +16,7 @@ namespace Application.Features.BloodRequests.Handlers
     public class UpdateRequestHandler : IRequestHandler<UpdateRequestCommand, (RequestDto? request, BaseException? err)>
     {
         private readonly IRequestRepository _requestRepository;
+        private readonly IBloodTransferCenterRepository _centerRepository;
         private readonly IEventProducer _eventProducer;
         private readonly IOptions<KafkaSettings> _kafkaSettings;
         private readonly ILogger<UpdateRequestHandler> _logger;
@@ -23,10 +24,12 @@ namespace Application.Features.BloodRequests.Handlers
         public UpdateRequestHandler(IRequestRepository requestRepository, 
                                    ILogger<UpdateRequestHandler> logger, 
                                    IEventProducer eventProducer, 
+                                   IBloodTransferCenterRepository centerRepository,
                                    IOptions<KafkaSettings> kafkaSettings)
         {
             _eventProducer = eventProducer;
             _kafkaSettings = kafkaSettings;
+            _centerRepository = centerRepository;
         
             _requestRepository = requestRepository;
             _logger = logger;
@@ -53,8 +56,10 @@ namespace Application.Features.BloodRequests.Handlers
                 
                 if (command.DueDate != null)
                 {
+                    var hospital = await _centerRepository.GetPrimaryAsync();
                     var topic = _kafkaSettings.Value.Topics["UpdateRequest"];
                     var updateRequestEvent = new UpdateRequestEvent(
+                        hospital.Id,
                         command.Id,
                         command.Priority?.Value,  // Add null check with ? operator
                         null,
@@ -62,8 +67,8 @@ namespace Application.Features.BloodRequests.Handlers
                         request.RequiredQty,
                         command.DueDate
                     );
-                    var message = JsonSerializer.Serialize(updateRequestEvent);
-                    await _eventProducer.ProduceAsync(topic, message);
+                  
+                    await _eventProducer.ProduceAsync(topic, updateRequestEvent);
                     _logger.LogInformation("request updated successfully");
                 }
                 

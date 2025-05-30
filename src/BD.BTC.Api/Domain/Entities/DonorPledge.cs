@@ -22,14 +22,6 @@ namespace Domain.Entities
             Status = PledgeStatus.Pledged; 
             PledgeDate = DateOnly.FromDateTime(DateTime.Now);
         }
-      /**
-           public static DonorPledge FromEvent(DonorPledgeEvent @event) => new DonorPledge(
-            @event.Donor.DonorName,
-            @event.RequestId,
-            @event.Status,
-            @event.PledgedAt
-        );
-      */
 
         public DonorPledge(
             Guid donorName,
@@ -48,6 +40,12 @@ namespace Domain.Entities
         public void UpdateStatus(PledgeStatus newStatus)
         {
             Status = newStatus;
+        }
+        
+        // Add this method to allow updating the pledge date
+        public void UpdatePledgeDate(DateOnly newDate)
+        {
+            PledgeDate = newDate;
         }
     }
 }

@@ -16,15 +16,18 @@ namespace Application.Features.EventHandling.Handlers
     public class PledgeCanceledEventHandler : IRequestHandler<PledgeCanceledCommand,Unit>
     {
         private readonly IPledgeRepository _pledgeRepository;
+        private readonly IBloodTransferCenterRepository _centerRepository;
         private readonly ILogger<PledgeCanceledEventHandler> _logger;
         private readonly RetryPolicySettings _retrySettings;
         
         public PledgeCanceledEventHandler(
             IPledgeRepository pledgeRepository,
+            IBloodTransferCenterRepository centerRepository,
             ILogger<PledgeCanceledEventHandler> logger,
             IOptions<RetryPolicySettings> retrySettings)
         {
             _pledgeRepository = pledgeRepository;
+            _centerRepository = centerRepository;
             _logger = logger;
             _retrySettings = retrySettings.Value;
         }
@@ -62,6 +65,25 @@ namespace Application.Features.EventHandling.Handlers
         
         private async Task ProcessPledgeCancellation(PledgeCanceledEvent payload, CancellationToken cancellationToken)
         {
+            // Get the hospital ID from the primary blood transfer center
+            var primaryCenter = await _centerRepository.GetPrimaryAsync();
+            if (primaryCenter == null)
+            {
+                _logger.LogError("No primary blood transfer center found");
+                return;
+            }
+            
+            var localHospitalId = primaryCenter.Id;
+            
+            if (payload.HospitalId != localHospitalId)
+            {
+                _logger.LogInformation(
+                    "Ignoring pledge cancellation event - hospital ID {EventHospitalId} doesn't match local hospital ID {LocalHospitalId}",
+                    payload.HospitalId,
+                    localHospitalId);
+                return;
+            }
+            
             _logger.LogInformation(
                 "Processing pledge cancellation from external system for donor {DonorId} and request {RequestId}",
                 payload.DonorId, 
@@ -81,25 +103,41 @@ namespace Application.Features.EventHandling.Handlers
                 return;
             }
             
-            // Check if pledge can be canceled (not already fulfilled or canceled)
-            if (pledge.Status.IsFulfilled || pledge.Status.IsCanceled)
+            // Check if the event contains PledgeDate
+            if (payload.PledgeDate.HasValue)
             {
-                _logger.LogWarning(
-                    "Cannot cancel pledge with status {Status} for donor {DonorId} and request {RequestId}",
-                    pledge.Status.Value,
-                    payload.DonorId, 
-                    payload.RequestId);
-                return;
+                // Just update the date
+                pledge.UpdatePledgeDate(DateOnly.FromDateTime(payload.PledgeDate.Value));
+                _logger.LogInformation(
+                    "Updated pledge date for donor {DonorId} and request {RequestId} to {NewDate}",
+                    payload.DonorId,
+                    payload.RequestId,
+                    payload.PledgeDate.Value);
+            }
+            else
+            {
+                // No date provided, update the status to canceled if not already in terminal state
+                if (!pledge.Status.IsFulfilled && !pledge.Status.IsCanceled)
+                {
+                    pledge.UpdateStatus(PledgeStatus.Canceled);
+                    _logger.LogInformation(
+                        "Pledge for donor {DonorId} and request {RequestId} canceled due to event without date",
+                        payload.DonorId,
+                        payload.RequestId);
+                }
+                else
+                {
+                    _logger.LogWarning(
+                        "Cannot cancel pledge with status {Status} for donor {DonorId} and request {RequestId}",
+                        pledge.Status.Value,
+                        payload.DonorId, 
+                        payload.RequestId);
+                    return;
+                }
             }
             
-            // Update status to canceled
-            pledge.UpdateStatus(PledgeStatus.Canceled);
+            // Save the changes
             await _pledgeRepository.UpdateAsync(pledge);
-            
-            _logger.LogInformation(
-                "Pledge for donor {DonorId} and request {RequestId}}",
-                payload.DonorId,
-                payload.RequestId);
         }
     }
 }

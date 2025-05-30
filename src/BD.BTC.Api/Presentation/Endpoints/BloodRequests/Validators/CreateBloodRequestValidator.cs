@@ -50,8 +50,6 @@ public class CreateBloodRequestValidator:Validator<CreateRequestRequest>
             })
             .WithMessage("Invalid request status.");
         RuleFor(x => x.AquiredQty)
-            .NotEmpty()
-            .WithMessage("Aquired quantity is required.")
             .GreaterThanOrEqualTo(0)
             .WithMessage("Aquired quantity must be greater than or equal to 0.");
         RuleFor(x => x.RequiredQty)
