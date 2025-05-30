@@ -5,11 +5,11 @@ namespace BD.PublicPortal.Api.Features.Subscriptions;
 
 public class CreateSubscriptionRequest
 {
-  public Guid BloodTansfusionCenterId { get; set; }
-  public Guid ApplicationUserId { get; set; }
+  //public Guid ApplicationUserId { get; set; }
 
-  //[FromClaim(claimType: "UserId", isRequired: true)]
-  //public Guid LoggedUserId { get; set; }
+  [FromClaim(claimType: "UserId", isRequired: true)]
+  public Guid ApplicationUserId { get; set; }
+  public Guid BloodTansfusionCenterId { get; set; }
 }
 
 public class CreateSubscriptionResponse
@@ -22,7 +22,6 @@ public class CreateSubscriptionEndpoint(IMediator _mediator) : Endpoint<CreateSu
   public override void Configure()
   {
     Post("/subscriptions");
-    AllowAnonymous();
   }
 
   public override async Task HandleAsync(CreateSubscriptionRequest req, CancellationToken cancellationToken)

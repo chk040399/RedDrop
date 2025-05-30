@@ -7,11 +7,11 @@ namespace BD.PublicPortal.Api.Features.Pledges;
 
 public class UpdatePledgeRequest
 {
-  [FromClaim(claimType: "UserId", isRequired: false)]
+  [FromClaim(claimType: "UserId", isRequired: true)]
+  public Guid ApplicationUserId { get; set; }
   public Guid PledgeId { get; set; }
   public BloodDonationPladgeEvolutionStatus? EvolutionStatus { get; set; }
   public DateTime? PledgeDate { get; set; }
-  public Guid ApplicationUserId { get; set; }
 }
 
 public class UpdatePledgeResponse
@@ -29,12 +29,17 @@ public class UpdatePledgeValidator : Validator<UpdatePledgeRequest>
     RuleFor(x => x)
       .Must(x => x.EvolutionStatus.HasValue || x.PledgeDate.HasValue)
       .WithMessage("At least one field must be provided for update");
+
+    
     RuleFor(x => x.EvolutionStatus)
       .Must(x => x == BloodDonationPladgeEvolutionStatus.CanceledByInitiaor || !x.HasValue)
-      .WithMessage("Only The status 'CanceledByInitiaor' is allowed for update");
+      .WithMessage("Only The status 'CanceledByInitiaor' is allowed for update")
+      .When(x => x.EvolutionStatus.HasValue);
+
     RuleFor(x => x.PledgeDate)
       .Must(x => x > DateTime.UtcNow)
-      .WithMessage("The pledge date must be in the future");
+      .WithMessage("The pledge date must be in the future")
+      .When(x => x.PledgeDate.HasValue);
   }
 }
 
@@ -43,7 +48,6 @@ public class UpdatePledgeEndpoint(IMediator _mediator) : Endpoint<UpdatePledgeRe
   public override void Configure()
   {
     Put("/Pledges/{PledgeId:guid}");
-    AllowAnonymous();
   }
 
   public override async Task HandleAsync(UpdatePledgeRequest req, CancellationToken cancellationToken)

@@ -2,6 +2,8 @@
 using BD.PublicPortal.Core.Entities.Specifications;
 
 namespace BD.PublicPortal.Application.BTCsubscribed;
-
-public record GetBTCsubscribedQuery(BTCSubscribedSpecificationFilter? filter = null, Guid? LoggedUserID = null, int? Level = null)
-  : IQuery<Result<IEnumerable<DonorBloodTransferCenterSubscriptionsDTO>>>;
+public record GetBTCsubscribedQuery(
+  Guid LoggedUserId,
+  int? PaginationTake = null,
+  int? Level = null
+) : IQuery<Result<IEnumerable<DonorBloodTransferCenterSubscriptionsDTO>>>;

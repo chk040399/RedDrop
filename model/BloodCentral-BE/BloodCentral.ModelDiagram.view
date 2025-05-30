@@ -1182,7 +1182,7 @@
                       <Y>0.5 px</Y>
                     </Location>
                     <Size>
-                      <Width>144 px</Width>
+                      <Width>200 px</Width>
                       <Height>18 px</Height>
                     </Size>
                     <Oid xsi:type="SchemaModelOID">
@@ -1201,7 +1201,7 @@
                       <Y>18.5 px</Y>
                     </Location>
                     <Size>
-                      <Width>144 px</Width>
+                      <Width>200 px</Width>
                       <Height>18 px</Height>
                     </Size>
                     <Oid xsi:type="SchemaModelOID">
@@ -1220,7 +1220,7 @@
                       <Y>36.5 px</Y>
                     </Location>
                     <Size>
-                      <Width>144 px</Width>
+                      <Width>200 px</Width>
                       <Height>18 px</Height>
                     </Size>
                     <Oid xsi:type="SchemaModelOID">
@@ -1239,7 +1239,7 @@
                       <Y>54.5 px</Y>
                     </Location>
                     <Size>
-                      <Width>144 px</Width>
+                      <Width>200 px</Width>
                       <Height>18 px</Height>
                     </Size>
                     <Oid xsi:type="SchemaModelOID">
@@ -1258,7 +1258,7 @@
                       <Y>72.5 px</Y>
                     </Location>
                     <Size>
-                      <Width>144 px</Width>
+                      <Width>200 px</Width>
                       <Height>18 px</Height>
                     </Size>
                     <Oid xsi:type="SchemaModelOID">
@@ -1277,7 +1277,7 @@
                       <Y>90.5 px</Y>
                     </Location>
                     <Size>
-                      <Width>144 px</Width>
+                      <Width>200 px</Width>
                       <Height>18 px</Height>
                     </Size>
                     <Oid xsi:type="SchemaModelOID">
@@ -1296,7 +1296,7 @@
                       <Y>108.5 px</Y>
                     </Location>
                     <Size>
-                      <Width>144 px</Width>
+                      <Width>200 px</Width>
                       <Height>18 px</Height>
                     </Size>
                     <Oid xsi:type="SchemaModelOID">
@@ -1306,7 +1306,7 @@
                   </Model>
                 </Children>
                 <Size>
-                  <Width>145 px</Width>
+                  <Width>201 px</Width>
                   <Height>127 px</Height>
                 </Size>
                 <MaxSize>
@@ -1327,7 +1327,7 @@
                     </CustomProperties>
                     <Children />
                     <Size>
-                      <Width>144 px</Width>
+                      <Width>200 px</Width>
                       <Height>18 px</Height>
                     </Size>
                     <Oid xsi:type="SchemaModelOID">
@@ -1341,7 +1341,7 @@
                   <Y>126 px</Y>
                 </Location>
                 <Size>
-                  <Width>145 px</Width>
+                  <Width>201 px</Width>
                   <Height>37 px</Height>
                 </Size>
                 <MaxSize>
@@ -1352,11 +1352,11 @@
               </Model>
             </Children>
             <Location>
-              <X>40 px</X>
+              <X>-16 px</X>
               <Y>356 px</Y>
             </Location>
             <Size>
-              <Width>150 px</Width>
+              <Width>206 px</Width>
               <Height>212 px</Height>
             </Size>
             <MinSize>
@@ -3180,7 +3180,7 @@
               </PointD>
               <PointD>
                 <X>968 px</X>
-                <Y>451.087799072266 px</Y>
+                <Y>451.087804878049 px</Y>
               </PointD>
             </BendPoints>
             <IsManuallyRouted>false</IsManuallyRouted>
@@ -3275,10 +3275,10 @@
         <GridSize>8 px</GridSize>
         <ViewPort>
           <ScaleMode>Free</ScaleMode>
-          <Scale>0.7046765</Scale>
+          <Scale>0.61</Scale>
           <Location>
-            <X>39.7345457354884 px</X>
-            <Y>39.7345457354884 px</Y>
+            <X>-345.90163123252 px</X>
+            <Y>-118.03278384661 px</Y>
           </Location>
         </ViewPort>
         <Oid xsi:type="SchemaModelOID">

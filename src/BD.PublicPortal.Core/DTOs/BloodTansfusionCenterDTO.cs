@@ -57,4 +57,16 @@ namespace BD.PublicPortal.Core.DTOs
         #endregion
     }
 
+    public partial class BloodTansfusionCenterExDTO : BloodTansfusionCenterDTO
+  {
+    #region Constructors
+    public BloodTansfusionCenterExDTO(bool? loggedUserSubscribed)
+    {
+      LoggedUserSubscribed = loggedUserSubscribed;
+    }
+
+    public bool? LoggedUserSubscribed { get; set; } = null;
+
+    #endregion
+  }
 }

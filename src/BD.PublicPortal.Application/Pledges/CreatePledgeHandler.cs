@@ -1,6 +1,7 @@
 ﻿using BD.PublicPortal.Core.Entities;
 using BD.PublicPortal.Core.DTOs;
 using BD.PublicPortal.Core.Entities.Enums;
+using BD.PublicPortal.Core.Entities.Specifications;
 
 namespace BD.PublicPortal.Application.Pledges;
 
@@ -9,8 +10,17 @@ public class CreatePledgeHandler(IRepository<BloodDonationPledge> _pledgeReposit
 {
   public async Task<Result<BloodDonationPledgeDTO>> Handle(CreatePledgeCommand request, CancellationToken cancellationToken)
   {
-    // Create new pledge entity  
-    var pledge = new BloodDonationPledge
+
+    var existingInitiatedPldgeCount = await
+      _pledgeRepository.CountAsync(new BloodDonationPledgeSpecification(request.ApplicationUserId));
+
+    if (existingInitiatedPldgeCount > 0)
+    {
+      return Result.Invalid(new ValidationError("You already have an active pledge. Please complete or cancel it before creating a new one."));
+    }
+
+      // Create new pledge entity  
+      var pledge = new BloodDonationPledge
     {
       BloodDonationRequestId = request.BloodDonationRequestId,
       ApplicationUserId = request.ApplicationUserId,

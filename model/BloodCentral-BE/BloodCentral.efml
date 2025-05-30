@@ -84,7 +84,7 @@
       <column name="" not-null="False" />
     </property>
   </class>
-  <class name="BloodTansfusionCenter" entity-set="BloodTansfusionCenters" p1:Guid="3ba20d0a-d7e5-4400-8b52-1c60050864de" p1:DoNotGenerateSerializableAttribute="True" p1:DoNotImplementCloneable="True" p1:DoNotSerialize="True">
+  <class name="BloodTansfusionCenter" entity-set="BloodTansfusionCenters" p1:Guid="3ba20d0a-d7e5-4400-8b52-1c60050864de" p1:DoNotGenerateSerializableAttribute="True" p1:DoNotImplementCloneable="True" p1:EntityBase="EntityBase&lt;Guid&gt;, IAggregateRoot" p1:DoNotSerialize="True">
     <id name="Id" type="Guid" p1:ValidateRequired="true" p1:Guid="f710713a-9447-4dc5-964b-8a60e1d001ec">
       <column name="" />
     </id>
@@ -115,8 +115,8 @@
       <column name="" />
     </property>
   </class>
-  <class name="BloodDonationPledge" entity-set="BloodDonationPledges" p1:Guid="1c03fad6-b298-4619-b3b5-975a6d2be371" p1:DoNotGenerateSerializableAttribute="True" p1:DoNotImplementCloneable="True" p1:DoNotSerialize="True">
-    <id name="Id" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="3737314d-e87a-43f3-868b-05bb0466238b">
+  <class name="BloodDonationPledge" entity-set="BloodDonationPledges" p1:Guid="1c03fad6-b298-4619-b3b5-975a6d2be371" p1:DoNotGenerateSerializableAttribute="True" p1:DoNotImplementCloneable="True" p1:EntityBase="EntityBase&lt;Guid&gt;, IAggregateRoot" p1:DoNotSerialize="True">
+    <id name="Id" type="Guid" p1:ValidateRequired="true" p1:Guid="3737314d-e87a-43f3-868b-05bb0466238b">
       <column name="" />
     </id>
     <property name="EvolutionStatus" type="BD.BloodCentral.Core.BloodDonationPladgeEvolutionStatus" p1:ValidateRequired="true" p1:Guid="6eb40e48-2bd4-4660-aac0-dfe874d9c825">
@@ -145,7 +145,7 @@
     </property>
   </class>
   <class name="DonorBloodTransferCenterSubscriptions" entity-set="DonorBloodTransferCenterSubscriptions" p1:Guid="e0974b70-af72-4a70-bb9e-c9e4525e6d1f" p1:DoNotGenerateSerializableAttribute="True" p1:DoNotImplementCloneable="True" p1:DoNotSerialize="True">
-    <id name="Id" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="9e4a7fbb-9b02-4203-b89f-8d9ba0aab7ce">
+    <id name="Id" type="Guid" p1:ValidateRequired="true" p1:Guid="9e4a7fbb-9b02-4203-b89f-8d9ba0aab7ce">
       <column name="" />
     </id>
     <property name="BloodTansfusionCenterId" type="Guid" p1:ValidateRequired="true" p1:Guid="777e731e-c98e-4505-858b-74f5a00b6721">
@@ -155,8 +155,8 @@
       <column name="" not-null="False" />
     </property>
   </class>
-  <class name="BloodInventory" entity-set="BloodInventories" p1:Guid="febdde5c-04d9-4364-8ff0-d8ce3ecb38a0" p1:DoNotGenerateSerializableAttribute="True" p1:DoNotImplementCloneable="True" p1:DoNotSerialize="True">
-    <id name="Id" type="Guid" p1:ValidateRequired="true" p1:Guid="37e03e83-e157-4f30-80a8-fa96e4c3c801">
+  <class name="BloodInventory" entity-set="BloodInventories" p1:Guid="febdde5c-04d9-4364-8ff0-d8ce3ecb38a0" p1:DoNotGenerateSerializableAttribute="True" p1:DoNotImplementCloneable="True" p1:EntityBase="EntityBase&lt;Guid&gt;, IAggregateRoot" p1:DoNotSerialize="True">
+    <id name="Id" type="Guid" value-generated="OnAdd" p1:ValidateRequired="true" p1:Guid="37e03e83-e157-4f30-80a8-fa96e4c3c801">
       <column name="" />
     </id>
     <property name="BloodTansfusionCenterId" type="Guid" p1:ValidateRequired="true" p1:Guid="b77204f3-c9fd-48fa-9a0d-cbef04325411">
@@ -189,7 +189,7 @@
       <column name="" not-null="False" />
     </property>
   </class>
-  <class name="Donor" entity-set="Donors" p1:Guid="4f46ae26-ca31-47f6-b048-9928977db005">
+  <class name="ApplicationUser" entity-set="ApplicationUsers" p1:Guid="4f46ae26-ca31-47f6-b048-9928977db005" p1:EntityBase="EntityBase&lt;Guid&gt;, IAggregateRoot">
     <id name="Id" type="Guid" p1:ValidateRequired="true" p1:Guid="bff3a781-d4ac-4a46-aedc-98229b75226a">
       <column name="" />
     </id>
@@ -286,26 +286,26 @@
       </end2>
     </association>
     <association name="Commune_Donor" cardinality="OneToMany" on-delete="Restrict" p1:Guid="a1251182-a877-4198-a1b6-8a32ebd88b9d">
-      <end1 multiplicity="One" name="Commune" class="Donor" relation-class="Commune" constrained="True" lazy="False" p1:Guid="1c48b9c4-8d36-49a3-9bc3-0e1e757c884d">
+      <end1 multiplicity="One" name="Commune" class="ApplicationUser" relation-class="Commune" constrained="True" lazy="False" p1:Guid="1c48b9c4-8d36-49a3-9bc3-0e1e757c884d">
         <property name="Id" />
       </end1>
-      <end2 multiplicity="Many" name="Donors" class="Commune" relation-class="Donor" lazy="False" p1:Guid="5b5129a9-4f33-4d02-ac74-6b0c8a39fd14">
+      <end2 multiplicity="Many" name="Donors" class="Commune" relation-class="ApplicationUser" lazy="False" p1:Guid="5b5129a9-4f33-4d02-ac74-6b0c8a39fd14">
         <property name="CommuneId1" />
       </end2>
     </association>
     <association name="Donor_DonorBloodTransferCenterSubscriptions" cardinality="OneToMany" on-delete="Restrict" p1:Guid="b3aa379b-89cf-426f-9bff-9a7f921b588d">
-      <end1 multiplicity="One" name="Donor" class="DonorBloodTransferCenterSubscriptions" relation-class="Donor" constrained="True" lazy="False" p1:Guid="e503b394-cb29-4b91-8e6f-66427a44ea83">
+      <end1 multiplicity="One" name="Donor" class="DonorBloodTransferCenterSubscriptions" relation-class="ApplicationUser" constrained="True" lazy="False" p1:Guid="e503b394-cb29-4b91-8e6f-66427a44ea83">
         <property name="Id" />
       </end1>
-      <end2 multiplicity="Many" name="DonorBloodTransferCenterSubscriptions" class="Donor" relation-class="DonorBloodTransferCenterSubscriptions" lazy="False" p1:Guid="341e54a0-de93-4427-9423-dc6ff53fdf8e">
+      <end2 multiplicity="Many" name="DonorBloodTransferCenterSubscriptions" class="ApplicationUser" relation-class="DonorBloodTransferCenterSubscriptions" lazy="False" p1:Guid="341e54a0-de93-4427-9423-dc6ff53fdf8e">
         <property name="DonorId" />
       </end2>
     </association>
     <association name="Donor_BloodDonationPledge" cardinality="OneToMany" p1:Guid="6c60ac8d-32c0-4bf4-9d13-6b888c785212">
-      <end1 multiplicity="One" name="Donor" class="BloodDonationPledge" relation-class="Donor" constrained="True" lazy="False" p1:Guid="022f2e62-5674-4d5a-8d1b-044c581b13c3">
+      <end1 multiplicity="One" name="Donor" class="BloodDonationPledge" relation-class="ApplicationUser" constrained="True" lazy="False" p1:Guid="022f2e62-5674-4d5a-8d1b-044c581b13c3">
         <property name="Id" />
       </end1>
-      <end2 multiplicity="Many" name="BloodDonationPledges" class="Donor" relation-class="BloodDonationPledge" lazy="False" p1:Guid="e20ecb80-93cc-4162-a540-a365c5ed5683">
+      <end2 multiplicity="Many" name="BloodDonationPledges" class="ApplicationUser" relation-class="BloodDonationPledge" lazy="False" p1:Guid="e20ecb80-93cc-4162-a540-a365c5ed5683">
         <property name="DonorId" />
       </end2>
     </association>

@@ -43,7 +43,43 @@ namespace BD.PublicPortal.Core.DTOs
             return target;
         }
 
-        public static BloodTansfusionCenter ToEntity(this BloodTansfusionCenterDTO source)
+        public static BloodTansfusionCenterExDTO ToExDtoWithRelated(this BloodTansfusionCenter source, int level, List<Guid> lstCenters)
+        {
+          if (source == null)
+            return null;
+
+          var target = new BloodTansfusionCenterExDTO(null);
+
+          // Properties
+          target.Id = source.Id;
+          target.Name = source.Name;
+          target.Address = source.Address;
+          target.Contact = source.Contact;
+          target.Email = source.Email;
+          target.Tel = source.Tel;
+          target.WilayaId = source.WilayaId;
+          if (lstCenters != null && lstCenters.Count > 0)
+          {
+            target.LoggedUserSubscribed = lstCenters.Contains(source.Id);
+          }
+          
+
+          // Navigation Properties
+          if (level > 0)
+          {
+            target.DonorBloodTransferCenterSubscriptions = source.DonorBloodTransferCenterSubscriptions.ToDtosWithRelated(level - 1);
+            target.BloodDonationRequests = source.BloodDonationRequests.ToDtosWithRelated(level - 1);
+            target.Wilaya = source.Wilaya.ToDtoWithRelated(level - 1);
+          }
+
+          
+
+          
+
+          return target;
+        }
+
+    public static BloodTansfusionCenter ToEntity(this BloodTansfusionCenterDTO source)
         {
             if (source == null)
               return null;
@@ -77,7 +113,19 @@ namespace BD.PublicPortal.Core.DTOs
             return target;
         }
 
-        public static List<BloodTansfusionCenterDTO> ToDtosWithRelated(this IEnumerable<BloodTansfusionCenter> source, int level)
+    public static List<BloodTansfusionCenterExDTO> ToExDtosWithRelated(this IEnumerable<BloodTansfusionCenter> source, int level, List<Guid> lstCenters)
+    {
+      if (source == null)
+        return null;
+
+      var target = source
+        .Select(src => src.ToExDtoWithRelated(level,lstCenters))
+        .ToList();
+
+      return target;
+    }
+
+    public static List<BloodTansfusionCenterDTO> ToDtosWithRelated(this IEnumerable<BloodTansfusionCenter> source, int level)
         {
             if (source == null)
               return null;

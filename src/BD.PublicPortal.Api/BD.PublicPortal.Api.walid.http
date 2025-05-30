@@ -1,0 +1,383 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@host=https://localhost
+@port=57679
+
+
+// List all contributors
+GET {{host}}:{{port}}/Contributors
+
+###
+@id_to_get=2
+GET {{host}}:{{port}}/Contributors/{{id_to_get}}
+
+###
+// Add a new contributor
+POST {{host}}:{{port}}/Contributors
+Content-Type: application/json
+
+{
+  "name": "John Doe 2",
+  "email": "test@test.com",
+  "phoneNumber": "1234567890"
+}
+
+###
+@id_to_update=3
+PUT {{host}}:{{port}}/Contributors/{{id_to_update}}
+Content-Type: application/json
+
+{
+  "id": {{id_to_update}},
+  "name": "ardalis2"
+}
+
+###
+@id_to_delete=6
+DELETE {{host}}:{{port}}/Contributors/{{id_to_delete}}
+
+###
+
+
+
+### Auth:
+
+### Register:
+
+POST {{host}}:{{port}}/auth/register
+Content-Type: application/json
+{
+  "userName": "hikihiki",
+  "email": "hikihiki@example.com",
+  "password": "HikiHiki-2025",
+  "confirmPassword": "HikiHiki-2025",
+  "donorName": "hikiHiki hikiHiki",
+  "donorBirthDate": "2006-05-22T09:16:16.749Z",
+  "donorBloodGroup": 8,
+  "donorNIN": "125555879123412345"  
+}
+###
+
+
+POST {{host}}:{{port}}/auth/register
+Content-Type: application/json
+{
+  "userName": "Zimou",
+  "email": "Zimou@example.com",
+  "password": "Zimou-2025",
+  "confirmPassword": "Zimou-2025",
+  "donorName": "Zimou Zimou",
+  "donorBirthDate": "2001-05-22T09:16:16.749Z",
+  "donorBloodGroup": 8,
+  "donorNIN": "125555879123412346"  
+}
+###
+
+POST {{host}}:{{port}}/auth/register
+Content-Type: application/json
+{
+  "userName": "ozich",
+  "email": "ozich@example.com",
+  "password": "Ozich-2025",
+  "confirmPassword": "Ozich-2025",
+  "donorName": "ozich ozich",
+  "donorBirthDate": "2000-05-22T09:16:16.749Z",
+  "donorBloodGroup": 2,
+  "donorNIN": "125555879123512346"  
+}
+###
+
+
+POST {{host}}:{{port}}/auth/register
+Content-Type: application/json
+{
+  "userName": "ozich1",
+  "email": "ozich1@example.com",
+  "password": "Ozich-2025",
+  "confirmPassword": "Ozich-2025",
+  "donorName": "ozich1 ozich1",
+  "donorBirthDate": "2000-05-22T09:16:16.749Z",
+  "donorBloodGroup": 2,
+  "donorNIN": "125555879123512346"  
+}
+###
+
+
+### Login:
+
+POST {{host}}:{{port}}/auth/login
+Content-Type: application/json
+{
+  "email": "hikihiki@example.com",
+  "password": "HikiHiki-2025" 
+}
+###
+
+POST {{host}}:{{port}}/auth/login
+Content-Type: application/json
+{
+  "email": "hiki@example.com",
+  "password": "Hiki-2025" 
+}
+###
+
+POST {{host}}:{{port}}/auth/login
+Content-Type: application/json
+{
+  "email": "Zimou@example.com",
+  "password": "Zimou-2025" 
+}
+###
+
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJVc2VySWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJlbWFpbCI6IlppbW91QGV4YW1wbGUuY29tIiwibmJmIjoxNzQ4NTUwMzU0LCJleHAiOjE3NDg2MzY3NTQsImlhdCI6MTc0ODU1MDM1NCwiaXNzIjoiUmVkRHJvcE9yZ2FuaXNhdGlvbiIsImF1ZCI6IkJsb29kIERvbmF0b3JzIn0.eUV5teVYJoouncCdnLDJeO0IdOORZC_APNBUrX0CnXY
+
+
+GET {{host}}:{{port}}/auth/manage/info
+Authorization: Bearer {{token}}
+###
+
+
+
+### User:
+
+
+###Users
+
+GET {{host}}:{{port}}/users/
+### not needed
+
+GET {{host}}:{{port}}/users/?PaginationTake=5&level=1
+###
+
+GET {{host}}:{{port}}/users/?CommuneId=558&PaginationTake=5&level=1
+###
+
+GET {{host}}:{{port}}/users/?WilayaId=16&PaginationTake=5&level=1
+###
+
+GET {{host}}:{{port}}/users/?DonorBloodGroup=7&PaginationTake=5&level=1
+###
+
+GET {{host}}:{{port}}/users/?DonorContactMethod=3&PaginationTake=5&level=1
+###
+
+GET {{host}}:{{port}}/users/?DonorWantToStayAnonymous=true&PaginationTake=5&level=1
+###
+
+GET {{host}}:{{port}}/users/?DonorExcludedFromPublicPortal=false&PaginationTake=5&level=1
+###
+
+###Profile
+
+
+GET {{host}}:{{port}}/user/
+Authorization: Bearer {{token}}
+###
+
+PATCH {{host}}:{{port}}/donor/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+    "donorWantToStayAnonymous": true,
+    "donorExcludeFromPublicPortal": true,
+    "donorAvailability": 3
+}
+###
+
+PATCH {{host}}:{{port}}/donor/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+    "donorBloodGroup": 2
+}
+
+###
+
+### Enums:
+
+//Enums
+GET {{host}}:{{port}}/enums/BloodGroup,DonorAvailability,DonorContactMethod,donorContactMethod
+###
+
+
+
+### Wilayas,Communes:
+
+GET {{host}}:{{port}}/Wilayas
+###
+
+GET {{host}}:{{port}}/Communes/16
+###
+
+
+
+### Blood Requests:
+
+GET {{host}}:{{port}}/BloodDonationRequests
+###
+
+GET {{host}}:{{port}}/BloodDonationRequests?&wilayaId=16&PaginationTake=10&level=1
+###
+
+
+GET {{host}}:{{port}}/BloodDonationRequests?level=2
+###
+
+
+GET {{host}}:{{port}}/BloodDonationRequests?SubscriptionsOnly=true&level=1
+Authorization: Bearer {{token}}
+###
+
+
+GET {{host}}:{{port}}/BloodDonationRequests?IlligibilityOnly=true&level=1
+Authorization: Bearer {{token}}
+###
+
+//Initiated = 0,Waiting = 1,PartiallyResolved = 2,Resolved = 3, Canceled = 4
+
+GET {{host}}:{{port}}/BloodDonationRequests?evolutionStatus=Waiting&wilayaId=16&PaginationTake=10&level=1
+###
+
+GET {{host}}:{{port}}/BloodDonationRequests?PaginationTake=10&&PaginationSkip=10&level=1
+###
+
+GET {{host}}:{{port}}/BloodDonationRequests?PaginationTake=10&&PaginationSkip=20&level=1
+###
+
+GET {{host}}:{{port}}/BloodDonationRequests?PaginationTake=10&&PaginationSkip=30&level=1
+###
+
+
+
+### CTS:
+
+GET {{host}}:{{port}}/BTC/
+###
+
+
+GET {{host}}:{{port}}/BTC/
+Authorization: Bearer {{token}}
+###
+
+GET {{host}}:{{port}}/BTC?&wilayaId=16&PaginationTake=10&level=1
+###
+
+GET {{host}}:{{port}}/BTC?PaginationTake=10&level=1
+###
+
+GET {{host}}:{{port}}/BTC?PaginationTake=10&&PaginationSkip=10&level=1
+###
+
+GET {{host}}:{{port}}/BTC?PaginationTake=10&&PaginationSkip=20&level=1
+###
+
+GET {{host}}:{{port}}/BTC?PaginationTake=10&&PaginationSkip=30&level=1
+###
+
+
+### BTC subscribed
+
+@UserId = 019719fa-671c-7953-84d3-c2fb402afbd9
+GET {{host}}:{{port}}/BTC/subscribed?ApplicationUserId={{UserId}}&PaginationTake=10&level=1
+###
+
+
+
+### Pledges:
+
+
+
+GET {{host}}:{{port}}/Pledges
+Authorization: Bearer {{token}}
+### 
+
+
+GET {{host}}:{{port}}/Pledges?EvolutionStatus=2&level=1
+Authorization: Bearer {{token}}
+### 
+
+POST {{host}}:{{port}}/Pledges
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "bloodDonationRequestId": "a0e69be0-1a29-edf3-bc65-6e12a6d78412",
+  "pledgeDate": "2025-08-28T01:26:27.739Z",
+  "pledgeNotes": "pppppppppppppp"
+}
+### 0196fd7e-2d78-75ff-92ab-8c7f590e598c
+
+
+
+// UserID: 0196fd7f-3618-71fc-a348-680923b64576
+// Pid:    019701b1-540d-7d52-b2c7-d63d09e3b814
+
+PUT {{host}}:{{port}}/Pledges/01971a4e-82cf-74ed-aabf-115864279304
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "evolutionStatus": 2
+}
+###
+
+PUT {{host}}:{{port}}/Pledges/01971a4e-82cf-74ed-aabf-115864279304
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "evolutionStatus": 2,
+  "pledgeDate": "2025-06-30T01:26:27.739Z"
+}
+###
+
+
+PUT {{host}}:{{port}}/Pledges/01971a4e-82cf-74ed-aabf-115864279304
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "pledgeDate": "2030-06-30T01:26:27.739Z"
+}
+###
+
+
+
+
+
+### Subscriptions
+
+POST {{host}}:{{port}}/subscriptions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  "BloodTansfusionCenterId": "12daf261-1f92-82eb-81c9-e77d22b34692"
+}
+###
+
+DELETE {{host}}:{{port}}/subscriptions/760f2763-9701-4082-9ab5-ac399669aebd
+Authorization: Bearer {{token}}
+###
+
+
+DELETE {{host}}:{{port}}/subscriptions/760f2763-9701-4082-9ab5-ac399669aebd
+Authorization: Bearer {{token}}
+###
+
+
+@UserId = 019719fa-671c-7953-84d3-c2fb402afbd9
+GET {{host}}:{{port}}/BTC/subscribed?ApplicationUserId={{UserId}}&PaginationTake=10&level=1
+###
+
+@BtcId=895bc690-3f2a-66c2-456f-ec56ae482558
+DELETE {{host}}:{{port}}/Subscriptions/btc/{{BtcId}}
+Authorization: Bearer {{token}}
+
+###
+
+GET {{host}}:{{port}}/BTC/subscribed?level=2
+Authorization: Bearer {{token}}
+
+###
+
+
+GET {{host}}:{{port}}/Dashboard/stats  
+
+###
+
+

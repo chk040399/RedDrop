@@ -2,13 +2,21 @@
 {
     public enum BloodGroup : int
     {
-        AB_POSITIVE = 1,
-        AB_NEGATIVE = 2,
-        A_POSITIVE = 3,
-        A_NEGATIVE = 4,
-        B_POSITIVE = 5,
-        B_NEGATIVE = 6,
-        O_POSITIVE = 7,
-        O_NEGATIVE = 8
+    [Display(Name = "AB+")]
+    AB_POSITIVE = 1,
+    [Display(Name = "AB-")]
+    AB_NEGATIVE = 2, 
+      [Display(Name = "A+")]
+    A_POSITIVE = 3,
+    [Display(Name = "A-")]
+    A_NEGATIVE = 4,
+    [Display(Name = "B+")]
+    B_POSITIVE = 5,
+    [Display(Name = "B-")]
+    B_NEGATIVE = 6,
+    [Display(Name = "O+")]
+    O_POSITIVE = 7,
+    [Display(Name = "O-")]
+    O_NEGATIVE = 8
     }
 }
