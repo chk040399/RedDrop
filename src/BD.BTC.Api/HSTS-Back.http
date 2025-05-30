@@ -1,0 +1,31 @@
+@HSTS_Back_HostAddress = http://localhost:5000
+
+# Test the root route
+GET {{HSTS_Back_HostAddress}}/test
+Accept: application/json
+
+###
+
+# Test the /test route
+GET {{HSTS_Back_HostAddress}}/services
+Accept: application/json
+
+###
+
+# add service
+POST {{HSTS_Back_HostAddress}}/services
+Accept: application/json
+Content-Type: application/json
+{
+    "name":""
+}
+###
+
+# add service
+POST {{HSTS_Back_HostAddress}}/services
+Accept: application/json
+Content-Type: application/json
+{
+    "name":"aabbccddee"
+}
+###

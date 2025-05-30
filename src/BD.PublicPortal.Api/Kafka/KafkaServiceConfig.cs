@@ -25,7 +25,7 @@ public static class KafkaServiceConfig
     builder.Services.PostConfigure<KafkaConsumerOptions>(config =>
     {
       {
-        config.ConsumerTopics = ["Poztzt", "zzzz"];
+        config.ConsumerTopics = ["topic1", "topic2"];
       //config.KeyToEventType = new Dictionary<string, Type>
       //{
       //  { "BloodRequestCreated", typeof() },
