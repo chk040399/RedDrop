@@ -1,4 +1,4 @@
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +14,7 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Wilaya?> GetByIdAsync(Guid id)
+        public async Task<Wilaya?> GetByIdAsync(int id)
         {
             return await _context.Wilayas
                 .Include(w => w.Communes)
@@ -76,7 +76,7 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(int id)
         {
             var wilaya = await GetByIdAsync(id);
             if (wilaya != null)

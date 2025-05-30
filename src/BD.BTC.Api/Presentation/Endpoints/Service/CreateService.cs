@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using FastEndpoints;
 using Application.Features.ServiceManagement.Commands;
 using Shared.Exceptions;
@@ -20,7 +20,9 @@ namespace Presentation.Endpoints.Service
         public override void Configure()
         {
             Post("/services");
-            Policies("RequireAdminRole"); // Restrict to admin role
+            AllowAnonymous();
+
+            //Policies("RequireAdminRole"); // Restrict to admin role
             Description(x => x
                 .WithName("CreateService")
                 .WithTags("Admin", "Services") // Add Admin tag

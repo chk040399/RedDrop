@@ -15,18 +15,20 @@ namespace Infrastructure.ExternalServices.Kafka
         private readonly KafkaSettings _settings;
         private readonly ITopicDispatcher _dispatcher;
         private readonly CancellationTokenSource _cts = new();
-        private IConsumer<Ignore, string>? _consumer;
+        private IConsumer<string, string> _consumer;
 
         public KafkaConsumerService(
             ILogger<KafkaConsumerService> logger,
             IOptions<KafkaSettings> settings,
             IMediator mediator,
-            ITopicDispatcher dispatcher)
+            ITopicDispatcher dispatcher,
+            IConsumer<string, string> consumer)
         {
             _logger = logger;
             _mediator = mediator;
             _settings = settings.Value;
             _dispatcher = dispatcher;
+            _consumer = consumer;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -40,23 +42,11 @@ namespace Infrastructure.ExternalServices.Kafka
         private async Task RunConsumerLoop(CancellationToken stoppingToken)
         {
             // Create consumer inside ExecuteAsync instead of constructor
-            var config = new ConsumerConfig
-            {
-                BootstrapServers = _settings.BootstrapServers,
-                GroupId = _settings.GroupId ?? $"{Environment.MachineName}-consumer-group",
-                AutoOffsetReset = Enum.TryParse<AutoOffsetReset>(_settings.AutoOffsetReset, true, out var offsetReset) 
-                    ? offsetReset 
-                    : AutoOffsetReset.Latest,
-                EnableAutoCommit = false,
-                EnablePartitionEof = true
-            };
 
             try
             {
-                _consumer = new ConsumerBuilder<Ignore, string>(config).Build();
-                
                 // Test connection to Kafka before subscribing
-                _logger.LogInformation("Attempting to connect to Kafka at {BrokerAddress}", _settings.BootstrapServers);
+                _logger.LogInformation("Attempting to connect to Kafka ...");
                 
                 // Get the list of topics we should subscribe to - REMOVE DUPLICATES
                 if (_settings.ConsumerTopics?.Any() == true)
@@ -110,7 +100,7 @@ namespace Infrastructure.ExternalServices.Kafka
             }
         }
 
-        private async Task ProcessMessageAsync(ConsumeResult<Ignore, string> result)
+        private async Task ProcessMessageAsync(ConsumeResult<string, string> result)
         {
             try
             {

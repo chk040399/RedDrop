@@ -1,4 +1,4 @@
-// Infrastructure/MessageBrokers/KafkaEventPublisher.cs
+﻿// Infrastructure/MessageBrokers/KafkaEventPublisher.cs
 using System.Text.Json;
 using Application.Interfaces;
 using Confluent.Kafka;
@@ -8,35 +8,23 @@ namespace Infrastructure.ExternalServices.Kafka
 {
     public class KafkaEventPublisher : IEventProducer, IDisposable
     {
-        private readonly IProducer<Null, string> _producer;
+        private readonly IProducer<string, string> _producer;
         private readonly ILogger<KafkaEventPublisher> _logger;
 
         public KafkaEventPublisher(
-            ILogger<KafkaEventPublisher> logger,
-            IOptions<KafkaSettings> settings)
+            ILogger<KafkaEventPublisher> logger, IProducer<string, string> producer)
         {
-            _logger = logger;
-            
-            var kafkaSettings = settings.Value;
-            var config = new ProducerConfig
-            {
-                BootstrapServers = kafkaSettings.BootstrapServers,
-                EnableIdempotence = kafkaSettings.EnableIdempotence,
-                MessageTimeoutMs = 5000,
-                Acks = Acks.All
-            };
-
-            _producer = new ProducerBuilder<Null, string>(config)
-                .SetErrorHandler((_, e) => _logger.LogError($"Producer error: {e.Reason}"))
-                .Build();
+          _producer = producer;
+          _logger = logger;
         }
 
         public async Task ProduceAsync<TEvent>(string topic, TEvent @event) where TEvent : class
         {
             try
             {
-                var message = new Message<Null, string>
+                var message = new Message<string, string>
                 {
+                    Key = "CtsCreated",
                     Value = JsonSerializer.Serialize(@event)
                 };
 

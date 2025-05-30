@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HSTS_Back.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250501105914_Initial")]
+    [Migration("20250529174121_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -65,10 +65,82 @@ namespace HSTS_Back.Migrations
                     b.ToTable("BloodBags");
                 });
 
+            modelBuilder.Entity("Domain.Entities.BloodTransferCenter", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasDefaultValueSql("gen_random_uuid()");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("character varying(200)");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<bool>("IsPrimary")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
+                    b.Property<int>("WilayaId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Email");
+
+                    b.HasIndex("IsPrimary")
+                        .IsUnique()
+                        .HasFilter("\"IsPrimary\" = true");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("WilayaId");
+
+                    b.ToTable("BloodTransferCenters");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Commune", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<int>("WilayaId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WilayaId");
+
+                    b.ToTable("Communes");
+                });
+
             modelBuilder.Entity("Domain.Entities.Donor", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("gen_random_uuid()");
 
@@ -102,6 +174,9 @@ namespace HSTS_Back.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
+                    b.Property<string>("NotesBTC")
+                        .HasColumnType("text");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(15)
@@ -120,12 +195,16 @@ namespace HSTS_Back.Migrations
                     b.Property<Guid>("RequestId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateOnly>("PledgeDate")
+                    b.Property<DateOnly?>("FulfillmentDate")
                         .HasColumnType("date");
+
+                    b.Property<DateTime>("PledgeDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.HasKey("DonorId", "RequestId");
 
@@ -162,10 +241,100 @@ namespace HSTS_Back.Migrations
                     b.ToTable("GlobalStocks");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Request", b =>
+            modelBuilder.Entity("Domain.Entities.Notification", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Icon")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<bool>("IsRead")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Link")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("IsRead");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PushSubscription", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("Auth")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Endpoint")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime?>("LastModifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("P256dh")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Endpoint")
+                        .IsUnique();
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PushSubscriptions");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Request", b =>
+                {
+                    b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasDefaultValueSql("gen_random_uuid()");
 
@@ -185,6 +354,9 @@ namespace HSTS_Back.Migrations
 
                     b.Property<DateOnly?>("DueDate")
                         .HasColumnType("date");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("MoreDetails")
                         .HasMaxLength(500)
@@ -206,6 +378,9 @@ namespace HSTS_Back.Migrations
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("autoResolve")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -284,6 +459,24 @@ namespace HSTS_Back.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.Wilaya", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Wilayas");
+                });
+
             modelBuilder.Entity("Domain.Entities.BloodBag", b =>
                 {
                     b.HasOne("Domain.Entities.Donor", "Donor")
@@ -301,18 +494,40 @@ namespace HSTS_Back.Migrations
                     b.Navigation("Request");
                 });
 
+            modelBuilder.Entity("Domain.Entities.BloodTransferCenter", b =>
+                {
+                    b.HasOne("Domain.Entities.Wilaya", "Wilaya")
+                        .WithMany("BloodTransferCenters")
+                        .HasForeignKey("WilayaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Wilaya");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Commune", b =>
+                {
+                    b.HasOne("Domain.Entities.Wilaya", "Wilaya")
+                        .WithMany("Communes")
+                        .HasForeignKey("WilayaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Wilaya");
+                });
+
             modelBuilder.Entity("Domain.Entities.DonorPledge", b =>
                 {
                     b.HasOne("Domain.Entities.Donor", "Donor")
-                        .WithMany()
+                        .WithMany("Pledges")
                         .HasForeignKey("DonorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Request", "Request")
                         .WithMany("Pledges")
                         .HasForeignKey("RequestId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Donor");
@@ -341,6 +556,8 @@ namespace HSTS_Back.Migrations
                 {
                     b.Navigation("BloodBags");
 
+                    b.Navigation("Pledges");
+
                     b.Navigation("Requests");
                 });
 
@@ -354,6 +571,13 @@ namespace HSTS_Back.Migrations
             modelBuilder.Entity("Domain.Entities.Service", b =>
                 {
                     b.Navigation("Requests");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Wilaya", b =>
+                {
+                    b.Navigation("BloodTransferCenters");
+
+                    b.Navigation("Communes");
                 });
 #pragma warning restore 612, 618
         }

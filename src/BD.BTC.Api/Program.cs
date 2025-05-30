@@ -14,23 +14,31 @@ using Infrastructure.BackgroundServices;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using HSTS_Back;
+using HSTS_Back.Infrastructure.BackgroundServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Presentation.Middlewares;
 using Infrastructure.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Kestrel explicitly
-builder.WebHost.ConfigureKestrel(serverOptions => {
-    serverOptions.ListenAnyIP(5000);
-    serverOptions.AllowSynchronousIO = true;
-});
+//builder.WebHost.ConfigureKestrel(serverOptions => {
+//    serverOptions.ListenAnyIP(5000);
+//    serverOptions.AllowSynchronousIO = true;
+//});
 
 // Database
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
-          .EnableSensitiveDataLogging()
-          .EnableDetailedErrors());
-Console.WriteLine("Database connection string: " + builder.Configuration.GetConnectionString("DefaultConnection"));
+builder.AddNpgsqlDbContext<ApplicationDbContext>(connectionName: "Cts1PortalDatabase", configureDbContextOptions:
+  options =>
+  {
+    options.EnableSensitiveDataLogging().EnableDetailedErrors();
+
+  }
+);
+
+//builder.Services.AddDbContext<ApplicationDbContext>(options =>
+//    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
+//          .EnableSensitiveDataLogging()
+//          .EnableDetailedErrors());
+//Console.WriteLine("Database connection string: " + builder.Configuration.GetConnectionString("DefaultConnection"));
 
 // CORS Configuration
 builder.Services.AddCors(options =>
@@ -43,22 +51,52 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Add health checks
-builder.Services.AddHealthChecks()
-    .AddNpgSql(
-        builder.Configuration.GetConnectionString("DefaultConnection") ?? 
-        throw new InvalidOperationException("Connection string 'DefaultConnection' not found."), 
-        name: "postgres");
 
-// Register Kafka configuration
+
+// Add health checks
+//builder.Services.AddHealthChecks()
+//    .AddNpgSql(
+//        builder.Configuration.GetConnectionString("DefaultConnection") ?? 
+//        throw new InvalidOperationException("Connection string 'DefaultConnection' not found."), 
+//        name: "postgres");
+
+// Register Kafka stuff
+builder.AddKafkaProducer<string, string>("kafka", o => { o.Config.AllowAutoCreateTopics = true; });
+
+builder.AddKafkaConsumer<string, string>("kafka", o => {
+  o.Config.GroupId = "CTSs";
+  o.Config.AllowAutoCreateTopics = true;
+});
+// 
+//
+
+// TODO : exemple utilisation simple
+//services.Configure<KafkaConsumerOptions>(o => { o.ConsumerTopics =  ["NewBloodRequests", "PledgesUpdates", "DonnorsUpdate"]; });
+
+// TODO : exemple utilisation avancé
+//builder.Services.PostConfigure<KafkaConsumerOptions>(config =>
+//{
+//  {
+//    config.ConsumerTopics = ["topic1", "topic2"];
+//    config.KeyToEventType = new Dictionary<string, Type>
+//    {
+//      { "BloodRequestCreated", typeof() },
+//      { "BloodRequestStatusUpdated", typeof() },
+//      { "PledgeStatusUpdated", typeof() },
+//      { "CtsCreated", typeof() }
+//  }
+//  ;
+//});
+
 builder.Services.Configure<KafkaSettings>(
     builder.Configuration.GetSection("Kafka"));
 
-// Register singleton for topic initialization
-builder.Services.AddSingleton<KafkaTopicInitializer>();
-
 // Register scoped services
 builder.Services.AddScoped<IEventProducer, KafkaEventPublisher>();
+
+// Register singleton for topic initialization
+//TODO : Disabled not needed
+//builder.Services.AddSingleton<KafkaTopicInitializer>();
 
 // FastEndpoints + Swagger
 builder.Services.AddInfrastructureServices(builder.Configuration);
@@ -73,8 +111,11 @@ builder.Services.SwaggerDocument(o =>
     };
 });
 
-// MediatR
 
+//
+
+
+// MediatR
 
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
@@ -83,15 +124,7 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.Get
 // FluentValidation
 builder.Services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
 
-// hosted service
-builder.Services.AddHostedService<KafkaConsumerService>();
 
-// Add background processing service
-builder.Services.AddHostedService<BackgroundEventProcessor>();
-builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
-
-// Register the DailySchedulerService
-builder.Services.AddHostedService<HSTS_Back.Infrastructure.BackgroundServices.DailySchedulerService>();
 
 // Add JWT configuration
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -116,8 +149,22 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User"));
 });
 
-// Register JWT service
-builder.Services.AddScoped<IJwtService, JwtService>();
+
+// hosted service
+//TODO : Disabled Temporarly -- Renabled
+builder.Services.AddHostedService<KafkaConsumerService>();
+
+
+//TODO : Disabled Temporarly -- Renabled
+builder.Services.AddHostedService<BackgroundEventProcessor>();
+builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
+
+//TODO : Disabled Temporarly -- Renabled
+// Register the DailySchedulerService
+builder.Services.AddHostedService<DailySchedulerService>();
+
+
+builder.AddServiceDefaults();// For ASPIRE --> Services registration
 
 var app = builder.Build();
 
@@ -160,33 +207,33 @@ app.MapGet("/api/system/status", () => new {
 });
 
 // Add all other middleware
-app.UseCors("AllowAll");
+
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseFastEndpoints();
 app.UseSwaggerGen();
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseMiddleware<JwtMiddleware>();
+app.UseCors("AllowAll");
+
 
 // Register your topic handlers with the dispatcher
-//TODO : Temproary disabled
-/*
-var topicDispatcher = app.Services.GetRequiredService<ITopicDispatcher>();
-topicDispatcher.Register<DonorPledgeCommand>("donors-pledges");
-*/
+//TODO : Disabled
+//var topicDispatcher = app.Services.GetRequiredService<ITopicDispatcher>();
+//topicDispatcher.Register<DonorPledgeCommand>("donors-pledges");
 
-Console.WriteLine("Starting web server on port 5000...");
-app.Logger.LogInformation("Web server is ready to accept requests at http://0.0.0.0:5000");
+
+app.MapDefaultEndpoints();// ASPIRE  --> Middle ware
+
 
 // In Program.cs after service registration
-var serviceProvider = app.Services;
-var topicInitializer = serviceProvider.GetRequiredService<KafkaTopicInitializer>();
-await topicInitializer.InitializeAsync();
-
+//TODO : Disabled not needed
+//var serviceProvider = app.Services;
+//var topicInitializer = serviceProvider.GetRequiredService<KafkaTopicInitializer>();
+//await topicInitializer.InitializeAsync();
 // Add a delay to ensure topics are ready
-await Task.Delay(2000); 
+//await Task.Delay(2000); 
+//app.Logger.LogInformation("Kafka topics initialized, starting application");
 
-app.Logger.LogInformation("Kafka topics initialized, starting application");
 
 // Call database seeder
 await DatabaseSeeder.SeedDatabase(app.Services);

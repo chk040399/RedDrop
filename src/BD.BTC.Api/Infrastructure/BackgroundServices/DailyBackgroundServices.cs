@@ -6,6 +6,9 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Features.BloodBagManagement.Commands;
+using Application.Features.BloodRequests.Commands;
+using Application.Features.PledgeManagement.Commands;
 
 namespace HSTS_Back.Infrastructure.BackgroundServices
 {
@@ -14,20 +17,19 @@ namespace HSTS_Back.Infrastructure.BackgroundServices
         private readonly ILogger<DailySchedulerService> _logger;
         private readonly IServiceScopeFactory _scopeFactory; // Needed to create scopes for MediatR dispatching
 
-        // Define your scheduled tasks and their times
-        // You could even load these from configuration or a database if they change frequently
-        private static readonly (TimeSpan Time, Func<IRequest> CommandFactory)[]? ScheduledTasks = null; 
-        //TODO : temporary disabled 
-        /*
-         =
-        {
-            (new TimeSpan(2, 0, 0), () => new Application.Features.BloodBagManagement.Commands.CleanupExpiredBloodBagsCommand()), // Example for 2 AM
-            (new TimeSpan(4, 30, 0), () => new Application.Features.BloodRequests.Commands.CleanupExpiredRequestsCommand()), // Example for 4:30 AM
-            (new TimeSpan(23, 0, 0), () => new Application.Features.PledgeManagement.Commands.CleanupExpiredPledgesCommand()) // Example for 11 PM
-        };
-        */
-
-        public DailySchedulerService(ILogger<DailySchedulerService> logger, IServiceScopeFactory scopeFactory)
+    // Define your scheduled tasks and their times
+    // You could even load these from configuration or a database if they change frequently
+    
+    private static readonly (TimeSpan Time, Func<IRequest> CommandFactory)[] ScheduledTasks = null!
+    //TODO : disabled
+    //= new (TimeSpan, Func<IRequest>)[]
+    //{
+    //    (new TimeSpan(2, 0, 0), () => new CleanupExpiredBloodBagsCommand()), // Example for 2 AM
+    //    (new TimeSpan(4, 30, 0), () => new CleanupExpiredRequestsCommand()), // Example for 4:30 AM
+    //    (new TimeSpan(23, 0, 0), () => new CleanupExpiredPledgesCommand()) // Example for 11 PM
+    //}
+    ;
+    public DailySchedulerService(ILogger<DailySchedulerService> logger, IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
             _scopeFactory = scopeFactory;

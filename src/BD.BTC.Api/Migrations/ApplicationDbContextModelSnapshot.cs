@@ -17,7 +17,7 @@ namespace HSTS_Back.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.5")
+                .HasAnnotation("ProductVersion", "9.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -93,8 +93,8 @@ namespace HSTS_Back.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
-                    b.Property<Guid>("WilayaId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("WilayaId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -114,17 +114,19 @@ namespace HSTS_Back.Migrations
 
             modelBuilder.Entity("Domain.Entities.Commune", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<Guid>("WilayaId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("WilayaId")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -456,9 +458,11 @@ namespace HSTS_Back.Migrations
 
             modelBuilder.Entity("Domain.Entities.Wilaya", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()

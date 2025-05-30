@@ -1,4 +1,4 @@
-using Domain.Events;
+﻿using Domain.Events;
 namespace Domain.Events
 {
     public sealed record CtsData(
@@ -9,5 +9,5 @@ namespace Domain.Events
         string HospitalEmail,
         string Wilaya,
         string Commune,
-        List<GlobalStockData> GlobalStockData);
+        List<GlobalStockData> GlobalStockData = null);
 }

@@ -1,8 +1,10 @@
-using Confluent.Kafka;
+﻿using Confluent.Kafka;
 using Confluent.Kafka.Admin;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 
+//TODO : Disabled not needed
+/*
 namespace Infrastructure.ExternalServices.Kafka
 {
     public class KafkaTopicInitializer
@@ -56,3 +58,4 @@ namespace Infrastructure.ExternalServices.Kafka
         }
     }
 }
+*/

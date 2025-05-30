@@ -1,4 +1,4 @@
-using FastEndpoints;
+﻿using FastEndpoints;
 using Application.Features.ServiceManagement.Commands;
 using Application.DTOs;
 using MediatR;
@@ -19,7 +19,8 @@ namespace Presentation.Endpoints.Service
         public override void Configure()
         {
             Delete("/services/{id}");
-            Policies("RequireAdminRole"); // Restrict to admin role
+            AllowAnonymous();
+            //Policies("RequireAdminRole"); // Restrict to admin role
             Description(x => x
                 .WithName("DeleteService")
                 .WithTags("Admin", "Services") // Add Admin tag

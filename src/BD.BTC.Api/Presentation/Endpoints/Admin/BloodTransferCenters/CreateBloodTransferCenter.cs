@@ -1,4 +1,4 @@
-using FastEndpoints;
+﻿using FastEndpoints;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Application.Features.BloodTransferCenterManagement.Commands;
@@ -21,7 +21,8 @@ namespace Presentation.Endpoints.Admin.BloodTransferCenters
         public override void Configure()
         {
             Post("/admin/blood-transfer-centers");
-            Policies("RequireAdminRole"); // Restrict to admin role
+            AllowAnonymous();
+            //Policies("RequireAdminRole"); // Restrict to admin role
             Description(x => x
                 .WithName("CreateBloodTransferCenter")
                 .WithTags("Admin", "BloodTransferCenters")
@@ -87,7 +88,7 @@ namespace Presentation.Endpoints.Admin.BloodTransferCenters
         public string Address { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
-        public Guid WilayaId { get; set; }
+        public int WilayaId { get; set; }
         public bool IsPrimary { get; set; } = false;
     }
 
@@ -98,7 +99,7 @@ namespace Presentation.Endpoints.Admin.BloodTransferCenters
         public string Address { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
-        public Guid WilayaId { get; set; }
+        public int WilayaId { get; set; }
         public string WilayaName { get; set; } = string.Empty;
         public bool IsPrimary { get; set; }
         public bool Success { get; set; }

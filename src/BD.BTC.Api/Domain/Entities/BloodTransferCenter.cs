@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace Domain.Entities
@@ -13,7 +13,7 @@ namespace Domain.Entities
         public bool IsPrimary { get; private set; } // Add this field
         
         // Foreign key for Wilaya
-        public Guid WilayaId { get; private set; }
+        public int WilayaId { get; private set; }
         
         // Navigation property
         public Wilaya Wilaya { get; private set; } = null!;
@@ -25,7 +25,7 @@ namespace Domain.Entities
             string address,
             string email,
             string phoneNumber,
-            Guid wilayaId,
+            int wilayaId,
             bool isPrimary = false)
         {
             Id = Guid.NewGuid();
@@ -42,7 +42,7 @@ namespace Domain.Entities
             string? address = null,
             string? email = null,
             string? phoneNumber = null,
-            Guid? wilayaId = null)
+            int? wilayaId = null)
         {
             if (name != null) Name = name;
             if (address != null) Address = address;

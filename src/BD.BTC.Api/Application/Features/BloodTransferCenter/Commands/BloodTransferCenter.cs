@@ -1,4 +1,4 @@
-// filepath: /home/hiki-zrx/Desktop/HSTS-Back/src/Application/Features/BloodTransferCenterManagement/Commands/CreateBloodTransferCenterCommand.cs
+﻿// filepath: /home/hiki-zrx/Desktop/HSTS-Back/src/Application/Features/BloodTransferCenterManagement/Commands/CreateBloodTransferCenterCommand.cs
 using MediatR;
 using Application.DTOs;
 using Shared.Exceptions;
@@ -11,7 +11,7 @@ namespace Application.Features.BloodTransferCenterManagement.Commands
         public string Address { get; }
         public string Email { get; }
         public string PhoneNumber { get; }
-        public Guid WilayaId { get; }
+        public int WilayaId { get; }
         public bool IsPrimary { get; }
 
         public CreateBloodTransferCenterCommand(
@@ -19,7 +19,7 @@ namespace Application.Features.BloodTransferCenterManagement.Commands
             string address,
             string email,
             string phoneNumber,
-            Guid wilayaId,
+            int wilayaId,
             bool isPrimary = false)
         {
             Name = name;

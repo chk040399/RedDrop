@@ -1,4 +1,4 @@
-namespace Application.DTOs
+﻿namespace Application.DTOs
 {
     public class BloodTransferCenterDTO
     {
@@ -7,7 +7,7 @@ namespace Application.DTOs
         public string Address { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
-        public Guid WilayaId { get; set; }
+        public int WilayaId { get; set; }
         public string WilayaName { get; set; } = string.Empty;
         public bool IsPrimary { get; set; }
     }

@@ -56,21 +56,27 @@ namespace Infrastructure.DependencyInjection
                 configuration.GetSection(KafkaSettings.SectionName));
             ;
 
-// Kafka infrastructure components
-      services.AddSingleton<ITopicDispatcher, TopicDispatcher>();
-            services.AddSingleton<KafkaTopicInitializer>();
-            services.AddScoped<IEventProducer, KafkaEventPublisher>();
-            services.AddHostedService<KafkaConsumerService>();
+       services.AddSingleton<ITopicDispatcher, TopicDispatcher>();
+      
+       // Kafka infrastructure components
+       //TODO : Disabled not needed
+      //services.AddSingleton<KafkaTopicInitializer>();
+      services.AddScoped<IEventProducer, KafkaEventPublisher>();
+      services.AddHostedService<KafkaConsumerService>();
 
-            // Health check registration
-            services.AddHealthChecks()
-                .AddKafka(new Confluent.Kafka.ProducerConfig 
-                { 
-                    BootstrapServers = configuration.GetSection("Kafka:BootstrapServers").Value 
-                })
-                .AddNpgSql(configuration.GetConnectionString("DefaultConnection")!);
+      // TODO : Disabled temp
+      /*
+    // Health check registration
+      services.AddHealthChecks()
+          .AddKafka(new Confluent.Kafka.ProducerConfig
+          {
+            BootstrapServers = configuration.GetSection("Kafka:BootstrapServers").Value
+          })
+          .AddNpgSql(configuration.GetConnectionString("DefaultConnection")!);
+      */
 
-            return services;
+        return services;
         }
+        
     }
 }

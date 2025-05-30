@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -39,7 +39,7 @@ namespace Infrastructure.Repositories
                 .FirstOrDefaultAsync(btc => btc.Email == email);
         }
         
-        public async Task<List<BloodTransferCenter>> GetByWilayaIdAsync(Guid wilayaId)
+        public async Task<List<BloodTransferCenter>> GetByWilayaIdAsync(int wilayaId)
         {
             return await _context.BloodTransferCenters
                 .Include(btc => btc.Wilaya)

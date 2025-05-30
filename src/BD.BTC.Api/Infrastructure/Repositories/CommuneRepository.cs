@@ -1,4 +1,4 @@
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -14,7 +14,7 @@ namespace Infrastructure.Repositories
             _context = context;
         }
 
-        public async Task<Commune?> GetByIdAsync(Guid id)
+        public async Task<Commune?> GetByIdAsync(int id)
         {
             return await _context.Communes
                 .Include(c => c.Wilaya)
@@ -28,7 +28,7 @@ namespace Infrastructure.Repositories
                 .FirstOrDefaultAsync(c => c.Name == name);
         }
 
-        public async Task<List<Commune>> GetByWilayaIdAsync(Guid wilayaId)
+        public async Task<List<Commune>> GetByWilayaIdAsync(int wilayaId)
         {
             return await _context.Communes
                 .Include(c => c.Wilaya)
@@ -43,7 +43,7 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<(List<Commune> Communes, int Total)> GetAllAsync(int page, int pageSize, string? name = null, Guid? wilayaId = null)
+        public async Task<(List<Commune> Communes, int Total)> GetAllAsync(int page, int pageSize, string? name = null, int? wilayaId = null)
         {
             var query = _context.Communes
                 .Include(c => c.Wilaya)
@@ -55,7 +55,7 @@ namespace Infrastructure.Repositories
                 query = query.Where(c => c.Name.Contains(name));
             }
 
-            if (wilayaId.HasValue && wilayaId.Value != Guid.Empty)
+            if (wilayaId.HasValue)
             {
                 query = query.Where(c => c.WilayaId == wilayaId.Value);
             }
@@ -84,7 +84,7 @@ namespace Infrastructure.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync(int id)
         {
             var commune = await GetByIdAsync(id);
             if (commune != null)

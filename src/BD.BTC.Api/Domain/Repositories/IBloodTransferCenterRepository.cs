@@ -1,4 +1,4 @@
-using Domain.Entities;
+﻿using Domain.Entities;
 
 namespace Domain.Repositories
 {
@@ -8,7 +8,7 @@ namespace Domain.Repositories
         Task<BloodTransferCenter?> GetByNameAsync(string name);
         Task<BloodTransferCenter?> GetByEmailAsync(string email);
         Task<BloodTransferCenter?> GetPrimaryAsync(); // Add this method
-        Task<List<BloodTransferCenter>> GetByWilayaIdAsync(Guid wilayaId);
+        Task<List<BloodTransferCenter>> GetByWilayaIdAsync(int wilayaId);
         Task<List<BloodTransferCenter>> GetAllAsync();
         Task<(List<BloodTransferCenter> Centers, int Total)> GetAllAsync(int page, int pageSize);
         Task AddAsync(BloodTransferCenter center);

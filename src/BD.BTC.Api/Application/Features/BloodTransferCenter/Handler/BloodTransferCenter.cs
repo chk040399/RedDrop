@@ -1,4 +1,4 @@
-using MediatR;
+﻿using MediatR;
 using Domain.Entities;
 using Domain.Repositories;
 using Application.DTOs;
@@ -76,6 +76,18 @@ namespace Application.Features.BloodTransferCenterManagement.Handlers
 
                 _logger.LogInformation("Blood transfer center created successfully with ID: {Id}", newCenter.Id);
                 var topic = _kafkaSettings.Value.Topics["CTSInit"];
+                var initEvent = new CtsData(
+                  newCenter.Id,
+                  newCenter.Name,
+                  newCenter.Address,
+                  newCenter.PhoneNumber,
+                  newCenter.Email,
+                  newCenter.Wilaya.Name,
+                  wilaya.Name
+                );
+                await _eventProducer.ProduceAsync(topic, initEvent);
+                //TODO : Disabled
+                /*
                 var stocks = await _globalStockRepository.GetAllAsync();
                 var globalStocks = new List<GlobalStockData>();
                 foreach (var stock in stocks)
@@ -91,18 +103,8 @@ namespace Application.Features.BloodTransferCenterManagement.Handlers
                      globalStocks.Add(eventMessage);
 
                 }
-                var cts = await _centerRepository.GetPrimaryAsync();
-                var initEvent = new CtsData(
-                    newCenter.Id,
-                    newCenter.Name,
-                    newCenter.Address,
-                    newCenter.Email,
-                    newCenter.PhoneNumber,
-                    newCenter.Wilaya.Name,
-                    wilaya.Name,
-                    globalStocks
-                );
-                await _eventProducer.ProduceAsync(topic, initEvent);
+                var cts = await _centerRepository.GetPrimaryAsync();                
+                */
 
                 return (new BloodTransferCenterDTO
                 {
