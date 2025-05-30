@@ -314,6 +314,14 @@ PUT {{host}}:{{port}}/Pledges/01971a4e-82cf-74ed-aabf-115864279304
 Authorization: Bearer {{token}}
 Content-Type: application/json
 {
+  "evolutionStatus": 2
+}
+###
+
+PUT {{host}}:{{port}}/Pledges/01971a4e-82cf-74ed-aabf-115864279304
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
   "evolutionStatus": 2,
   "pledgeDate": "2025-06-30T01:26:27.739Z"
 }

@@ -29,12 +29,17 @@ public class UpdatePledgeValidator : Validator<UpdatePledgeRequest>
     RuleFor(x => x)
       .Must(x => x.EvolutionStatus.HasValue || x.PledgeDate.HasValue)
       .WithMessage("At least one field must be provided for update");
+
+    
     RuleFor(x => x.EvolutionStatus)
       .Must(x => x == BloodDonationPladgeEvolutionStatus.CanceledByInitiaor || !x.HasValue)
-      .WithMessage("Only The status 'CanceledByInitiaor' is allowed for update");
+      .WithMessage("Only The status 'CanceledByInitiaor' is allowed for update")
+      .When(x => x.EvolutionStatus.HasValue);
+
     RuleFor(x => x.PledgeDate)
       .Must(x => x > DateTime.UtcNow)
-      .WithMessage("The pledge date must be in the future");
+      .WithMessage("The pledge date must be in the future")
+      .When(x => x.PledgeDate.HasValue);
   }
 }
 
