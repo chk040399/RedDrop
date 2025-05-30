@@ -32,7 +32,9 @@ public static class InfrastructureServiceExtensions
     ILogger logger)
   {
 
-    builder.AddNpgsqlDbContext<AppDbContext>(connectionName: "PublicPortalDatabase", configureDbContextOptions:
+    var databaseName = builder.Configuration["DatabaseName"];
+    if (databaseName is null) throw new Exception("Database name not indicated in the env vars");
+    builder.AddNpgsqlDbContext<AppDbContext>(connectionName: databaseName, configureDbContextOptions:
       options =>
       {
         options.EnableSensitiveDataLogging().EnableDetailedErrors();

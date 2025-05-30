@@ -26,7 +26,9 @@ var builder = WebApplication.CreateBuilder(args);
 //});
 
 // Database
-builder.AddNpgsqlDbContext<ApplicationDbContext>(connectionName: "Cts1PortalDatabase", configureDbContextOptions:
+var databaseName = builder.Configuration["DatabaseName"];
+if (databaseName is null) throw new Exception("Database name not indicated in the env vars");
+builder.AddNpgsqlDbContext<ApplicationDbContext>(connectionName: databaseName, configureDbContextOptions:
   options =>
   {
     options.EnableSensitiveDataLogging().EnableDetailedErrors();
@@ -151,47 +153,48 @@ builder.Services.AddAuthorization(options =>
 
 
 // hosted service
-//TODO : Disabled Temporarly -- Renabled
 builder.Services.AddHostedService<KafkaConsumerService>();
 
 
-//TODO : Disabled Temporarly -- Renabled
+
 builder.Services.AddHostedService<BackgroundEventProcessor>();
 builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 
-//TODO : Disabled Temporarly -- Renabled
+
+//TODO : Disabled -- runtime exception
 // Register the DailySchedulerService
-builder.Services.AddHostedService<DailySchedulerService>();
+//builder.Services.AddHostedService<DailySchedulerService>();
 
 
 builder.AddServiceDefaults();// For ASPIRE --> Services registration
 
 var app = builder.Build();
 
+//TODO : Disabled -- ?????
 // Move logging middleware to be one of the first middleware components
 // Custom request logging middleware
-app.Use(async (context, next) => {
-    var start = DateTime.UtcNow;
-    var requestPath = context.Request.Path;
-    var method = context.Request.Method;
-    
-    app.Logger.LogInformation("Request started: {Method} {Path}", method, requestPath);
-    
-    try {
-        await next();
-        
-        var elapsed = DateTime.UtcNow - start;
-        var statusCode = context.Response.StatusCode;
-        
-        app.Logger.LogInformation(
-            "Request completed: {Method} {Path} - Status: {StatusCode} - Duration: {Duration}ms",
-            method, requestPath, statusCode, elapsed.TotalMilliseconds);
-    }
-    catch (Exception ex) {
-        app.Logger.LogError(ex, "Request failed: {Method} {Path}", method, requestPath);
-        throw; // Re-throw to let the exception handler middleware handle it
-    }
-});
+//app.Use(async (context, next) => {
+//    var start = DateTime.UtcNow;
+//    var requestPath = context.Request.Path;
+//    var method = context.Request.Method;
+
+//    app.Logger.LogInformation("Request started: {Method} {Path}", method, requestPath);
+
+//    try {
+//        await next();
+
+//        var elapsed = DateTime.UtcNow - start;
+//        var statusCode = context.Response.StatusCode;
+
+//        app.Logger.LogInformation(
+//            "Request completed: {Method} {Path} - Status: {StatusCode} - Duration: {Duration}ms",
+//            method, requestPath, statusCode, elapsed.TotalMilliseconds);
+//    }
+//    catch (Exception ex) {
+//        app.Logger.LogError(ex, "Request failed: {Method} {Path}", method, requestPath);
+//        throw; // Re-throw to let the exception handler middleware handle it
+//    }
+//});
 
 // Basic health check endpoint for troubleshooting
 app.MapGet("/", () => "Hello from HSTS API!");
@@ -217,7 +220,7 @@ app.UseCors("AllowAll");
 
 
 // Register your topic handlers with the dispatcher
-//TODO : Disabled
+//TODO : Disabled - compile error
 //var topicDispatcher = app.Services.GetRequiredService<ITopicDispatcher>();
 //topicDispatcher.Register<DonorPledgeCommand>("donors-pledges");
 
@@ -226,7 +229,7 @@ app.MapDefaultEndpoints();// ASPIRE  --> Middle ware
 
 
 // In Program.cs after service registration
-//TODO : Disabled not needed
+//TODO : Disabled not needed maybe + redundant
 //var serviceProvider = app.Services;
 //var topicInitializer = serviceProvider.GetRequiredService<KafkaTopicInitializer>();
 //await topicInitializer.InitializeAsync();

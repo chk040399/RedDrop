@@ -20,15 +20,15 @@ namespace HSTS_Back.Infrastructure.BackgroundServices
     // Define your scheduled tasks and their times
     // You could even load these from configuration or a database if they change frequently
     
-    private static readonly (TimeSpan Time, Func<IRequest> CommandFactory)[] ScheduledTasks = null!
-    //TODO : disabled
-    //= new (TimeSpan, Func<IRequest>)[]
+    private static readonly (TimeSpan Time, Func<IRequest> CommandFactory)[] ScheduledTasks = new (TimeSpan, Func<IRequest>)[]
+        {};
+    //TODO : Disabled - compile error
     //{
     //    (new TimeSpan(2, 0, 0), () => new CleanupExpiredBloodBagsCommand()), // Example for 2 AM
     //    (new TimeSpan(4, 30, 0), () => new CleanupExpiredRequestsCommand()), // Example for 4:30 AM
     //    (new TimeSpan(23, 0, 0), () => new CleanupExpiredPledgesCommand()) // Example for 11 PM
-    //}
-    ;
+    //};
+    
     public DailySchedulerService(ILogger<DailySchedulerService> logger, IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
