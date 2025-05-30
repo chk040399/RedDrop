@@ -55,7 +55,8 @@ public static class MiddlewareConfig
 
     app.UseHttpsRedirection(); // Note this will drop Authorization headers
 
-    // Temporary DISABLED
+    app.UseCors("AllowAll");
+
     await SeedDatabase(app);
 
     return app;

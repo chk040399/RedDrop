@@ -13,7 +13,12 @@ var logger = Log.Logger = new LoggerConfiguration()
   .CreateLogger();
 
 logger.Information("Starting web host");
-
+builder.Services.AddCors(o=>o.AddPolicy("AllowAll", o =>
+{
+  o.AllowAnyOrigin();
+  o.AllowAnyHeader();
+  o.AllowAnyMethod();
+}));
 builder.AddLoggerConfigs();
 
 var appLogger = new SerilogLoggerFactory(logger)
