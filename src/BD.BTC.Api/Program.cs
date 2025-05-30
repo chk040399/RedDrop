@@ -26,7 +26,9 @@ var builder = WebApplication.CreateBuilder(args);
 //});
 
 // Database
-builder.AddNpgsqlDbContext<ApplicationDbContext>(connectionName: "Cts1PortalDatabase", configureDbContextOptions:
+var databaseName = builder.Configuration["DatabaseName"];
+if (databaseName is null) throw new Exception("Database name not indicated in the env vars");
+builder.AddNpgsqlDbContext<ApplicationDbContext>(connectionName: databaseName, configureDbContextOptions:
   options =>
   {
     options.EnableSensitiveDataLogging().EnableDetailedErrors();
