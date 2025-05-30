@@ -8,8 +8,6 @@ public class ListBloodTransfusionCenterRequest
   [FromQuery] 
   public BloodTransfusionCenterSpecificationFilter? Filter { get; set; } = null;
 
-  [FromClaim(claimType:"UserId",isRequired:false)] 
-  public Guid? LoggedUserId { get; set; } = null;
   public int? Level { get; set; } = null;
 };
   
@@ -36,7 +34,7 @@ public class ListBloodDonationRequestsEndpoint(IMediator _mediator) : Endpoint<L
   public override async Task HandleAsync(ListBloodTransfusionCenterRequest req, CancellationToken cancellationToken)
   {
     
-    var res = await _mediator.Send(new ListBloodTansfusionCentersQuery(filter:req.Filter,LoggedUserID: req.LoggedUserId,Level:req.Level), cancellationToken);
+    var res = await _mediator.Send(new ListBloodTansfusionCentersQuery(filter:req.Filter,Level:req.Level), cancellationToken);
 
     if (res.IsSuccess)
     {

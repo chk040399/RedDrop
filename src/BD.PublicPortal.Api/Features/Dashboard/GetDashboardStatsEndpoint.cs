@@ -5,8 +5,6 @@ namespace BD.PublicPortal.Api.Features.Dashboard;
 
 public class GetDashboardStatsRequest
 {
-  [FromClaim(claimType: "UserId", isRequired: false)]
-  public Guid? LoggedUserId { get; set; } = null;
 
 }
 
@@ -32,8 +30,7 @@ public class GetDashboardStatsEndpoint : Endpoint<GetDashboardStatsRequest, GetD
 
   public override async Task HandleAsync(GetDashboardStatsRequest req, CancellationToken cancellationToken)
   {
-    var result = await _mediator.Send(new GetDashboardStatsQuery(
-      LoggedUserId: req.LoggedUserId), cancellationToken);
+    var result = await _mediator.Send(new GetDashboardStatsQuery(), cancellationToken);
 
     if (result.IsSuccess)
     {

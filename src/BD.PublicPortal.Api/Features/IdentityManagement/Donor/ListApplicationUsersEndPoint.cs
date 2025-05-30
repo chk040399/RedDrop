@@ -8,8 +8,6 @@ public class ListApplicationUsersRequest
 {
   [FromQuery]
   public ApplicationUserSpecificationFilter? Filter { get; set; } = null;
-  [FromClaim(claimType: "UserId", isRequired: false)]
-  public Guid? LoggedUserId { get; set; } = null;
   public int? Level { get; set; } = null;
 };
 

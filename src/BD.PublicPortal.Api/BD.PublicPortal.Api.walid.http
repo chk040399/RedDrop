@@ -3,41 +3,6 @@
 @port=57679
 
 
-// List all contributors
-GET {{host}}:{{port}}/Contributors
-
-###
-@id_to_get=2
-GET {{host}}:{{port}}/Contributors/{{id_to_get}}
-
-###
-// Add a new contributor
-POST {{host}}:{{port}}/Contributors
-Content-Type: application/json
-
-{
-  "name": "John Doe 2",
-  "email": "test@test.com",
-  "phoneNumber": "1234567890"
-}
-
-###
-@id_to_update=3
-PUT {{host}}:{{port}}/Contributors/{{id_to_update}}
-Content-Type: application/json
-
-{
-  "id": {{id_to_update}},
-  "name": "ardalis2"
-}
-
-###
-@id_to_delete=6
-DELETE {{host}}:{{port}}/Contributors/{{id_to_delete}}
-
-###
-
-
 
 ### Auth:
 
