@@ -55,7 +55,7 @@ public static class MiddlewareConfig
 
     app.UseHttpsRedirection(); // Note this will drop Authorization headers
 
-    // Temporary DISABLED
+    
     await SeedDatabase(app);
 
     return app;
@@ -65,7 +65,7 @@ public static class MiddlewareConfig
   {
     return Task.CompletedTask;
     
-    // Temporary DISABLED
+    // Temporary DISABLED not needed done by sql admin endpoint
     //using var scope = app.Services.CreateScope();
     //var services = scope.ServiceProvider;
 

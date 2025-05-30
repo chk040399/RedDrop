@@ -24,7 +24,7 @@ public class DatabaseManagementService : IDatabaseManagementService
       DeployChanges.To
         .PostgresqlDatabase(connectionString)
         .WithScriptsEmbeddedInAssembly(Assembly.GetAssembly(typeof(IAssemblyMarquer)))
-        .WithVariablesDisabled()
+        .WithVariablesDisabled()//necessaire pour certaines requetes
         .LogToConsole()
         .Build();
 

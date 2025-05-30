@@ -151,15 +151,14 @@ builder.Services.AddAuthorization(options =>
 
 
 // hosted service
-//TODO : Disabled Temporarly -- Renabled
 builder.Services.AddHostedService<KafkaConsumerService>();
 
 
-//TODO : Disabled Temporarly -- Renabled
+
 builder.Services.AddHostedService<BackgroundEventProcessor>();
 builder.Services.AddSingleton<IBackgroundTaskQueue, BackgroundTaskQueue>();
 
-//TODO : Disabled Temporarly -- Renabled
+
 // Register the DailySchedulerService
 builder.Services.AddHostedService<DailySchedulerService>();
 
@@ -217,7 +216,7 @@ app.UseCors("AllowAll");
 
 
 // Register your topic handlers with the dispatcher
-//TODO : Disabled
+//TODO : Disabled - compile error
 //var topicDispatcher = app.Services.GetRequiredService<ITopicDispatcher>();
 //topicDispatcher.Register<DonorPledgeCommand>("donors-pledges");
 
@@ -226,7 +225,7 @@ app.MapDefaultEndpoints();// ASPIRE  --> Middle ware
 
 
 // In Program.cs after service registration
-//TODO : Disabled not needed
+//TODO : Disabled not needed maybe + redundant
 //var serviceProvider = app.Services;
 //var topicInitializer = serviceProvider.GetRequiredService<KafkaTopicInitializer>();
 //await topicInitializer.InitializeAsync();

@@ -86,7 +86,7 @@ namespace Application.Features.BloodTransferCenterManagement.Handlers
                   wilaya.Name
                 );
                 await _eventProducer.ProduceAsync(topic, initEvent);
-                //TODO : Disabled
+                //TODO : Disabled : faire autrement voir avec ramzi
                 /*
                 var stocks = await _globalStockRepository.GetAllAsync();
                 var globalStocks = new List<GlobalStockData>();

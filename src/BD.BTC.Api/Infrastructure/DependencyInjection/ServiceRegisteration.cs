@@ -59,12 +59,12 @@ namespace Infrastructure.DependencyInjection
        services.AddSingleton<ITopicDispatcher, TopicDispatcher>();
       
        // Kafka infrastructure components
-       //TODO : Disabled not needed
+       //TODO : Disabled not + redundant
       //services.AddSingleton<KafkaTopicInitializer>();
       services.AddScoped<IEventProducer, KafkaEventPublisher>();
       services.AddHostedService<KafkaConsumerService>();
 
-      // TODO : Disabled temp
+      // TODO : Disabled not needed
       /*
     // Health check registration
       services.AddHealthChecks()
