@@ -10,7 +10,14 @@ public static class KafkaServiceConfig
     // Bind Kafka configuration
     services.Configure<KafkaSettings>(
       builder.Configuration.GetSection(KafkaSettings.SectionName));
-    
+
+    builder.AddKafkaProducer<string, string>("kafka", o => { o.Config.AllowAutoCreateTopics = true; });
+
+    builder.AddKafkaConsumer<string, string>("kafka", o => {
+      o.Config.GroupId = "RedDropWebPortal";
+      o.Config.AllowAutoCreateTopics = true;
+    });
+
 
     services.AddSingleton<ITopicDispatcher, TopicDispatcher>();
 

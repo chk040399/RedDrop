@@ -62,7 +62,18 @@ builder.Services.AddServiceConfigs(appLogger, builder);
 
 
 builder.Services.AddFastEndpoints(o => o.IncludeAbstractValidators = true)
-                .SwaggerDocument(o =>o.ShortSchemaNames = true);
+  .SwaggerDocument(o =>
+  {
+    o.ShortSchemaNames = true;
+    o.DocumentSettings = s =>
+    {
+      s.Title = "RedDrop WebPortal API";
+      s.Version = "v1";
+      s.Description = "RedDrop WebPortal API";
+    };
+  });
+
+
 
 
 #if DEBUG

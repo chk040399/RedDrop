@@ -26,7 +26,9 @@ var builder = WebApplication.CreateBuilder(args);
 //});
 
 // Database
-builder.AddNpgsqlDbContext<ApplicationDbContext>(connectionName: "Cts1PortalDatabase", configureDbContextOptions:
+var databaseName = builder.Configuration["DatabaseName"];
+if (databaseName is null) throw new Exception("Database name not indicated in the env vars");
+builder.AddNpgsqlDbContext<ApplicationDbContext>(connectionName: databaseName, configureDbContextOptions:
   options =>
   {
     options.EnableSensitiveDataLogging().EnableDetailedErrors();
@@ -100,16 +102,17 @@ builder.Services.AddScoped<IEventProducer, KafkaEventPublisher>();
 
 // FastEndpoints + Swagger
 builder.Services.AddInfrastructureServices(builder.Configuration);
-builder.Services.AddFastEndpoints();
-builder.Services.SwaggerDocument(o =>
-{
+builder.Services.AddFastEndpoints(o => o.IncludeAbstractValidators = true)
+  .SwaggerDocument(o =>
+  {
+    o.ShortSchemaNames = true;
     o.DocumentSettings = s =>
     {
-        s.Title = "HSTS API";
-        s.Version = "v1";
-        s.Description = "API for HSTS project";
+      s.Title = "HSTS API";
+      s.Version = "v1";
+      s.Description = "API for HSTS project";
     };
-});
+  });
 
 
 //
