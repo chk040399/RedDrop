@@ -2,18 +2,21 @@
 
 
 
+using System.ComponentModel.DataAnnotations.Schema;
 using BD;
-using BD.PublicPortal.Core.Entities.Enums;
-using BD.SharedKernel;
+using BD.PublicPortal.Core.Entities.Events;
+
 
 namespace BD.PublicPortal.Core.Entities
 {
-    public partial class ApplicationUser : IdentityUser<Guid>, IAggregateRoot {
+    public partial class ApplicationUser : IdentityUser<Guid>, IAggregateRoot, IHasDomainEvents {
 
         public ApplicationUser()
         {
             this.DonorBloodTransferCenterSubscriptions = new List<DonorBloodTransferCenterSubscriptions>();
             this.BloodDonationPledges = new List<BloodDonationPledge>();
+
+            RegisterDomainEvent(new ApplicationUserEvent(this));
             OnCreated();
         }
 
@@ -55,7 +58,24 @@ namespace BD.PublicPortal.Core.Entities
 
         partial void OnCreated();
 
-        #endregion
+    #endregion
+
+        private readonly List<DomainEventBase> _domainEvents = new();
+        [NotMapped]
+        public IReadOnlyCollection<DomainEventBase> DomainEvents => _domainEvents.AsReadOnly();
+
+        protected void RegisterDomainEvent(DomainEventBase domainEvent) => _domainEvents.Add(domainEvent);
+        internal void ClearDomainEvents() => _domainEvents.Clear();
+
+    void IHasDomainEvents.RegisterDomainEvent(DomainEventBase domainEvent)
+    {
+      RegisterDomainEvent(domainEvent);
     }
+
+    void IHasDomainEvents.ClearDomainEvents()
+    {
+      ClearDomainEvents();
+    }
+  }
 
 }

@@ -9,7 +9,10 @@ public static class MediatrConfigs
     var mediatRAssemblies = new[]
     {
       Assembly.GetAssembly(typeof(BD.PublicPortal.Core.IAssemblyMarquer)), // Core
-      Assembly.GetAssembly(typeof(BD.PublicPortal.Application.IAssemblyMarquer)) // App
+      Assembly.GetAssembly(typeof(BD.PublicPortal.Application.IAssemblyMarquer)), // App
+      Assembly.GetAssembly(typeof(BD.PublicPortal.Api.IAssemblyMarquer)) // Web,
+
+
     };
 
     services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(mediatRAssemblies!))
