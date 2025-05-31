@@ -14,7 +14,7 @@ namespace BD.PublicPortal.Core.DTOs
             return source.ToDtoWithRelated(0);
         }
 
-        public static ApplicationUserDTO ToDtoWithRelated(this ApplicationUser source, int level)
+        public static ApplicationUserDTO ToDtoWithRelated(this ApplicationUser source, int level,bool ignoreComuUsers = true)
         {
             if (source == null)
               return null;
@@ -35,6 +35,12 @@ namespace BD.PublicPortal.Core.DTOs
             target.DonorNotesForBTC = source.DonorNotesForBTC;
             target.DonorLastDonationDate = source.DonorLastDonationDate;
             target.CommuneId = source.CommuneId;
+
+            // Navigation Properties
+            if (level > 0) {
+              target.DonorBloodTransferCenterSubscriptions = source.DonorBloodTransferCenterSubscriptions.ToDtosWithRelated(level - 1);
+              target.Commune = source.Commune.ToDtoWithRelated(level - 1, ignoreComuUsers);
+            }
 
             // User-defined partial method
             OnDtoCreating(source, target);

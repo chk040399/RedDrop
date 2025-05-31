@@ -2,4 +2,4 @@
 
 namespace BD.PublicPortal.Application.Identity;
 
-public record GetUserByIdQuery(Guid UserId) : IQuery<Result<ApplicationUserDTO>>;
+public record GetUserByIdQuery(Guid UserId, int? Level = null) : IQuery<Result<ApplicationUserDTO>>;

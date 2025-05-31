@@ -12,8 +12,8 @@ namespace BD.PublicPortal.Core.DTOs
         public ApplicationUserDTO() {
         }
 
-        public ApplicationUserDTO(System.Guid? donorCorrelationId, bool? donorWantToStayAnonymous, bool? donorExcludeFromPublicPortal, DonorAvailability? donorAvailability, DonorContactMethod? donorContactMethod, string donorName, System.DateTime donorBirthDate, BloodGroup donorBloodGroup, string donorNIN, string donorTel, string donorNotesForBTC, System.DateTime? donorLastDonationDate, int? communeId) {
-          
+        public ApplicationUserDTO(Guid? donorCorrelationId, bool? donorWantToStayAnonymous, bool? donorExcludeFromPublicPortal, DonorAvailability? donorAvailability, DonorContactMethod? donorContactMethod, string donorName, DateTime donorBirthDate, BloodGroup donorBloodGroup, string donorNIN, string donorTel, string donorNotesForBTC, DateTime? donorLastDonationDate, int? communeId, List<DonorBloodTransferCenterSubscriptionsDTO> donorBloodTransferCenterSubscriptions, CommuneDTO commune) {
+
           this.DonorCorrelationId = donorCorrelationId;
           this.DonorWantToStayAnonymous = donorWantToStayAnonymous;
           this.DonorExcludeFromPublicPortal = donorExcludeFromPublicPortal;
@@ -27,6 +27,8 @@ namespace BD.PublicPortal.Core.DTOs
           this.DonorNotesForBTC = donorNotesForBTC;
           this.DonorLastDonationDate = donorLastDonationDate;
           this.CommuneId = communeId;
+          this.DonorBloodTransferCenterSubscriptions = donorBloodTransferCenterSubscriptions;
+          this.Commune = commune;
         }
 
         #endregion
@@ -60,7 +62,16 @@ namespace BD.PublicPortal.Core.DTOs
         public int? CommuneId { get; set; }
 
         #endregion
+
+        #region Navigation Properties
+
+        public List<DonorBloodTransferCenterSubscriptionsDTO> DonorBloodTransferCenterSubscriptions { get; set; }
+
+        public CommuneDTO Commune { get; set; }
+
+        #endregion
     }
+
 
     public class LoginUserCommandResultDTO
     {

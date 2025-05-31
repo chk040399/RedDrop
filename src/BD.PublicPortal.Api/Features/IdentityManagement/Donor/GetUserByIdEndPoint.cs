@@ -8,6 +8,8 @@ public class GetUserByIdEndpointRequest
 {
   [FromClaim(claimType: "UserId", isRequired: false)]
   public Guid UserId { get; set; }
+  public int? Level { get; set; } = null;
+
 };
 
 public class GetUserByIdEndpointResponse
@@ -23,7 +25,7 @@ public class GetUserByIdEndpoint(IMediator _mediator) : Endpoint<GetUserByIdEndp
   }
   public override async Task HandleAsync(GetUserByIdEndpointRequest req, CancellationToken cancellationToken)
   {
-    var res = await _mediator.Send(new GetUserByIdQuery(req.UserId), cancellationToken);
+    var res = await _mediator.Send(new GetUserByIdQuery(req.UserId,req.Level), cancellationToken);
     if (res.IsSuccess)
     {
       var lwr = new GetUserByIdEndpointResponse()

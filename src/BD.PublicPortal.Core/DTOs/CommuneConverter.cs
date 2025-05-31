@@ -14,7 +14,7 @@ namespace BD.PublicPortal.Core.DTOs
             return source.ToDtoWithRelated(0);
         }
 
-        public static CommuneDTO ToDtoWithRelated(this Commune source, int level)
+        public static CommuneDTO ToDtoWithRelated(this Commune source, int level, bool ignoreComuUsers = true)
         {
             if (source == null)
               return null;
@@ -29,7 +29,7 @@ namespace BD.PublicPortal.Core.DTOs
             // Navigation Properties
             if (level > 0) {
               target.Wilaya = source.Wilaya.ToDtoWithRelated(level - 1);
-              target.ApplicationUsers = source.ApplicationUsers.ToDtosWithRelated(level - 1);
+              if(ignoreComuUsers) target.ApplicationUsers = null;
             }
 
             // User-defined partial method
