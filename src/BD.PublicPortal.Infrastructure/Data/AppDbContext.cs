@@ -9,8 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace BD.PublicPortal.Infrastructure.Data;
 public class AppDbContext(
     DbContextOptions<AppDbContext> options,
-    IDomainEventDispatcher? dispatcher,
-    ILogger<AppDbContext> logger
+    IDomainEventDispatcher? dispatcher
 ) : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options)
 {
     private readonly IDomainEventDispatcher? _dispatcher = dispatcher;
@@ -39,21 +38,21 @@ public class AppDbContext(
             .ToArray();
 
         // Traitement special users 
-        {
-          var updatedUsersIds = ChangeTracker.Entries<ApplicationUser>()
-            .Where(e => e.State == EntityState.Modified)
-            .Select(e => e.Entity.Id).
-            ToList();
-          if (updatedUsersIds.Count > 0)
-          {
-            logger.LogInformation("!!! Found updated users (for kafka eventing)");
-            entitiesWithEvents.Where(e => e.GetType() == typeof(ApplicationUserEvent))
-              .Cast<ApplicationUserEvent>()
-              .ToList()
-              .Where(e => updatedUsersIds.Contains(e.UserEntity.Id)).ToList()
-              .ForEach(ee => ee.EventType = "UpdatedUser");
-          }
-        }
+        //{
+        //  var updatedUsersIds = ChangeTracker.Entries<ApplicationUser>()
+        //    .Where(e => e.State == EntityState.Modified)
+        //    .Select(e => e.Entity.Id).
+        //    ToList();
+        //  if (updatedUsersIds.Count > 0)
+        //  {
+        //    logger.LogInformation("!!! Found updated users (for kafka eventing)");
+        //    entitiesWithEvents.Where(e => e.GetType() == typeof(ApplicationUserEvent))
+        //      .Cast<ApplicationUserEvent>()
+        //      .ToList()
+        //      .Where(e => updatedUsersIds.Contains(e.UserEntity.Id)).ToList()
+        //      .ForEach(ee => ee.EventType = "UpdatedUser");
+        //  }
+        //}
 
         await _dispatcher.DispatchAndClearEvents(entitiesWithEvents);
 

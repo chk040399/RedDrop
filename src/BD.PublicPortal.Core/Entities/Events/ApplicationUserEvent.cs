@@ -7,7 +7,7 @@ public class ApplicationUserEvent : DomainEventBase
   public ApplicationUserEvent(ApplicationUser applicationUser)
   {
     UserEntity = applicationUser;
-    EventType = "NewUser";
+    EventType = "NewOrUpdatedUser";
   }
   public ApplicationUser UserEntity  { get; set; }
   public string EventType { get; set; }

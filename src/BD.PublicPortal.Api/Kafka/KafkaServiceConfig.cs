@@ -11,6 +11,7 @@ public static class KafkaServiceConfig
     services.Configure<KafkaSettings>(
       builder.Configuration.GetSection(KafkaSettings.SectionName));
 
+    // Register your topic handlers with the dispatcher
     builder.AddKafkaProducer<string, string>("kafka", o => { o.Config.AllowAutoCreateTopics = true; });
 
     builder.AddKafkaConsumer<string, string>("kafka", o => {
@@ -24,6 +25,7 @@ public static class KafkaServiceConfig
     // Kafka infrastructure components
     //TODO : Disabled not needed
     //services.AddSingleton<KafkaTopicInitializer>();
+
     services.AddScoped<IEventProducer, KafkaEventPublisher>();
     services.AddHostedService<KafkaConsumerBackgroundService>();
     return services;

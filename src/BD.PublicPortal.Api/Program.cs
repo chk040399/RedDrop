@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using BD.PublicPortal.Api.Configurations;
+using BD.PublicPortal.Api.Kafka;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 
@@ -131,6 +132,11 @@ app.MapGet("/system/status", () => new {
 
 
 await app.UseAppMiddlewareAndSeedDatabase();
+
+//topics
+var topicDispatcher = app.Services.GetRequiredService<ITopicDispatcher>();
+//topicDispatcher.Register<>("donors-pledges");
+//topicDispatcher.Register<PledgeCanceledCommand, Unit>("pledge-canceled-events");
 
 logger.Information("Starting web host");
 app.Run();
