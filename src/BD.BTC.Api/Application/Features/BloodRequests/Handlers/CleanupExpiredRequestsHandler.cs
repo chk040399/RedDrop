@@ -40,7 +40,7 @@ namespace Application.Features.BloodRequests.Handlers
         public async Task<Unit> Handle(CleanupExpiredRequestsCommand command, CancellationToken cancellationToken)
         {
             // Get the primary blood transfer center
-            var primaryCenter = await _centerRepository.GetPrimaryAsync();
+            var primaryCenter = await _centerRepository.GetAsync();
             if (primaryCenter == null)
             {
                 _logger.LogError("No primary blood transfer center found, cannot process expired requests");

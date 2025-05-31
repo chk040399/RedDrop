@@ -12,22 +12,19 @@ namespace Application.Features.BloodTransferCenterManagement.Commands
         public string Email { get; }
         public string PhoneNumber { get; }
         public int WilayaId { get; }
-        public bool IsPrimary { get; }
 
         public CreateBloodTransferCenterCommand(
             string name,
             string address,
             string email,
             string phoneNumber,
-            int wilayaId,
-            bool isPrimary = false)
+            int wilayaId)
         {
             Name = name;
             Address = address;
             Email = email;
             PhoneNumber = phoneNumber;
             WilayaId = wilayaId;
-            IsPrimary = isPrimary;
         }
     }
 }

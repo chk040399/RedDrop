@@ -22,18 +22,36 @@ namespace Infrastructure.ExternalServices.Kafka
         {
             try
             {
+                string serializedMessage;
+                if (@event is string eventStr)
+                {
+                    serializedMessage = eventStr;
+                }
+                else
+                {
+                    serializedMessage = JsonSerializer.Serialize(@event);
+                }
+                
                 var message = new Message<string, string>
                 {
-                    Key = "CtsCreated",
-                    Value = JsonSerializer.Serialize(@event)
+                    Key = Guid.NewGuid().ToString(),
+                    Value = serializedMessage
                 };
-
+                
                 var result = await _producer.ProduceAsync(topic, message);
-                _logger.LogDebug($"Delivered to {result.TopicPartitionOffset}");
+                _logger.LogDebug("Delivered to {Topic} [{Partition}] @{Offset}", 
+                    result.Topic, result.Partition, result.Offset);
+            }
+            catch (ObjectDisposedException ex)
+            {
+                _logger.LogError(ex, "Kafka producer has been disposed");
+                // Rethrow to maintain error propagation
+                throw;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Message production failed");
+                // Rethrow to maintain error propagation  
                 throw;
             }
         }

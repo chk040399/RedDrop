@@ -96,5 +96,39 @@ namespace Domain.Entities
                 
             ReadyCount += count;
         }
+
+        /// <summary>
+        /// Increments the ready blood bags count by the specified amount
+        /// </summary>
+        public void IncrementReadyCount(int count)
+        {
+            if (count <= 0)
+                return;
+                
+            ReadyCount += count;
+        }
+
+        /// <summary>
+        /// Increments the acquired blood bags count (adds to ready count)
+        /// </summary>
+        public void IncrementAcquiredCount(int count)
+        {
+            if (count <= 0)
+                return;
+                
+            // Acquired bags are also ready bags
+            ReadyCount += count;
+        }
+
+        /// <summary>
+        /// Increments the expired blood bags count by the specified amount
+        /// </summary>
+        public void IncrementExpiredCount(int count)
+        {
+            if (count <= 0)
+                return;
+                
+            CountExpired += count;
+        }
     }
 }

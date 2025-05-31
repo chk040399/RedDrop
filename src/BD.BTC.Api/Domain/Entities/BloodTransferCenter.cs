@@ -10,7 +10,6 @@ namespace Domain.Entities
         public string Address { get; private set; } = string.Empty;
         public string Email { get; private set; } = string.Empty;
         public string PhoneNumber { get; private set; } = string.Empty;
-        public bool IsPrimary { get; private set; } // Add this field
         
         // Foreign key for Wilaya
         public int WilayaId { get; private set; }
@@ -25,8 +24,7 @@ namespace Domain.Entities
             string address,
             string email,
             string phoneNumber,
-            int wilayaId,
-            bool isPrimary = false)
+            int wilayaId)
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -34,7 +32,6 @@ namespace Domain.Entities
             Email = email;
             PhoneNumber = phoneNumber;
             WilayaId = wilayaId;
-            IsPrimary = isPrimary;
         }
         
         public void UpdateDetails(
@@ -49,16 +46,6 @@ namespace Domain.Entities
             if (email != null) Email = email;
             if (phoneNumber != null) PhoneNumber = phoneNumber;
             if (wilayaId != null) WilayaId = wilayaId.Value;
-        }
-        
-        public void SetAsPrimary()
-        {
-            IsPrimary = true;
-        }
-        
-        public void UnsetPrimary()
-        {
-            IsPrimary = false;
         }
     }
 }

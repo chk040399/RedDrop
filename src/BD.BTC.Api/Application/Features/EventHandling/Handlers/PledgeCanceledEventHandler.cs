@@ -66,7 +66,7 @@ namespace Application.Features.EventHandling.Handlers
         private async Task ProcessPledgeCancellation(PledgeCanceledEvent payload, CancellationToken cancellationToken)
         {
             // Get the hospital ID from the primary blood transfer center
-            var primaryCenter = await _centerRepository.GetPrimaryAsync();
+            var primaryCenter = await _centerRepository.GetAsync();
             if (primaryCenter == null)
             {
                 _logger.LogError("No primary blood transfer center found");

@@ -9,6 +9,7 @@ using Domain.Events;
 using Shared.Exceptions;
 using FastEndpoints;
 using Application.Interfaces;
+using System.Text.Json;
 
 namespace Application.Features.BloodRequests.Handlers
 {
@@ -41,6 +42,16 @@ namespace Application.Features.BloodRequests.Handlers
         {
             try
             {
+                // Get the blood transfer center - MAKE SURE THIS IS ADDED BEFORE CREATING EVENTS
+                var center = await _centerRepository.GetAsync();
+                if (center == null)
+                {
+                    _logger.LogError("Blood transfer center not found when creating request");
+                    throw new NotFoundException("Blood transfer center not found", "CreateBloodRequest");
+                }
+                _logger.LogInformation("Creating new request for center: {CenterId} ({CenterName})", 
+    center.Id, center.Name);
+
                 // Create a new request
                 var newRequest = new Request(
                     request.BloodType,
@@ -71,9 +82,9 @@ namespace Application.Features.BloodRequests.Handlers
                     _logger.LogError("Service not found");
                     throw new NotFoundException("Service not found", "CreateRequestHandler");
                 }
-                var hospital = await _centerRepository.GetPrimaryAsync();
+
                 var message = new RequestCreatedEvent(
-                    hospital.Id,
+                    center.Id,  // Use the center ID here, not Guid.Empty
                     newRequest.Id,
                     newRequest.BloodType,
                     newRequest.Priority,
@@ -89,9 +100,9 @@ namespace Application.Features.BloodRequests.Handlers
                 //await new AutoReuqestResolverEvent(newRequest).PublishAsync(Mode.WaitForNone); // Create and publish the event
                 _logger.LogInformation("Request created successfully");
                 // Return the DTO
-                await  _eventProducer.ProduceAsync(
-                    topic,
-                    message);
+                // Before sending the event to Kafka
+                _logger.LogInformation("Publishing event with HospitalId: {HospitalId}", center.Id);
+                await _eventProducer.ProduceAsync(topic, message);
                 return new RequestDto
                 {
                     Id = newRequest.Id,

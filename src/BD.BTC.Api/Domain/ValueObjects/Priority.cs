@@ -15,13 +15,19 @@ namespace Domain.ValueObjects
         public static Priority Low() => new Priority("low");
         public static Priority Standard() => new Priority("standard");
 
-        public static Priority Convert(string value) => value.ToLowerInvariant() switch
+        public static Priority? FromString(string value)
         {
-            "critical" => Critical(),
-            "low" => Low(),
-            "standard" => Standard(),
-            _ => throw new ValidationException("Invalid Priority", "Priority")
-        };
+            if (string.IsNullOrEmpty(value))
+                return null;
+                
+            return new Priority(value);
+        }
+        
+        // Add this method to fix the errors
+        public static Priority? Convert(string value)
+        {
+            return FromString(value);
+        }
 
         public override bool Equals(object? obj)
         {

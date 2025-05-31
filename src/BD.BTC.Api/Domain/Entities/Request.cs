@@ -134,5 +134,22 @@ namespace Domain.Entities
         {
             Status = RequestStatus.Partial();
         }
+
+        // Add this method to the Request class
+        public void UpdateAllDetails(
+            BloodBagType? bloodBagType, 
+            Priority? priority, 
+            RequestStatus? status, 
+            DateOnly? dueDate, 
+            string? moreDetails, 
+            int? requiredQty)
+        {
+            if (bloodBagType is not null) BloodBagType = bloodBagType;
+            if (priority is not null) Priority = priority;
+            if (status is not null) Status = status;  // Allow changing status
+            if (dueDate is not null) DueDate = dueDate;
+            if (moreDetails is not null) MoreDetails = moreDetails;
+            if (requiredQty is not null) RequiredQty = requiredQty.Value;
+        }
     }
 }

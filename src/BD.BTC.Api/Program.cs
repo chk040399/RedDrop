@@ -217,9 +217,9 @@ app.UseCors("AllowAll");
 
 
 // Register your topic handlers with the dispatcher
-//TODO : Disabled
-//var topicDispatcher = app.Services.GetRequiredService<ITopicDispatcher>();
-//topicDispatcher.Register<DonorPledgeCommand>("donors-pledges");
+var topicDispatcher = app.Services.GetRequiredService<ITopicDispatcher>();
+topicDispatcher.Register<DonorPledgeCommand, Unit>("donors-pledges");
+topicDispatcher.Register<PledgeCanceledCommand, Unit>("pledge-canceled-events");
 
 
 app.MapDefaultEndpoints();// ASPIRE  --> Middle ware
