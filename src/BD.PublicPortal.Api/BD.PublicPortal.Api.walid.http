@@ -1,6 +1,6 @@
 # For more info on HTTP files go to https://aka.ms/vs/httpfile
 @host=https://localhost
-@port=57679
+@port=5000
 
 
 
@@ -246,99 +246,6 @@ GET {{host}}:{{port}}/BTC/subscribed?ApplicationUserId={{UserId}}&PaginationTake
 ###
 
 
-
-### Pledges:
-
-
-
-GET {{host}}:{{port}}/Pledges
-Authorization: Bearer {{token}}
-### 
-
-
-GET {{host}}:{{port}}/Pledges?EvolutionStatus=2&level=1
-Authorization: Bearer {{token}}
-### 
-
-POST {{host}}:{{port}}/Pledges
-Authorization: Bearer {{token}}
-Content-Type: application/json
-{
-  "bloodDonationRequestId": "a0e69be0-1a29-edf3-bc65-6e12a6d78412",
-  "pledgeDate": "2025-08-28T01:26:27.739Z",
-  "pledgeNotes": "pppppppppppppp"
-}
-### 0196fd7e-2d78-75ff-92ab-8c7f590e598c
-
-
-
-// UserID: 0196fd7f-3618-71fc-a348-680923b64576
-// Pid:    019701b1-540d-7d52-b2c7-d63d09e3b814
-
-PUT {{host}}:{{port}}/Pledges/01971a4e-82cf-74ed-aabf-115864279304
-Authorization: Bearer {{token}}
-Content-Type: application/json
-{
-  "evolutionStatus": 2
-}
-###
-
-PUT {{host}}:{{port}}/Pledges/01971a4e-82cf-74ed-aabf-115864279304
-Authorization: Bearer {{token}}
-Content-Type: application/json
-{
-  "evolutionStatus": 2,
-  "pledgeDate": "2025-06-30T01:26:27.739Z"
-}
-###
-
-
-PUT {{host}}:{{port}}/Pledges/01971a4e-82cf-74ed-aabf-115864279304
-Authorization: Bearer {{token}}
-Content-Type: application/json
-{
-  "pledgeDate": "2030-06-30T01:26:27.739Z"
-}
-###
-
-
-
-
-
-### Subscriptions
-
-POST {{host}}:{{port}}/subscriptions
-Authorization: Bearer {{token}}
-Content-Type: application/json
-{
-  "BloodTansfusionCenterId": "12daf261-1f92-82eb-81c9-e77d22b34692"
-}
-###
-
-DELETE {{host}}:{{port}}/subscriptions/760f2763-9701-4082-9ab5-ac399669aebd
-Authorization: Bearer {{token}}
-###
-
-
-DELETE {{host}}:{{port}}/subscriptions/760f2763-9701-4082-9ab5-ac399669aebd
-Authorization: Bearer {{token}}
-###
-
-
-@UserId = 019719fa-671c-7953-84d3-c2fb402afbd9
-GET {{host}}:{{port}}/BTC/subscribed?ApplicationUserId={{UserId}}&PaginationTake=10&level=1
-###
-
-@BtcId=895bc690-3f2a-66c2-456f-ec56ae482558
-DELETE {{host}}:{{port}}/Subscriptions/btc/{{BtcId}}
-Authorization: Bearer {{token}}
-
-###
-
-GET {{host}}:{{port}}/BTC/subscribed?level=2
-Authorization: Bearer {{token}}
-
-###
 
 
 GET {{host}}:{{port}}/Dashboard/stats  

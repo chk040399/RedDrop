@@ -1,0 +1,108 @@
+﻿#nullable disable
+
+
+using BD.PublicPortal.Core.DTOs;
+
+namespace BD.BloodCentral.Core
+{
+
+    public static partial class BloodInventoryConverter
+    {
+
+        public static BloodInventoryDTO ToDto(this BloodInventory source)
+        {
+            return source.ToDtoWithRelated(0);
+        }
+
+        public static BloodInventoryDTO ToDtoWithRelated(this BloodInventory source, int level)
+        {
+            if (source == null)
+              return null;
+
+            var target = new BloodInventoryDTO();
+
+            // Properties
+            target.Id = source.Id;
+            target.BloodTansfusionCenterId = source.BloodTansfusionCenterId;
+            target.BloodGroup = source.BloodGroup;
+            target.BloodDonationType = source.BloodDonationType;
+            target.TotalQty = source.TotalQty;
+            target.MinQty = source.MinQty;
+            target.MaxQty = source.MaxQty;
+
+            // Navigation Properties
+            if (level > 0) {
+              target.BloodTansfusionCenter = source.BloodTansfusionCenter.ToDtoWithRelated(level - 1);
+            }
+
+            // User-defined partial method
+            OnDtoCreating(source, target);
+
+            return target;
+        }
+
+        public static BloodInventory ToEntity(this BloodInventoryDTO source)
+        {
+            if (source == null)
+              return null;
+
+            var target = new BloodInventory();
+
+            // Properties
+            target.Id = source.Id;
+            target.BloodTansfusionCenterId = source.BloodTansfusionCenterId;
+            target.BloodGroup = source.BloodGroup;
+            target.BloodDonationType = source.BloodDonationType;
+            target.TotalQty = source.TotalQty;
+            target.MinQty = source.MinQty;
+            target.MaxQty = source.MaxQty;
+
+            // User-defined partial method
+            OnEntityCreating(source, target);
+
+            return target;
+        }
+
+        public static List<BloodInventoryDTO> ToDtos(this IEnumerable<BloodInventory> source)
+        {
+            if (source == null)
+              return null;
+
+            var target = source
+              .Select(src => src.ToDto())
+              .ToList();
+
+            return target;
+        }
+
+        public static List<BloodInventoryDTO> ToDtosWithRelated(this IEnumerable<BloodInventory> source, int level)
+        {
+            if (source == null)
+              return null;
+
+            var target = source
+              .Select(src => src.ToDtoWithRelated(level))
+              .ToList();
+
+            return target;
+        }
+
+        public static List<BloodInventory> ToEntities(this IEnumerable<BloodInventoryDTO> source)
+        {
+            if (source == null)
+              return null;
+
+            var target = source
+              .Select(src => src.ToEntity())
+              .ToList();
+
+            return target;
+        }
+
+        static partial void OnDtoCreating(BloodInventory source, BloodInventoryDTO target);
+
+        static partial void OnEntityCreating(BloodInventoryDTO source, BloodInventory target);
+
+    }
+
+}

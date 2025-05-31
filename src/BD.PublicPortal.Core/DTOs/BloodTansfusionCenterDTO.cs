@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using BD;
+using BD.BloodCentral.Core;
 
 namespace BD.PublicPortal.Core.DTOs
 {
@@ -12,7 +13,7 @@ namespace BD.PublicPortal.Core.DTOs
         public BloodTansfusionCenterDTO() {
         }
 
-        public BloodTansfusionCenterDTO(System.Guid id, string name, string address, string contact, string email, string tel, int wilayaId, List<DonorBloodTransferCenterSubscriptionsDTO> donorBloodTransferCenterSubscriptions, List<BloodDonationRequestDTO> bloodDonationRequests, WilayaDTO wilaya) {
+        public BloodTansfusionCenterDTO(Guid id, string name, string address, string contact, string email, string tel, int wilayaId, List<DonorBloodTransferCenterSubscriptionsDTO> donorBloodTransferCenterSubscriptions, List<BloodDonationRequestDTO> bloodDonationRequests, WilayaDTO wilaya, List<BloodInventoryDTO> bloodInventories) {
 
           this.Id = id;
           this.Name = name;
@@ -24,6 +25,7 @@ namespace BD.PublicPortal.Core.DTOs
           this.DonorBloodTransferCenterSubscriptions = donorBloodTransferCenterSubscriptions;
           this.BloodDonationRequests = bloodDonationRequests;
           this.Wilaya = wilaya;
+          this.BloodInventories = bloodInventories;
         }
 
         #endregion
@@ -53,6 +55,8 @@ namespace BD.PublicPortal.Core.DTOs
         public List<BloodDonationRequestDTO> BloodDonationRequests { get; set; }
 
         public WilayaDTO Wilaya { get; set; }
+		
+		public List<BloodInventoryDTO> BloodInventories { get; set; }
 
         #endregion
     }
@@ -64,6 +68,8 @@ namespace BD.PublicPortal.Core.DTOs
     {
       LoggedUserSubscribed = loggedUserSubscribed;
     }
+	
+	
 
     public bool? LoggedUserSubscribed { get; set; } = null;
 

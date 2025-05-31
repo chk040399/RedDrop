@@ -1,7 +1,6 @@
 ﻿#nullable disable
 
-using BD;
-using BD.SharedKernel;
+using BD.BloodCentral.Core;
 
 namespace BD.PublicPortal.Core.Entities
 {
@@ -32,6 +31,9 @@ namespace BD.PublicPortal.Core.Entities
         public virtual IList<BloodDonationRequest> BloodDonationRequests { get; set; }
 
         public virtual Wilaya Wilaya { get; set; }
+
+
+        public virtual IList<BloodInventory> BloodInventories { get; set; }
 
         #region Extensibility Method Definitions
 

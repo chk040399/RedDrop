@@ -27,6 +27,7 @@ namespace BD.PublicPortal.Infrastructure.Data.Config
             builder.HasMany(x => x.DonorBloodTransferCenterSubscriptions).WithOne(op => op.BloodTansfusionCenter).HasForeignKey(@"BloodTansfusionCenterId").IsRequired(true);
             builder.HasMany(x => x.BloodDonationRequests).WithOne(op => op.BloodTansfusionCenter).HasForeignKey(@"BloodTansfusionCenterId").IsRequired(true);
             builder.HasOne(x => x.Wilaya).WithMany(op => op.BloodTansfusionCenters).OnDelete(DeleteBehavior.Restrict).HasForeignKey(@"WilayaId").IsRequired(true);
+            builder.HasMany(x => x.BloodInventories).WithOne(op => op.BloodTansfusionCenter).HasForeignKey(@"BloodTansfusionCenterId").IsRequired(true);
 
             CustomizeConfiguration(builder);
         }

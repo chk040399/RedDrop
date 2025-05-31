@@ -3,17 +3,14 @@ using BD.PublicPortal.Core.DTOs;
 
 namespace BD.PublicPortal.Api.Features.Dashboard;
 
-public class GetDashboardStatsRequest
-{
 
-}
 
 public class GetDashboardStatsResponse
 {
   public DashboardStatsDTO? Stats { get; set; }
 }
 
-public class GetDashboardStatsEndpoint : Endpoint<GetDashboardStatsRequest, GetDashboardStatsResponse>
+public class GetDashboardStatsEndpoint : EndpointWithoutRequest<GetDashboardStatsResponse>
 {
   private readonly IMediator _mediator;
 
@@ -25,10 +22,10 @@ public class GetDashboardStatsEndpoint : Endpoint<GetDashboardStatsRequest, GetD
   public override void Configure()
   {
     Get("/Dashboard/stats");
-    AllowAnonymous(); // Or require authentication based on your needs  
+    AllowAnonymous();
   }
 
-  public override async Task HandleAsync(GetDashboardStatsRequest req, CancellationToken cancellationToken)
+  public override async Task HandleAsync( CancellationToken cancellationToken)
   {
     var result = await _mediator.Send(new GetDashboardStatsQuery(), cancellationToken);
 

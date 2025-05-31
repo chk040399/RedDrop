@@ -1,6 +1,7 @@
 ﻿#nullable disable
 
 using BD;
+using BD.BloodCentral.Core;
 using BD.PublicPortal.Core.Entities;
 
 namespace BD.PublicPortal.Core.DTOs
@@ -35,6 +36,7 @@ namespace BD.PublicPortal.Core.DTOs
               target.DonorBloodTransferCenterSubscriptions = source.DonorBloodTransferCenterSubscriptions.ToDtosWithRelated(level - 1);
               target.BloodDonationRequests = source.BloodDonationRequests.ToDtosWithRelated(level - 1);
               target.Wilaya = source.Wilaya.ToDtoWithRelated(level - 1);
+              target.BloodInventories = source.BloodInventories.ToDtosWithRelated(level - 1);
             }
 
             // User-defined partial method
