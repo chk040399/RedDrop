@@ -1,37 +1,29 @@
 ﻿using MediatR;
-using Domain.Entities;
+using Microsoft.Extensions.Logging;
 using Domain.Repositories;
+using Domain.Entities;
 using Application.DTOs;
 using Application.Features.BloodTransferCenterManagement.Commands;
 using Shared.Exceptions;
 using Application.Interfaces;
-using Infrastructure.ExternalServices.Kafka;
-using Microsoft.Extensions.Options;
-using Domain.Events;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Application.Features.BloodTransferCenterManagement.Handlers
 {
     public class CreateBloodTransferCenterHandler : IRequestHandler<CreateBloodTransferCenterCommand, (BloodTransferCenterDTO? center, BaseException? err)>
     {
         private readonly IBloodTransferCenterRepository _centerRepository;
-        private readonly IEventProducer _eventProducer;
-        private readonly IGlobalStockRepository _globalStockRepository;
-        private readonly IOptions<KafkaSettings> _kafkaSettings;
         private readonly IWilayaRepository _wilayaRepository;
         private readonly ILogger<CreateBloodTransferCenterHandler> _logger;
 
         public CreateBloodTransferCenterHandler(
             IBloodTransferCenterRepository centerRepository,
             IWilayaRepository wilayaRepository,
-            ILogger<CreateBloodTransferCenterHandler> logger,
-            IGlobalStockRepository globalStockRepository,
-            IEventProducer eventProducer,
-            IOptions<KafkaSettings> kafkaSettings)
+            ILogger<CreateBloodTransferCenterHandler> logger)
         {
             _centerRepository = centerRepository;
-            _eventProducer = eventProducer;
-            _globalStockRepository = globalStockRepository;
-            _kafkaSettings = kafkaSettings;
             _wilayaRepository = wilayaRepository;
             _logger = logger;
         }
@@ -44,6 +36,12 @@ namespace Application.Features.BloodTransferCenterManagement.Handlers
             {
                 _logger.LogInformation("Creating blood transfer center with name: {Name}", command.Name);
                 
+                // Check if a center already exists
+                if (await _centerRepository.ExistsAsync())
+                {
+                    return (null, new BadRequestException("Only one blood transfer center is allowed in the system", "CreateBloodTransferCenter"));
+                }
+                
                 // Check if wilaya exists
                 var wilaya = await _wilayaRepository.GetByIdAsync(command.WilayaId);
                 if (wilaya == null)
@@ -51,60 +49,16 @@ namespace Application.Features.BloodTransferCenterManagement.Handlers
                     return (null, new NotFoundException($"Wilaya with ID {command.WilayaId} not found", "CreateBloodTransferCenter"));
                 }
                 
-                // Check if a center with the same name already exists
-                var existingCenter = await _centerRepository.GetByNameAsync(command.Name);
-                if (existingCenter != null)
-                {
-                    return (null, new BadRequestException($"Blood transfer center with name '{command.Name}' already exists", "CreateBloodTransferCenter"));
-                }
-
                 var newCenter = new BloodTransferCenter(
                     command.Name,
                     command.Address,
                     command.Email,
                     command.PhoneNumber,
-                    command.WilayaId,
-                    command.IsPrimary);
+                    command.WilayaId);
 
-                await _centerRepository.AddAsync(newCenter);
-                
-                // If this is marked as primary, we need to update other centers
-                if (command.IsPrimary)
-                {
-                    await _centerRepository.SetAsPrimaryAsync(newCenter.Id);
-                }
+                await _centerRepository.SaveAsync(newCenter);
 
                 _logger.LogInformation("Blood transfer center created successfully with ID: {Id}", newCenter.Id);
-                var topic = _kafkaSettings.Value.Topics["CTSInit"];
-                var initEvent = new CtsData(
-                  newCenter.Id,
-                  newCenter.Name,
-                  newCenter.Address,
-                  newCenter.PhoneNumber,
-                  newCenter.Email,
-                  newCenter.Wilaya.Name,
-                  wilaya.Name
-                );
-                await _eventProducer.ProduceAsync(topic, initEvent);
-                //TODO : Disabled
-                /*
-                var stocks = await _globalStockRepository.GetAllAsync();
-                var globalStocks = new List<GlobalStockData>();
-                foreach (var stock in stocks)
-                {
-                    var eventMessage = new GlobalStockData(
-                     stock.BloodType,
-                     stock.BloodBagType,
-                     stock.ReadyCount + stock.CountExpired + stock.CountExpiring,
-                     stock.ReadyCount,
-                     stock.MinStock,
-                     stock.CountExpired
-                     );
-                     globalStocks.Add(eventMessage);
-
-                }
-                var cts = await _centerRepository.GetPrimaryAsync();                
-                */
 
                 return (new BloodTransferCenterDTO
                 {
@@ -114,14 +68,13 @@ namespace Application.Features.BloodTransferCenterManagement.Handlers
                     Email = newCenter.Email,
                     PhoneNumber = newCenter.PhoneNumber,
                     WilayaId = newCenter.WilayaId,
-                    WilayaName = wilaya.Name,
-                    IsPrimary = newCenter.IsPrimary
+                    WilayaName = wilaya.Name
                 }, null);
             }
-            catch (BaseException ex)
+            catch (InvalidOperationException ex) when (ex.Message.Contains("Only one blood transfer center"))
             {
-                _logger.LogError(ex, "Error creating blood transfer center");
-                return (null, ex);
+                _logger.LogWarning(ex, "Attempted to create a second blood transfer center");
+                return (null, new BadRequestException("Only one blood transfer center is allowed in the system", "CreateBloodTransferCenter"));
             }
             catch (Exception ex)
             {

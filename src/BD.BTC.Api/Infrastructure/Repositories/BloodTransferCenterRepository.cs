@@ -6,137 +6,64 @@ using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Infrastructure.Repositories
 {
     public class BloodTransferCenterRepository : IBloodTransferCenterRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<BloodTransferCenterRepository> _logger;
         
-        public BloodTransferCenterRepository(ApplicationDbContext context)
+        public BloodTransferCenterRepository(
+            ApplicationDbContext context,
+            ILogger<BloodTransferCenterRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
         
-        public async Task<BloodTransferCenter?> GetByIdAsync(Guid id)
+        public async Task<BloodTransferCenter?> GetAsync()
         {
             return await _context.BloodTransferCenters
                 .Include(btc => btc.Wilaya)
-                .FirstOrDefaultAsync(btc => btc.Id == id);
+                .FirstOrDefaultAsync();
         }
         
-        public async Task<BloodTransferCenter?> GetByNameAsync(string name)
+        public async Task<bool> ExistsAsync()
         {
-            return await _context.BloodTransferCenters
-                .Include(btc => btc.Wilaya)
-                .FirstOrDefaultAsync(btc => btc.Name == name);
+            return await _context.BloodTransferCenters.AnyAsync();
         }
         
-        public async Task<BloodTransferCenter?> GetByEmailAsync(string email)
+        public async Task SaveAsync(BloodTransferCenter center)
         {
-            return await _context.BloodTransferCenters
-                .Include(btc => btc.Wilaya)
-                .FirstOrDefaultAsync(btc => btc.Email == email);
-        }
-        
-        public async Task<List<BloodTransferCenter>> GetByWilayaIdAsync(int wilayaId)
-        {
-            return await _context.BloodTransferCenters
-                .Include(btc => btc.Wilaya)
-                .Where(btc => btc.WilayaId == wilayaId)
-                .ToListAsync();
-        }
-        
-        public async Task<List<BloodTransferCenter>> GetAllAsync()
-        {
-            return await _context.BloodTransferCenters
-                .Include(btc => btc.Wilaya)
-                .ToListAsync();
-        }
-        
-        public async Task<(List<BloodTransferCenter> Centers, int Total)> GetAllAsync(int page, int pageSize)
-        {
-            var query = _context.BloodTransferCenters
-                .Include(btc => btc.Wilaya)
-                .AsQueryable();
-                
-            var total = await query.CountAsync();
-            
-            var centers = await query
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-                
-            return (centers, total);
-        }
-        
-        // Add this method to handle setting a center as primary
-        public async Task SetAsPrimaryAsync(Guid id)
-        {
-            using var transaction = await _context.Database.BeginTransactionAsync();
-            try
+            // Check if a center already exists
+            if (await ExistsAsync())
             {
-                // First, set all centers to not primary
-                foreach (var center in _context.BloodTransferCenters)
-                {
-                    center.UnsetPrimary();
-                }
-                
-                // Now set the selected one as primary
-                var primaryCenter = await _context.BloodTransferCenters
-                    .FirstOrDefaultAsync(c => c.Id == id);
-                
-                if (primaryCenter != null)
-                {
-                    primaryCenter.SetAsPrimary();
-                }
-                
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
-        }
-        
-        // Get the current primary center
-        public async Task<BloodTransferCenter?> GetPrimaryAsync()
-        {
-            return await _context.BloodTransferCenters
-                .Include(btc => btc.Wilaya)
-                .FirstOrDefaultAsync(btc => btc.IsPrimary);
-        }
-        
-        // Override the Add method to enforce singleton if needed
-        public async Task AddAsync(BloodTransferCenter center)
-        {
-            // If this is the only center, make it primary
-            bool hasCenters = await _context.BloodTransferCenters.AnyAsync();
-            
-            if (!hasCenters)
-            {
-                center.SetAsPrimary();
+                _logger.LogWarning("Attempted to create a second blood transfer center. Only one center is allowed.");
+                throw new InvalidOperationException("Only one blood transfer center is allowed in the system.");
             }
             
             await _context.BloodTransferCenters.AddAsync(center);
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Blood transfer center created with ID: {Id}", center.Id);
         }
         
         public async Task UpdateAsync(BloodTransferCenter center)
         {
             _context.BloodTransferCenters.Update(center);
             await _context.SaveChangesAsync();
+            _logger.LogInformation("Blood transfer center updated: {Id}", center.Id);
         }
         
-        public async Task DeleteAsync(Guid id)
+        public async Task DeleteAsync()
         {
-            var center = await GetByIdAsync(id);
+            var center = await GetAsync();
             if (center != null)
             {
                 _context.BloodTransferCenters.Remove(center);
                 await _context.SaveChangesAsync();
+                _logger.LogInformation("Blood transfer center deleted");
             }
         }
     }

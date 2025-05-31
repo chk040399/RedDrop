@@ -168,7 +168,7 @@ namespace Application.Features.BloodBagManagement.Handlers
 
             // Publish Kafka messages for all global stocks (not just the ones with notifications)
             var topic = _kafkaSettings.Value.Topics["GlobalStock"];
-            var hospital = await _centerRepository.GetPrimaryAsync();
+            var hospital = await _centerRepository.GetAsync();
 
             if (hospital == null)
             {

@@ -8,37 +8,21 @@ namespace Presentation.Endpoints.BloodRequests.Validators
     {
         public UpdateRequestValidator()
         {
-            // Fix: change 'Id' to 'id' to match property name in UpdateRequestRequest
             RuleFor(x => x.id)
                 .NotEmpty()
-                .WithMessage("Id is required.")
-                .Must(id => Guid.TryParse(id.ToString(), out _))
-                .WithMessage("Invalid Id.");
-                
-            // Add null checks for optional properties
-            When(x => x.BloodBagType != null, () => {
-                RuleFor(x => x.BloodBagType)
-                    .Must(x => BloodBagType.Convert(x!) != null)
-                    .WithMessage("Invalid BloodBagType.");
-            });
+                .WithMessage("Request ID is required");
 
-            When(x => x.Priority != null, () => {
-                RuleFor(x => x.Priority)
-                    .Must(x => Priority.Convert(x!) != null)
-                    .WithMessage("Invalid Priority.");
-            });
+            RuleFor(x => x.BloodBagType)
+                .Must(bloodBagType => string.IsNullOrEmpty(bloodBagType) || BloodBagType.Convert(bloodBagType) != null)
+                .WithMessage("Invalid blood bag type");
 
-            When(x => x.DueDate != null, () => {
-                RuleFor(x => x.DueDate)
-                    .Must(x => DateOnly.TryParse(x.ToString(), out _))
-                    .WithMessage("Invalid DueDate.");
-            });
+            RuleFor(x => x.Priority)
+                .Must(priority => string.IsNullOrEmpty(priority) || Priority.Convert(priority) != null)
+                .WithMessage("Invalid priority");
 
-            When(x => x.MoreDetails != null, () => {
-                RuleFor(x => x.MoreDetails)
-                    .MaximumLength(500)
-                    .WithMessage("MoreDetails cannot exceed 500 characters.");
-            });
+            RuleFor(x => x.RequiredQty)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage("Required quantity must be 0 or greater");
         }
     }
 }

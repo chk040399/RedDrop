@@ -11,7 +11,7 @@ namespace Infrastructure.ExternalServices.Kafka
     public class KafkaConsumerService : BackgroundService
     {
         private readonly ILogger<KafkaConsumerService> _logger;
-        private readonly IMediator _mediator;
+        private readonly IServiceScopeFactory _scopeFactory; // Add this
         private readonly KafkaSettings _settings;
         private readonly ITopicDispatcher _dispatcher;
         private readonly CancellationTokenSource _cts = new();
@@ -20,12 +20,12 @@ namespace Infrastructure.ExternalServices.Kafka
         public KafkaConsumerService(
             ILogger<KafkaConsumerService> logger,
             IOptions<KafkaSettings> settings,
-            IMediator mediator,
+            IServiceScopeFactory scopeFactory, // Replace IMediator with this
             ITopicDispatcher dispatcher,
             IConsumer<string, string> consumer)
         {
             _logger = logger;
-            _mediator = mediator;
+            _scopeFactory = scopeFactory; // Use scopeFactory instead of mediator
             _settings = settings.Value;
             _dispatcher = dispatcher;
             _consumer = consumer;
@@ -104,10 +104,10 @@ namespace Infrastructure.ExternalServices.Kafka
         {
             try
             {
-                // Log the raw message for debugging
-                _logger.LogInformation("Received message from topic {Topic}: {Message}", 
-                    result.Topic, result.Message.Value);
-                    
+                // Create a scope for this message processing
+                using var scope = _scopeFactory.CreateScope();
+                var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                
                 var topic = result.Topic;
                 var handlerType = _dispatcher.GetHandlerType(topic);
                 var messageType = _dispatcher.GetMessageType(topic);
@@ -127,25 +127,33 @@ namespace Infrastructure.ExternalServices.Kafka
 
                 // Use the custom options for deserialization
                 var message = JsonSerializer.Deserialize(result.Message.Value, messageType, options);
+
                 if (message == null)
                 {
                     _logger.LogError($"Failed to deserialize message for topic {topic}");
                     return;
                 }
 
+                // Create the command instance
                 var request = Activator.CreateInstance(handlerType, message);
-                if (request is not IRequest mediatorRequest)
+                
+                if (request == null || 
+                    !(request.GetType().GetInterfaces().Any(i => 
+                        i.IsGenericType && 
+                        i.GetGenericTypeDefinition() == typeof(IRequest<>) || 
+                        i == typeof(IRequest))))
                 {
-                    _logger.LogError($"Invalid request type for topic {topic}");
+                    _logger.LogError($"Invalid request type for topic {topic}. Request type: {request?.GetType().Name}");
                     return;
                 }
 
-                await _mediator.Send(mediatorRequest);
-                _consumer!.Commit(result);
+                // Use mediator from the scope
+                await mediator.Send(request);
+                _consumer.Commit(result);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error processing Kafka message");
+                _logger.LogError(ex, "Error processing Kafka message from topic {Topic}", result.Topic);
             }
         }
 

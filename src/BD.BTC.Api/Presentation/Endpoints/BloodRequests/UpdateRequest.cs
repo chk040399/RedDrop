@@ -30,26 +30,35 @@ namespace Presentation.Endpoints.BloodRequests
         }
         public override async Task HandleAsync(UpdateRequestRequest req, CancellationToken ct)
         {
-            var Command = new UpdateRequestCommand(req.id,BloodBagType.Convert(req.BloodBagType!),req.Priority==null?Priority.Convert(req.Priority!):null,req.DueDate,req.MoreDetails,req.RequiredQty);
-            var (result,err) = await _mediator.Send(Command,ct);
+            var Command = new UpdateRequestCommand(
+                req.id,
+                req.BloodBagType != null ? BloodBagType.Convert(req.BloodBagType) : null,
+                req.Priority != null ? Priority.Convert(req.Priority) : null,
+                req.Status != null ? RequestStatus.Convert(req.Status) : null, // Add this line
+                req.DueDate,
+                req.MoreDetails,
+                req.RequiredQty);
+            
+            var (result,err) = await _mediator.Send(Command, ct);
             if(err != null)
             {
                 _logger.LogError("Error while updating request");
                 throw err;
             }
             _logger.LogInformation("request updated succeffuly");
-            var response = new UpdateRequestResponse(result,200,"request updated succesfully");
-            await SendAsync(response,cancellation:ct); 
+            var response = new UpdateRequestResponse(result, 200, "request updated succesfully");
+            await SendAsync(response, cancellation:ct); 
         }  
     }
-    public class UpdateRequestRequest{
+    public class UpdateRequestRequest {
         public required Guid id {get;set;}
-        public  string? BloodBagType { get; set; }
-        public  DateOnly? DueDate { get; set; }
+        public string? BloodBagType { get; set; }
+        public DateOnly? DueDate { get; set; }
         public string? Priority {get;set;}
-        public  string? MoreDetails { get; set; }
-        public  DateOnly? RequestDate { get; set; }
-        public  int RequiredQty { get; set; }
+        public string? Status { get; set; } // Add this field
+        public string? MoreDetails { get; set; }
+        public DateOnly? RequestDate { get; set; }
+        public int RequiredQty { get; set; }
     } 
     public class UpdateRequestResponse
     {

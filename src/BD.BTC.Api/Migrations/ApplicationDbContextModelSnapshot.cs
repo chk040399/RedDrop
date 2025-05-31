@@ -78,10 +78,10 @@ namespace HSTS_Back.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)");
 
-                    b.Property<bool>("IsPrimary")
+                    b.Property<bool>("IsSingleton")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
-                        .HasDefaultValue(false);
+                        .HasDefaultValue(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -98,13 +98,7 @@ namespace HSTS_Back.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Email");
-
-                    b.HasIndex("IsPrimary")
-                        .IsUnique()
-                        .HasFilter("\"IsPrimary\" = true");
-
-                    b.HasIndex("Name")
+                    b.HasIndex("IsSingleton")
                         .IsUnique();
 
                     b.HasIndex("WilayaId");
