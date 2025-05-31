@@ -76,6 +76,47 @@ builder.WebHost.ConfigureKestrel(options =>
 
 var app = builder.Build();
 
+// TODO : Disabled for now
+// Move logging middleware to be one of the first middleware components
+// Custom request logging middleware
+//app.Use(async (context, next) => {
+//  var start = DateTime.UtcNow;
+//  var requestPath = context.Request.Path;
+//  var method = context.Request.Method;
+
+//  app.Logger.LogInformation("Request started: {Method} {Path}", method, requestPath);
+
+//  try
+//  {
+//    await next();
+
+//    var elapsed = DateTime.UtcNow - start;
+//    var statusCode = context.Response.StatusCode;
+
+//    app.Logger.LogInformation(
+//      "Request completed: {Method} {Path} - Status: {StatusCode} - Duration: {Duration}ms",
+//      method, requestPath, statusCode, elapsed.TotalMilliseconds);
+//  }
+//  catch (Exception ex)
+//  {
+//    app.Logger.LogError(ex, "Request failed: {Method} {Path}", method, requestPath);
+//    throw; // Re-throw to let the exception handler middleware handle it
+//  }
+//});
+
+// Basic health check endpoint for troubleshooting
+app.MapGet("/", () => "Hello from WebPortal API!");
+app.MapGet("/system/debug", (HttpContext context) => {
+  return $"Debug info - Remote IP: {context.Connection.RemoteIpAddress}";
+});
+app.MapHealthChecks("/health");
+app.MapGet("/system/ping", () => Results.Ok("pong"));
+app.MapGet("/system/status", () => new {
+  Status = "Running",
+  SchedulerActive = true,
+  CurrentTime = DateTime.Now
+});
+
 
 
 await app.UseAppMiddlewareAndSeedDatabase();

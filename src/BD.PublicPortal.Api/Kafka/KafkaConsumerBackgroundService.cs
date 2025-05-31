@@ -8,17 +8,17 @@ using System.Text.Json.Serialization;
 
 namespace BD.PublicPortal.Api.Kafka;
 
-  public class KafkaConsumerService : BackgroundService
+  public class KafkaConsumerBackgroundService : BackgroundService
   {
-      private readonly ILogger<KafkaConsumerService> _logger;
+      private readonly ILogger<KafkaConsumerBackgroundService> _logger;
       private readonly IServiceScopeFactory _scopeFactory; // Add this
       private readonly KafkaSettings _settings;
       private readonly ITopicDispatcher _dispatcher;
       private readonly CancellationTokenSource _cts = new();
       private IConsumer<string, string> _consumer;
 
-      public KafkaConsumerService(
-          ILogger<KafkaConsumerService> logger,
+      public KafkaConsumerBackgroundService(
+          ILogger<KafkaConsumerBackgroundService> logger,
           IOptions<KafkaSettings> settings,
           IServiceScopeFactory scopeFactory, // Replace IMediator with this
           ITopicDispatcher dispatcher,

@@ -18,7 +18,7 @@ public static class KafkaServiceConfig
     //TODO : Disabled not needed
     //services.AddSingleton<KafkaTopicInitializer>();
     services.AddScoped<IEventProducer, KafkaEventPublisher>();
-    services.AddHostedService<KafkaConsumerService>();
+    services.AddHostedService<KafkaConsumerBackgroundService>();
     return services;
   }
 

@@ -35,10 +35,11 @@ var kafka = builder.AddKafka("kafka")
 
 
 // api Portail Public
+var publicPortalApiName = "publicPortalApi";
 var publicPortalDatabaseName = "PublicPortalDatabase";
 var publicPortalDatabase = publicPortalPostgres.AddDatabase(name: "PublicPortalDatabase", databaseName: publicPortalDatabaseName);// name => la resource ! 
 
-var publicPortalApi = builder.AddProject<Projects.BD_PublicPortal_Api>("publicPortalApi")
+var publicPortalApi = builder.AddProject<Projects.BD_PublicPortal_Api>(publicPortalApiName)
   .WithUrlForEndpoint("http", url =>
   {
     url.Url = "/swagger";
