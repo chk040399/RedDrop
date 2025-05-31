@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HSTS_Back.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250531200540_AddSoftDeleteAndUpdatedEntities")]
+    partial class AddSoftDeleteAndUpdatedEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,11 +99,6 @@ namespace HSTS_Back.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
 
-                    b.Property<int>("SingletonCheck")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasDefaultValue(1);
-
                     b.Property<int>("WilayaId")
                         .HasColumnType("integer");
 
@@ -115,12 +113,12 @@ namespace HSTS_Back.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.HasIndex("SingletonCheck")
-                        .IsUnique();
-
                     b.HasIndex("WilayaId");
 
-                    b.ToTable("BloodTransferCenters");
+                    b.ToTable("BloodTransferCenters", t =>
+                        {
+                            t.HasCheckConstraint("CK_SingleBloodTransferCenter", "1=(SELECT CASE WHEN COUNT(*) <= 1 THEN 1 ELSE 0 END FROM \"BloodTransferCenters\")");
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Commune", b =>

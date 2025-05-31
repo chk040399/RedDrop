@@ -10,7 +10,9 @@ namespace Domain.Entities
         public string Address { get; private set; } = string.Empty;
         public string Email { get; private set; } = string.Empty;
         public string PhoneNumber { get; private set; } = string.Empty;
-        public bool IsPrimary { get; private set; } // Add this field
+        
+        // Add this property
+        public bool IsPrimary { get; private set; }
         
         // Foreign key for Wilaya
         public int WilayaId { get; private set; }
@@ -18,6 +20,9 @@ namespace Domain.Entities
         // Navigation property
         public Wilaya Wilaya { get; private set; } = null!;
         
+        // This property enforces a single-row constraint in the database
+        public int SingletonCheck { get; private set; } = 1;
+
         private BloodTransferCenter() { } // For EF Core
         
         public BloodTransferCenter(
@@ -26,7 +31,7 @@ namespace Domain.Entities
             string email,
             string phoneNumber,
             int wilayaId,
-            bool isPrimary = false)
+            bool isPrimary = false) // Update constructor
         {
             Id = Guid.NewGuid();
             Name = name;
@@ -42,23 +47,21 @@ namespace Domain.Entities
             string? address = null,
             string? email = null,
             string? phoneNumber = null,
-            int? wilayaId = null)
+            int? wilayaId = null,
+            bool? isPrimary = null) // Update method
         {
             if (name != null) Name = name;
             if (address != null) Address = address;
             if (email != null) Email = email;
             if (phoneNumber != null) PhoneNumber = phoneNumber;
             if (wilayaId != null) WilayaId = wilayaId.Value;
+            if (isPrimary != null) IsPrimary = isPrimary.Value;
         }
         
+        // Add this method to set a center as primary
         public void SetAsPrimary()
         {
             IsPrimary = true;
-        }
-        
-        public void UnsetPrimary()
-        {
-            IsPrimary = false;
         }
     }
 }

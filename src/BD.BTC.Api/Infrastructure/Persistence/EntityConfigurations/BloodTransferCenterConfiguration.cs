@@ -58,6 +58,13 @@ namespace Infrastructure.Persistence.EntityConfigurations
             
             // Create index on email for quick lookups
             builder.HasIndex(btc => btc.Email);
+            
+            // Instead, add a constant column with a unique index
+            builder.Property<int>("SingletonCheck")
+                .HasDefaultValue(1)
+                .IsRequired();
+                
+            builder.HasIndex("SingletonCheck").IsUnique();
         }
     }
 }

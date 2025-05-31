@@ -7,7 +7,5 @@ namespace Domain.Events
         string HospitalAddress,
         string HospitalPhoneNumber,
         string HospitalEmail,
-        string Wilaya,
-        string Commune,
-        List<GlobalStockData> GlobalStockData = null);
+        int WilayaId);
 }

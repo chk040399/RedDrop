@@ -82,29 +82,12 @@ namespace Application.Features.BloodTransferCenterManagement.Handlers
                   newCenter.Address,
                   newCenter.PhoneNumber,
                   newCenter.Email,
-                  newCenter.Wilaya.Name,
-                  wilaya.Name
+                  newCenter.Wilaya.Id
                 );
-                await _eventProducer.ProduceAsync(topic, initEvent);
-                //TODO : Disabled
-                /*
-                var stocks = await _globalStockRepository.GetAllAsync();
-                var globalStocks = new List<GlobalStockData>();
-                foreach (var stock in stocks)
-                {
-                    var eventMessage = new GlobalStockData(
-                     stock.BloodType,
-                     stock.BloodBagType,
-                     stock.ReadyCount + stock.CountExpired + stock.CountExpiring,
-                     stock.ReadyCount,
-                     stock.MinStock,
-                     stock.CountExpired
-                     );
-                     globalStocks.Add(eventMessage);
-
-                }
-                var cts = await _centerRepository.GetPrimaryAsync();                
-                */
+                _logger.LogInformation("Producing CtsData event to topic: {Topic}", topic);
+                _logger.LogInformation("CtsData event details: {@InitEvent}", initEvent);
+                await _eventProducer.ProduceAsync("cts-init", initEvent);
+               
 
                 return (new BloodTransferCenterDTO
                 {

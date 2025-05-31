@@ -2,7 +2,7 @@ using Domain.ValueObjects;
 
 namespace Domain.Entities
 {
-    public class BloodBag
+    public class BloodBag 
     {
         public Guid Id { get; private set; }
         public BloodBagType BloodBagType { get; private set; } = BloodBagType.Blood();
@@ -10,6 +10,9 @@ namespace Domain.Entities
         public BloodBagStatus Status { get; private set; } = BloodBagStatus.Ready();
         public DateOnly? ExpirationDate { get; private set; }
         public DateOnly? AcquiredDate { get; private set; } = DateOnly.FromDateTime(DateTime.Now);
+        
+        // Add IsDeleted property for soft delete
+        public bool IsDeleted { get; private set; } = false;
 
         // Foreign keys
         public Guid? DonorId { get; private set; }
@@ -21,6 +24,7 @@ namespace Domain.Entities
 
         private BloodBag() { }
 
+        // Constructor remains the same
         public BloodBag(
             BloodBagType bloodBagType,
             BloodType bloodType,
@@ -30,6 +34,7 @@ namespace Domain.Entities
             Guid donorId,
             Guid? requestId = null)
         {
+            Id = Guid.NewGuid();
             BloodBagType = bloodBagType;
             BloodType = bloodType;
             Status = status;
@@ -37,6 +42,12 @@ namespace Domain.Entities
             AcquiredDate = acquiredDate ?? DateOnly.FromDateTime(DateTime.Now);
             DonorId = donorId;
             RequestId = requestId;
+        }
+
+        // Add method to mark as deleted
+        public void MarkAsDeleted()
+        {
+            IsDeleted = true;
         }
 
         public void UpdateDetails(

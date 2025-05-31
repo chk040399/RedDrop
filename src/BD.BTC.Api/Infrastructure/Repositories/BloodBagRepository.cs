@@ -18,14 +18,14 @@ namespace Infrastructure.Repositories
         public async Task<BloodBag?> GetByIdAsync(Guid id)
         {
             return await _context.BloodBags
-                .FirstOrDefaultAsync(b => b.Id == id);
+                .Where(b => b.Id == id && !b.IsDeleted)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<List<BloodBag?>> GetByBloodGroupAsync(BloodType bloodGroup)
         {
             return await _context.BloodBags
-                .Where(b => b.BloodType == bloodGroup)
-                .Cast<BloodBag?>()
+                .Where(b => b.BloodType.Value == bloodGroup.Value && !b.IsDeleted)
                 .ToListAsync();
         }
 
@@ -92,7 +92,9 @@ namespace Infrastructure.Repositories
             var bloodBag = await GetByIdAsync(id);
             if (bloodBag != null)
             {
-                _context.BloodBags.Remove(bloodBag);
+                // Instead of removing, mark as deleted
+                bloodBag.MarkAsDeleted();
+                _context.BloodBags.Update(bloodBag);
                 await _context.SaveChangesAsync();
             }
         }

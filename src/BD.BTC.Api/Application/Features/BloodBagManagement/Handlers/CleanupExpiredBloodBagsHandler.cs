@@ -197,7 +197,7 @@ namespace Application.Features.BloodBagManagement.Handlers
                     );
                     
                     // Publish to Kafka
-                    await _eventProducer.ProduceAsync(topic, System.Text.Json.JsonSerializer.Serialize(globalStockEvent));
+                    await _eventProducer.ProduceAsync(topic, globalStockEvent);
                     _logger.LogInformation("Published global stock update for {BloodType} {BloodBagType} to Kafka", 
                         stock.BloodType.Value, stock.BloodBagType.Value);
                 }

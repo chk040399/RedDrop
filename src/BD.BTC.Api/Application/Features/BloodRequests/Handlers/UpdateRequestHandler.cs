@@ -9,6 +9,7 @@ using Shared.Exceptions;
 using MediatR;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using Domain.ValueObjects;
 
 namespace Application.Features.BloodRequests.Handlers
 {
@@ -62,12 +63,40 @@ namespace Application.Features.BloodRequests.Handlers
                         request.RequiredQty,
                         command.DueDate
                     );
-                    var message = JsonSerializer.Serialize(updateRequestEvent);
+                    var message = updateRequestEvent;
                     await _eventProducer.ProduceAsync(topic, message);
                     _logger.LogInformation("request updated successfully");
                 }
                 
+                // First apply explicit status update if provided
+                if (command.Status != null)
+                {
+                    // Directly set status if explicitly provided
+                    if (command.Status.Value == RequestStatus.Partial().Value)
+                        request.MarkAsPartial();
+                    else if (command.Status.Value == RequestStatus.Resolved().Value)
+                        request.Resolve();
+                    else if (command.Status.Value == RequestStatus.Cancelled().Value)
+                        request.Cancel();
+                    else if (command.Status.Value == RequestStatus.Rejected().Value)
+                        request.Reject();
+                    else if (command.Status.Value == RequestStatus.Pending().Value)
+                        request.MarkAsPending();
+                }
+                
+                // Then update other details (which might override status based on quantities)
                 request.UpdateDetails(command.BloodBagType, command.Priority, command.DueDate, command.MoreDetails, command.RequiredQty);
+                
+                // Update acquired quantity if provided
+                if (command.AquiredQty.HasValue)
+                {
+                    // Only update with quantities if no explicit status was provided
+                    if (command.Status == null)
+                        request.UpdateAcquiredQuantity(command.AquiredQty.Value);
+                    else
+                        request.SetAcquiredQuantity(command.AquiredQty.Value); // Use new method instead
+                }
+                
                 await _requestRepository.UpdateAsync(request);
                 _logger.LogInformation("request updated successfully");
                 var requestDto = new RequestDto

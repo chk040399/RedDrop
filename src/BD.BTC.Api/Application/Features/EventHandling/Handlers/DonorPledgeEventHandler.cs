@@ -73,7 +73,7 @@ namespace Application.Features.EventHandling.Handlers
             {
                 _logger.LogError(ex, "Pledge processing failed after retries");
                 var topic = _kafkaSettings.Value.Topics["PledgeFailed"];
-                await _eventProducer.ProduceAsync(topic, JsonSerializer.Serialize(new PledgeFailedEvent(command.Payload, ex.Message, DateTime.UtcNow, Guid.NewGuid())));
+                await _eventProducer.ProduceAsync(topic, new PledgeFailedEvent(command.Payload, ex.Message, DateTime.UtcNow, Guid.NewGuid()));
                 throw;
             }
         }

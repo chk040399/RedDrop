@@ -17,7 +17,6 @@ namespace Domain.Entities
         public int AquiredQty { get; private set; } = 0;
         public Boolean autoResolve { get; private set; } = false;
 
-        // Foreign keys
         public Guid? ServiceId { get; private set; }
         public Guid? DonorId { get; private set; }
 
@@ -133,6 +132,35 @@ namespace Domain.Entities
         public void MarkAsPartial()
         {
             Status = RequestStatus.Partial();
+        }
+        public void DecrementAcquiredQty()
+        {
+            if (AquiredQty > 0)
+            {
+                AquiredQty--;
+                RequiredQty++;
+
+                // If we had previously marked the request as resolved, revert it to pending
+                if (Status.Value == RequestStatus.Resolved().Value && RequiredQty > 0)
+                {
+                    Status = RequestStatus.Pending();
+                }
+            }
+        }
+        public void Cancel()
+        {
+            Status = RequestStatus.Cancelled();
+        }
+
+        public void MarkAsPending()
+        {
+            Status = RequestStatus.Pending();
+        }
+
+        public void SetAcquiredQuantity(int value)
+        {
+            AquiredQty = value;
+            // Does not change status - use this when explicitly setting status elsewhere
         }
     }
 }

@@ -6,6 +6,7 @@ using Domain.Entities;
 using Domain.Repositories;
 using Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace Infrastructure.Repositories
 {
@@ -27,16 +28,24 @@ namespace Infrastructure.Repositories
         
         public async Task<BloodTransferCenter?> GetByNameAsync(string name)
         {
+            // Using case-insensitive comparison for PostgreSQL
             return await _context.BloodTransferCenters
                 .Include(btc => btc.Wilaya)
-                .FirstOrDefaultAsync(btc => btc.Name == name);
+                .FirstOrDefaultAsync(btc => EF.Functions.ILike(btc.Name, name));
         }
         
         public async Task<BloodTransferCenter?> GetByEmailAsync(string email)
         {
+            // Using case-insensitive comparison for PostgreSQL
             return await _context.BloodTransferCenters
                 .Include(btc => btc.Wilaya)
-                .FirstOrDefaultAsync(btc => btc.Email == email);
+                .FirstOrDefaultAsync(btc => EF.Functions.ILike(btc.Email, email));
+        }
+        
+        public async Task<BloodTransferCenter?> GetPrimaryAsync()
+        {
+            // Just return any center since we're enforcing only one center exists
+            return await GetAsync();
         }
         
         public async Task<List<BloodTransferCenter>> GetByWilayaIdAsync(int wilayaId)
@@ -70,58 +79,57 @@ namespace Infrastructure.Repositories
             return (centers, total);
         }
         
-        // Add this method to handle setting a center as primary
+        // Method no longer needed with singleton approach
         public async Task SetAsPrimaryAsync(Guid id)
         {
-            using var transaction = await _context.Database.BeginTransactionAsync();
-            try
-            {
-                // First, set all centers to not primary
-                foreach (var center in _context.BloodTransferCenters)
-                {
-                    center.UnsetPrimary();
-                }
-                
-                // Now set the selected one as primary
-                var primaryCenter = await _context.BloodTransferCenters
-                    .FirstOrDefaultAsync(c => c.Id == id);
-                
-                if (primaryCenter != null)
-                {
-                    primaryCenter.SetAsPrimary();
-                }
-                
-                await _context.SaveChangesAsync();
-                await transaction.CommitAsync();
-            }
-            catch
-            {
-                await transaction.RollbackAsync();
-                throw;
-            }
+            // No-op since we only have one center
+            await Task.CompletedTask;
         }
         
-        // Get the current primary center
-        public async Task<BloodTransferCenter?> GetPrimaryAsync()
+        public async Task<BloodTransferCenter?> GetAsync()
         {
             return await _context.BloodTransferCenters
                 .Include(btc => btc.Wilaya)
-                .FirstOrDefaultAsync(btc => btc.IsPrimary);
+                .FirstOrDefaultAsync();
         }
         
-        // Override the Add method to enforce singleton if needed
         public async Task AddAsync(BloodTransferCenter center)
         {
-            // If this is the only center, make it primary
-            bool hasCenters = await _context.BloodTransferCenters.AnyAsync();
-            
-            if (!hasCenters)
+            // Create an execution strategy that will handle retries
+            var strategy = _context.Database.CreateExecutionStrategy();
+
+            await strategy.ExecuteAsync(async () =>
             {
-                center.SetAsPrimary();
-            }
-            
-            await _context.BloodTransferCenters.AddAsync(center);
-            await _context.SaveChangesAsync();
+                // Start transaction inside the execution strategy
+                await using var transaction = await _context.Database.BeginTransactionAsync();
+                try
+                {
+                    // Check if any center already exists
+                    bool hasCenter = await _context.BloodTransferCenters
+                        .TagWith("Check_Single_Center")
+                        .AnyAsync();
+                    
+                    if (hasCenter)
+                    {
+                        throw new InvalidOperationException("Only one Blood Transfer Center can exist in the system");
+                    }
+                    
+                    await _context.BloodTransferCenters.AddAsync(center);
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch (PostgresException pgEx) when (pgEx.SqlState == "23505") // Unique violation
+                {
+                    // Handle unique constraint violation specifically
+                    throw new InvalidOperationException("Cannot add another Blood Transfer Center due to unique constraint violation", pgEx);
+                }
+                catch (Exception ex)
+                {
+                    // Any other exception
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            });
         }
         
         public async Task UpdateAsync(BloodTransferCenter center)
