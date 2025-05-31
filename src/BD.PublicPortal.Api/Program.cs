@@ -1,9 +1,7 @@
 ﻿using System.Text;
 using BD.PublicPortal.Api.Configurations;
-using Confluent.Kafka;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,17 +10,18 @@ var logger = Log.Logger = new LoggerConfiguration()
   .WriteTo.Console()
   .CreateLogger();
 
-logger.Information("Starting web host");
-builder.Services.AddCors(o=>o.AddPolicy("AllowAll", o =>
+
+builder.Services.AddCors(o => o.AddPolicy("AllowAll", o =>
 {
   o.AllowAnyOrigin();
   o.AllowAnyHeader();
   o.AllowAnyMethod();
 }));
+
 builder.AddLoggerConfigs();
 
 var appLogger = new SerilogLoggerFactory(logger)
-    .CreateLogger<Program>();
+    .CreateLogger<BD.PublicPortal.Api.Program>();
 
 builder.Services.AddOptionConfigs(builder.Configuration, appLogger, builder);
 builder.Services.AddServiceConfigs(appLogger, builder);
@@ -81,8 +80,11 @@ var app = builder.Build();
 
 await app.UseAppMiddlewareAndSeedDatabase();
 
-
+logger.Information("Starting web host");
 app.Run();
 
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
-public partial class Program { }
+namespace BD.PublicPortal.Api
+{
+  public partial class Program { }
+}

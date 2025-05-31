@@ -32,32 +32,22 @@ namespace Infrastructure.Persistence.EntityConfigurations
                 
             builder.Property(btc => btc.WilayaId)
                 .IsRequired();
-                
-            // Add property for IsPrimary flag
-            builder.Property(btc => btc.IsPrimary)
-                .IsRequired()
-                .HasDefaultValue(false);
             
-            // Create a unique constraint on IsPrimary when true
-            // This ensures only one record can have IsPrimary = true
-            builder.HasIndex(btc => btc.IsPrimary)
-                .IsUnique()
-                .HasFilter("\"IsPrimary\" = true");
-                
             // Define relationship with Wilaya
             builder.HasOne(btc => btc.Wilaya)
                 .WithMany(w => w.BloodTransferCenters)
                 .HasForeignKey(btc => btc.WilayaId)
                 .OnDelete(DeleteBehavior.Restrict);
                 
-            // Create index on WilayaId for performance
-            builder.HasIndex(btc => btc.WilayaId);
+            // Remove the problematic index with subquery
+            // Instead, enforce singleton at application level through repository
             
-            // Create unique index on name
-            builder.HasIndex(btc => btc.Name).IsUnique();
-            
-            // Create index on email for quick lookups
-            builder.HasIndex(btc => btc.Email);
+            // Optional: Add a shadow property for tracking singleton status
+            builder.Property<bool>("IsSingleton")
+                .HasDefaultValue(true);
+    
+            builder.HasIndex("IsSingleton")
+                .IsUnique();
         }
     }
 }

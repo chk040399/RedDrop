@@ -3,6 +3,7 @@ using Domain.ValueObjects;
 namespace Domain.Events
 {
     public sealed record DonorPledgeEvent(
+        Guid HospitalId,
         DonorData Donor,      // Reference by ID
         Guid RequestId,
         DateOnly PledgedAt,

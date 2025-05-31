@@ -16,6 +16,7 @@ namespace Application.Features.BloodRequests.Handlers
     public class UpdateRequestHandler : IRequestHandler<UpdateRequestCommand, (RequestDto? request, BaseException? err)>
     {
         private readonly IRequestRepository _requestRepository;
+        private readonly IBloodTransferCenterRepository _centerRepository;
         private readonly IEventProducer _eventProducer;
         private readonly IOptions<KafkaSettings> _kafkaSettings;
         private readonly ILogger<UpdateRequestHandler> _logger;
@@ -23,10 +24,12 @@ namespace Application.Features.BloodRequests.Handlers
         public UpdateRequestHandler(IRequestRepository requestRepository, 
                                    ILogger<UpdateRequestHandler> logger, 
                                    IEventProducer eventProducer, 
+                                   IBloodTransferCenterRepository centerRepository,
                                    IOptions<KafkaSettings> kafkaSettings)
         {
             _eventProducer = eventProducer;
             _kafkaSettings = kafkaSettings;
+            _centerRepository = centerRepository;
         
             _requestRepository = requestRepository;
             _logger = logger;
@@ -51,43 +54,69 @@ namespace Application.Features.BloodRequests.Handlers
                     return (null, new NotFoundException($"Request {command.Id} not found", "updating request"));
                 }
                 
-                if (command.DueDate != null)
+                // Update the request first
+                request.UpdateAllDetails(
+                    command.BloodBagType, 
+                    command.Priority, 
+                    command.Status,    // Pass the status to update
+                    command.DueDate, 
+                    command.MoreDetails, 
+                    command.RequiredQty);
+                await _requestRepository.UpdateAsync(request);
+                _logger.LogInformation("Request updated successfully in database");
+                
+                // Create the updated DTO first
+                var requestDto = new RequestDto
                 {
-                    var topic = _kafkaSettings.Value.Topics["UpdateRequest"];
-                    var updateRequestEvent = new UpdateRequestEvent(
-                        command.Id,
-                        command.Priority?.Value,  // Add null check with ? operator
-                        null,
-                        request.AquiredQty,
-                        request.RequiredQty,
-                        command.DueDate
-                    );
-                    var message = JsonSerializer.Serialize(updateRequestEvent);
-                    await _eventProducer.ProduceAsync(topic, message);
-                    _logger.LogInformation("request updated successfully");
+                    Id = request.Id,
+                    Priority = request.Priority.Value,
+                    BloodType = request.BloodType.Value,
+                    BloodBagType = request.BloodBagType.Value,
+                    RequestDate = request.RequestDate,
+                    DueDate = request.DueDate,
+                    Status = request.Status.Value,
+                    MoreDetails = request.MoreDetails,
+                    RequiredQty = request.RequiredQty,
+                    AquiredQty = request.AquiredQty,
+                    ServiceId = request.ServiceId,
+                    DonorId = request.DonorId
+                };
+                
+                // Try to publish Kafka event, but don't fail the request update if it doesn't work
+                try {
+                    // Get the hospital/center for the Kafka message
+                    var hospital = await _centerRepository.GetAsync();
+                    if (hospital != null) 
+                    {
+                        // Always send Kafka message after any update
+                        var topic = _kafkaSettings.Value.Topics["UpdateRequest"];
+                        var updateRequestEvent = new UpdateRequestEvent(
+                            hospital.Id,
+                            command.Id,
+                            command.Priority?.Value,
+                            request.Status.Value,  // Include current status
+                            request.AquiredQty,
+                            request.RequiredQty,
+                            command.DueDate
+                        );
+                        
+                        try {
+                            await _eventProducer.ProduceAsync(topic, JsonSerializer.Serialize(updateRequestEvent));
+                            _logger.LogInformation("Kafka event published for request update: {RequestId}", command.Id);
+                        }
+                        catch (Exception kafkaEx) {
+                            // Log but don't fail - the database update already succeeded
+                            _logger.LogWarning(kafkaEx, "Failed to publish Kafka event, but database update was successful");
+                        }
+                    }
+                }
+                catch (Exception ex) {
+                    _logger.LogWarning(ex, "Error getting blood transfer center or publishing event, but database update was successful");
                 }
                 
-                request.UpdateDetails(command.BloodBagType, command.Priority, command.DueDate, command.MoreDetails, command.RequiredQty);
-                await _requestRepository.UpdateAsync(request);
-                _logger.LogInformation("request updated successfully");
-                var requestDto = new RequestDto
-                    {
-                        Id = request.Id,
-                        Priority = request.Priority.Value,
-                        BloodType = request.BloodType.Value,
-                        BloodBagType = request.BloodBagType.Value,
-                        RequestDate = request.RequestDate,
-                        DueDate = request.DueDate,
-                        Status = request.Status.Value,
-                        MoreDetails = request.MoreDetails,
-                        RequiredQty = request.RequiredQty,
-                        AquiredQty = request.AquiredQty,
-                        ServiceId = request.ServiceId,
-                        DonorId = request.DonorId
-                    };
-                return(requestDto,null);
-
-            }catch(BaseException ex)
+                return (requestDto, null);
+            }
+            catch(BaseException ex)
             {
                 _logger.LogError(ex, "Error while updating request {RequestId}", command.Id);
                 return (null, ex);

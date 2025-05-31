@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Application.Features.BloodTransferCenterManagement.Commands;
-using Application.DTOs;
 using Shared.Exceptions;
 
 namespace Presentation.Endpoints.Admin.BloodTransferCenters
@@ -20,12 +19,12 @@ namespace Presentation.Endpoints.Admin.BloodTransferCenters
 
         public override void Configure()
         {
-            Post("/admin/blood-transfer-centers");
-            AllowAnonymous();
-            //Policies("RequireAdminRole"); // Restrict to admin role
+            Post("/blood-transfer-center");
+            AllowAnonymous(); // Change to [Authorize] for authentication
+            //Roles("Admin"); // Restrict to admin role
             Description(x => x
                 .WithName("CreateBloodTransferCenter")
-                .WithTags("Admin", "BloodTransferCenters")
+                .WithTags("Admin", "BloodTransferCenter")
                 .Produces<CreateBloodTransferCenterResponse>(StatusCodes.Status201Created)
                 .Produces(StatusCodes.Status400BadRequest)
                 .Produces(StatusCodes.Status403Forbidden)
@@ -42,8 +41,7 @@ namespace Presentation.Endpoints.Admin.BloodTransferCenters
                     req.Address,
                     req.Email,
                     req.PhoneNumber,
-                    req.WilayaId,
-                    req.IsPrimary
+                    req.WilayaId
                 );
 
                 var (center, error) = await _mediator.Send(command, ct);
@@ -70,7 +68,6 @@ namespace Presentation.Endpoints.Admin.BloodTransferCenters
                     PhoneNumber = center.PhoneNumber,
                     WilayaId = center.WilayaId,
                     WilayaName = center.WilayaName,
-                    IsPrimary = center.IsPrimary,
                     Success = true
                 }, StatusCodes.Status201Created, ct);
             }
@@ -89,7 +86,6 @@ namespace Presentation.Endpoints.Admin.BloodTransferCenters
         public string Email { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public int WilayaId { get; set; }
-        public bool IsPrimary { get; set; } = false;
     }
 
     public class CreateBloodTransferCenterResponse
@@ -101,7 +97,6 @@ namespace Presentation.Endpoints.Admin.BloodTransferCenters
         public string PhoneNumber { get; set; } = string.Empty;
         public int WilayaId { get; set; }
         public string WilayaName { get; set; } = string.Empty;
-        public bool IsPrimary { get; set; }
         public bool Success { get; set; }
     }
 }

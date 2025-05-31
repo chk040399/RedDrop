@@ -61,6 +61,14 @@ namespace Application.Features.BloodBagManagement.Handlers
                     {
                         throw new NotFoundException("Request not found", "fetching request updating pledge status");
                     }
+                    
+                    // Get the hospital/center ID
+                    var center = await _centerRepository.GetAsync();
+                    if (center == null)
+                    {
+                        throw new NotFoundException("Blood transfer center not found", "creating blood bag");
+                    }
+                    
                     var pledge = await _pledgeRepository.GetByDonorAndRequestIdAsync(newBloodBag.DonorId!.Value, newBloodBag.RequestId.Value);
                     if (pledge != null)
                     {
@@ -72,23 +80,26 @@ namespace Application.Features.BloodBagManagement.Handlers
                         if (request.RequiredQty == 0)
                         {
                             var message = new UpdateRequestEvent(
-                                request.Id,
-                                null,
-                                RequestStatus.Resolved().Value,
-                                request.AquiredQty,
-                                request.RequiredQty, null);
-                            await _eventProducer.ProduceAsync(topic,JsonSerializer.Serialize(message));
+                                center.Id,               // Hospital ID first
+                                request.Id,              // Request ID second
+                                null,                    // Priority 
+                                RequestStatus.Resolved().Value, // Status
+                                request.AquiredQty,      // Acquired quantity
+                                request.RequiredQty,     // Required quantity
+                                null);                   // Due date
+                            await _eventProducer.ProduceAsync(topic, JsonSerializer.Serialize(message));
                         }
                         else
                         {
                             var updateRequestEvent = new UpdateRequestEvent(
-                                request.Id,
-                                null,
-                                null,
-                                request.AquiredQty,
-                                request.RequiredQty, null);
-                            await _eventProducer.ProduceAsync(topic,JsonSerializer.Serialize(updateRequestEvent));
-
+                                center.Id,               // Hospital ID first
+                                request.Id,              // Request ID second
+                                null,                    // Priority
+                                null,                    // Status
+                                request.AquiredQty,      // Acquired quantity
+                                request.RequiredQty,     // Required quantity
+                                null);                   // Due date
+                            await _eventProducer.ProduceAsync(topic, JsonSerializer.Serialize(updateRequestEvent));
                         }       
                     }
                 }
@@ -119,8 +130,25 @@ namespace Application.Features.BloodBagManagement.Handlers
                     if (stock == null) {
                         throw new NotFoundException("Global stock not found", "updating global stock");
                     }
-                    stock?.IncrementAvailableCount(1);
+                    if (newBloodBag.Status.Value == BloodBagStatus.Ready().Value)
+                    {
+                        stock?.IncrementReadyCount(1);
+                    }
+                    else if (newBloodBag.Status.Value == BloodBagStatus.Aquired().Value)
+                    {
+                        stock?.IncrementAcquiredCount(1);
+                    }
+                    else if (newBloodBag.Status.Value == BloodBagStatus.Expired().Value)
+                    {
+                        stock?.IncrementExpiredCount(1);
+                    }
+                    else
+                    {
+                        // Default case or for other statuses
+                        stock?.IncrementAvailableCount(1);
+                    }
                     await _globalStockRepository.UpdateAsync(stock!);
+                    
                     var topic = _kafkaSettings.Value.Topics["GlobalStock"];
                     var subMessage = new GlobalStockData(
                         newBloodBag.BloodType,
@@ -129,9 +157,16 @@ namespace Application.Features.BloodBagManagement.Handlers
                         stock?.ReadyCount ?? 0,
                         stock?.MinStock ?? 0,
                         stock?.CountExpired ?? 0);
-                    var hospital = await _centerRepository.GetPrimaryAsync();
+                    
+                    // Changed from GetPrimaryAsync to GetAsync
+                    var hospital = await _centerRepository.GetAsync();
+                    if (hospital == null)
+                    {
+                        throw new NotFoundException("Blood transfer center not found", "creating blood bag");
+                    }
+                    
                     var message = new GlobalStockEvent(
-                        hospital!.Id, 
+                        hospital.Id, 
                         subMessage
                     );
                     await _eventProducer.ProduceAsync(topic, JsonSerializer.Serialize(message));
