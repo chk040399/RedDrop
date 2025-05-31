@@ -20,7 +20,7 @@ public static class KafkaServiceConfig
     });
 
 
-    services.AddSingleton<ITopicDispatcher, TopicDispatcher>();
+    //services.AddSingleton<ITopicDispatcher, TopicDispatcher>();
 
     // Kafka infrastructure components
     //TODO : Disabled not needed

@@ -85,6 +85,8 @@ builder.WebHost.ConfigureKestrel(options =>
 });
 #endif
 
+builder.Services.AddKafkaServiceConfigs(builder);
+
 
 var app = builder.Build();
 
@@ -134,11 +136,11 @@ app.MapGet("/system/status", () => new {
 await app.UseAppMiddlewareAndSeedDatabase();
 
 //topics
-var topicDispatcher = app.Services.GetRequiredService<ITopicDispatcher>();
-topicDispatcher.Register<>("cts-init");
-topicDispatcher.Register<>("blood-request-created");
-topicDispatcher.Register<>("update-request");
-topicDispatcher.Register<>("pledge-canceled-events");
+//var topicDispatcher = app.Services.GetRequiredService<ITopicDispatcher>();
+//topicDispatcher.Register<>("cts-init");
+//topicDispatcher.Register<>("blood-request-created");
+//topicDispatcher.Register<>("update-request");
+//topicDispatcher.Register<>("pledge-canceled-events");
 
 
 

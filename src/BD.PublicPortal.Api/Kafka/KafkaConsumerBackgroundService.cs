@@ -1,264 +1,88 @@
-﻿using BD.PublicPortal.Api.CtsModel.ValueObjects;
+﻿using BD.PublicPortal.Api.Kafka.EventDTOs;
+using BD.PublicPortal.Core.DTOs;
+using BD.PublicPortal.Core.Entities;
 using Confluent.Kafka;
-using MediatR;
 using Microsoft.Extensions.Options;
-using System.Globalization;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace BD.PublicPortal.Api.Kafka;
 
-  public class KafkaConsumerBackgroundService : BackgroundService
+public class KafkaConsumerBackgroundService : BackgroundService
+{
+  private readonly IConsumer<string, string> _consumer;
+  private readonly ILogger<KafkaConsumerBackgroundService> _logger;
+  private readonly KafkaSettings _options;
+  private readonly IServiceScopeFactory _scopeFactory;
+
+  public KafkaConsumerBackgroundService(
+      IConsumer<string, string> consumer,
+      IOptions<KafkaSettings> options,
+      ILogger<KafkaConsumerBackgroundService> logger,
+      IServiceScopeFactory scopeFactory)
   {
-      private readonly ILogger<KafkaConsumerBackgroundService> _logger;
-      private readonly IServiceScopeFactory _scopeFactory; // Add this
-      private readonly KafkaSettings _settings;
-      private readonly ITopicDispatcher _dispatcher;
-      private readonly CancellationTokenSource _cts = new();
-      private IConsumer<string, string> _consumer;
+    _consumer = consumer;
+    _logger = logger;
+    _options = options.Value;
+    _scopeFactory = scopeFactory;
+  }
 
-      public KafkaConsumerBackgroundService(
-          ILogger<KafkaConsumerBackgroundService> logger,
-          IOptions<KafkaSettings> settings,
-          IServiceScopeFactory scopeFactory, // Replace IMediator with this
-          ITopicDispatcher dispatcher,
-          IConsumer<string, string> consumer)
+  protected override Task ExecuteAsync(CancellationToken stoppingToken)
+  {
+    return Task.Run(async () =>
+    {
+      _consumer.Subscribe(_options.ConsumerTopics);
+
+      while (!stoppingToken.IsCancellationRequested)
       {
-          _logger = logger;
-          _scopeFactory = scopeFactory; // Use scopeFactory instead of mediator
-          _settings = settings.Value;
-          _dispatcher = dispatcher;
-          _consumer = consumer;
-      }
-
-      protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-      {
-          // Move actual work to a separate method
-          await Task.Factory.StartNew(async () => {
-              await RunConsumerLoop(stoppingToken);
-          }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-      }
-
-      private async Task RunConsumerLoop(CancellationToken stoppingToken)
-      {
-          // Create consumer inside ExecuteAsync instead of constructor
-
-          try
+        try
+        {
+          var result = _consumer.Consume(stoppingToken);
+          if (result != null)
           {
-              // Test connection to Kafka before subscribing
-              _logger.LogInformation("Attempting to connect to Kafka ...");
-              
-              // Get the list of topics we should subscribe to - REMOVE DUPLICATES
-              if (_settings.ConsumerTopics?.Any() == true)
-              {
-                  // Important: Remove duplicate topics to avoid Kafka errors
-                  var uniqueTopics = _settings.ConsumerTopics.Distinct().ToList();
-                  _logger.LogInformation("Configured topics for subscription: {Topics}", 
-                      string.Join(", ", uniqueTopics));
-                  
-                  try {
-                      // Subscribe directly - don't try to create topics
-                      _consumer.Subscribe(uniqueTopics);
-                      _logger.LogInformation("Successfully subscribed to topics");
-                  }
-                  catch (Exception ex) {
-                      _logger.LogError(ex, "Failed to subscribe to topics");
-                      return; // Exit early but allow the application to continue
-                  }
-                  
-                  // Process messages
-                  while (!stoppingToken.IsCancellationRequested)
-                  {
-                      try
-                      {
-                          var result = _consumer.Consume(TimeSpan.FromMilliseconds(100));
-                          if (result?.IsPartitionEOF ?? true) continue;
+            _logger.LogInformation("Received message on topic {Topic}: {Value}", result.Topic, result.Message.Value);
 
-                          await ProcessMessageAsync(result);
-                      }
-                      catch (ConsumeException ex)
-                      {
-                          _logger.LogError($"Consume error: {ex.Error.Reason}");
-                          await Task.Delay(1000, stoppingToken);
-                      }
-                  }
+            if (result.Topic == "cts-init")
+            {
+              using var scope = _scopeFactory.CreateScope();
+              var repo = scope.ServiceProvider.GetRequiredService<IRepository<BloodTansfusionCenter>>();
+
+              var ctsData = CtsData.FromJson(result.Message.Value);
+              if (ctsData != null)
+              {
+                var ctsDto = ctsData.ToBloodTansfusionCenterDto();
+                var ctsEntity = await repo.GetByIdAsync(ctsDto.Id);
+                if (ctsEntity == null)
+                {
+                  _logger.LogInformation("!!! KAFKA : creating BTC");
+                  var created = await repo.AddAsync(ctsDto.ToEntity(), stoppingToken);
+                  _logger.LogInformation($"!!! KAFKA : BTC successfully created :{created.Id} - {created.Name}");
+                }
               }
               else
               {
-                  _logger.LogWarning("No consumer topics configured.");
-                  return;
+                _logger.LogError($"!!! KAFKA : creating BTC, Can't deserialize: {result.Message.Value}");
               }
+            }
+            else if (result.Topic == "blood-request-created")
+            {
+
+            }
+            else if (result.Topic == "update-request")
+            {
+
+            }
+            else if (result.Topic == "pledge-canceled-events")
+            {
+
+            }
           }
-          catch (Exception ex)
-          {
-              _logger.LogError(ex, "Error in Kafka consumer service. Service will stop, but application will continue.");
-          }
-          finally
-          {   
-              _logger.LogInformation("Closing Kafka consumer");
-              _consumer?.Close();
-          }
+        }
+        catch (ConsumeException ex)
+        {
+          _logger.LogError(ex, "Kafka consume error.");
+        }
       }
 
-      private async Task ProcessMessageAsync(ConsumeResult<string, string> result)
-      {
-          try
-          {
-              // Create a scope for this message processing
-              using var scope = _scopeFactory.CreateScope();
-              var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-              
-              var topic = result.Topic;
-              var handlerType = _dispatcher.GetHandlerType(topic);
-              var messageType = _dispatcher.GetMessageType(topic);
-
-              if (handlerType == null || messageType == null)
-              {
-                  _logger.LogError($"No handler registered for topic {topic}");
-                  return;
-              }
-
-              // Add custom JSON options with all needed converters
-              var options = new JsonSerializerOptions {
-                  PropertyNameCaseInsensitive = true
-              };
-              options.Converters.Add(new DateOnlyConverter());
-              options.Converters.Add(new PledgeStatusConverter());
-
-              // Use the custom options for deserialization
-              var message = JsonSerializer.Deserialize(result.Message.Value, messageType, options);
-
-              if (message == null)
-              {
-                  _logger.LogError($"Failed to deserialize message for topic {topic}");
-                  return;
-              }
-
-              // Create the command instance
-              var request = Activator.CreateInstance(handlerType, message);
-              
-              if (request == null || 
-                  !request.GetType().GetInterfaces().Any(i => 
-                      i.IsGenericType && 
-                      i.GetGenericTypeDefinition() == typeof(IRequest<>) || 
-                      i == typeof(IRequest)))
-              {
-                  _logger.LogError($"Invalid request type for topic {topic}. Request type: {request?.GetType().Name}");
-                  return;
-              }
-
-              // Use mediator from the scope
-              await mediator.Send(request);
-              _consumer.Commit(result);
-          }
-          catch (Exception ex)
-          {
-              _logger.LogError(ex, "Error processing Kafka message from topic {Topic}", result.Topic);
-          }
-      }
-
-      public override async Task StopAsync(CancellationToken cancellationToken)
-      {
-          _cts.Cancel();
-          await base.StopAsync(cancellationToken);
-      }
-
-      public override void Dispose()
-      {
-          _consumer?.Dispose();
-          _cts?.Dispose();
-          base.Dispose();
-      }
-
-      // Add this custom DateOnly converter class
-      private class DateOnlyConverter : JsonConverter<DateOnly>
-      {
-          private const string Format = "yyyy-MM-dd";
-
-          public override DateOnly Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-          {
-              var value = reader.GetString();
-              if (string.IsNullOrEmpty(value))
-                  return default;
-
-              // Try parsing with various formats
-              if (DateOnly.TryParse(value, out var result))
-                  return result;
-
-              if (DateOnly.TryParseExact(value, Format, CultureInfo.InvariantCulture, DateTimeStyles.None, out result))
-                  return result;
-
-              if (DateTime.TryParse(value, out var dateTime))
-                  return DateOnly.FromDateTime(dateTime);
-
-              // Log the actual value that couldn't be parsed
-              throw new FormatException($"Could not parse DateOnly from '{value}'");
-          }
-
-          public override void Write(Utf8JsonWriter writer, DateOnly value, JsonSerializerOptions options)
-          {
-              writer.WriteStringValue(value.ToString(Format));
-          }
-      }
-
-      // Update the PledgeStatusConverter class
-      private class PledgeStatusConverter : JsonConverter<PledgeStatus>
-      {
-          public override PledgeStatus Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-          {
-              if (reader.TokenType == JsonTokenType.String)
-              {
-                  var stringValue = reader.GetString();
-                  if (string.IsNullOrEmpty(stringValue))
-                      return PledgeStatus.Pledged; // Default value if empty
-
-                  try
-                  {
-                      // Use the FromString factory method on your value object
-                      return PledgeStatus.FromString(stringValue);
-                  }
-                  catch (Exception)
-                  {
-                      //_logger.LogWarning(ex, "Failed to parse PledgeStatus from '{Status}', using default value", stringValue);
-                      return PledgeStatus.Pledged; // Default to Pledged on failure
-                  }
-              }
-              else if (reader.TokenType == JsonTokenType.StartObject)
-              {
-                  // For object representation, try to extract the Value property
-                  string? value = null;
-                  while (reader.Read() && reader.TokenType != JsonTokenType.EndObject)
-                  {
-                      if (reader.TokenType == JsonTokenType.PropertyName && 
-                          reader.GetString() == "Value" && reader.Read() && 
-                          reader.TokenType == JsonTokenType.String)
-                      {
-                          value = reader.GetString();
-                          break;
-                      }
-                  }
-                  
-                  if (!string.IsNullOrEmpty(value))
-                  {
-                      try
-                      {
-                          return PledgeStatus.FromString(value);
-                      }
-                      catch
-                      {
-                          return PledgeStatus.Pledged;
-                      }
-                  }
-              }
-
-              // Default when we don't know what to do
-             // _logger.LogWarning("Unhandled token type {TokenType} when parsing PledgeStatus, using default value", reader.TokenType);
-              return PledgeStatus.Pledged;
-          }
-
-          public override void Write(Utf8JsonWriter writer, PledgeStatus value, JsonSerializerOptions options)
-          {
-              writer.WriteStringValue(value.ToString());
-          }
-      }
+      _consumer.Close();
+    }, stoppingToken);
   }
+}

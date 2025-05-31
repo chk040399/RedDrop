@@ -28,7 +28,7 @@ public static class ServiceConfigs
       services.AddScoped<IEmailSender, MimeKitEmailSender>();
     }
 
-    services.AddKafkaServiceConfigs(builder);
+    
 
     logger.LogInformation("{Project} services registered", "Mediatr and Email Sender");
 

@@ -33,5 +33,9 @@
     <ProjectReference Include="..\BD.PublicPortal.Application\BD.PublicPortal.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Kafka\Events\" />
+  </ItemGroup>
+
 
 </Project>
