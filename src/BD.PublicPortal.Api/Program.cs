@@ -135,8 +135,12 @@ await app.UseAppMiddlewareAndSeedDatabase();
 
 //topics
 var topicDispatcher = app.Services.GetRequiredService<ITopicDispatcher>();
-//topicDispatcher.Register<>("donors-pledges");
-//topicDispatcher.Register<PledgeCanceledCommand, Unit>("pledge-canceled-events");
+topicDispatcher.Register<>("cts-init");
+topicDispatcher.Register<>("blood-request-created");
+topicDispatcher.Register<>("update-request");
+topicDispatcher.Register<>("pledge-canceled-events");
+
+
 
 logger.Information("Starting web host");
 app.Run();

@@ -72,23 +72,7 @@ builder.AddKafkaConsumer<string, string>("kafka", o => {
 // 
 //
 
-// TODO : exemple utilisation simple
-//services.Configure<KafkaConsumerOptions>(o => { o.ConsumerTopics =  ["NewBloodRequests", "PledgesUpdates", "DonnorsUpdate"]; });
 
-// TODO : exemple utilisation avancé
-//builder.Services.PostConfigure<KafkaConsumerOptions>(config =>
-//{
-//  {
-//    config.ConsumerTopics = ["topic1", "topic2"];
-//    config.KeyToEventType = new Dictionary<string, Type>
-//    {
-//      { "BloodRequestCreated", typeof() },
-//      { "BloodRequestStatusUpdated", typeof() },
-//      { "PledgeStatusUpdated", typeof() },
-//      { "CtsCreated", typeof() }
-//  }
-//  ;
-//});
 
 builder.Services.Configure<KafkaSettings>(
     builder.Configuration.GetSection("Kafka"));

@@ -1,7 +1,6 @@
 ﻿using BD.PublicPortal.Api.CtsModel.ValueObjects;
 
-
-namespace BD.PublicPortal.Api.Kafka.Events;
+namespace BD.PublicPortal.Api.Kafka.EventDTOs;
 
   public class RequestCreatedEvent
   {

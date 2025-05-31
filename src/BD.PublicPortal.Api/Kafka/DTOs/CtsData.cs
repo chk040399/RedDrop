@@ -1,4 +1,4 @@
-﻿namespace BD.PublicPortal.Api.Kafka.Events;
+﻿namespace BD.PublicPortal.Api.Kafka.EventDTOs;
 
   public sealed record CtsData(
       Guid HospitalId,

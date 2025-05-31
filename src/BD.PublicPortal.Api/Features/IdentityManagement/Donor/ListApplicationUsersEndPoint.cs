@@ -2,7 +2,7 @@
 using BD.PublicPortal.Core.DTOs;
 using BD.PublicPortal.Core.Entities.Specifications;
 
-namespace BD.PublicPortal.Api.Features.IdentityManagement.Users.List;
+namespace BD.PublicPortal.Api.Features.IdentityManagement.Donor;
 
 public class ListApplicationUsersRequest
 {

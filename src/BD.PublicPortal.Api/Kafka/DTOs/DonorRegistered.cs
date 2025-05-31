@@ -1,6 +1,6 @@
 ﻿using BD.PublicPortal.Core.DTOs;
 
-namespace BD.PublicPortal.Api.Kafka.Events;
+namespace BD.PublicPortal.Api.Kafka.EventDTOs;
 
 public class DonorOperationEvent
 {

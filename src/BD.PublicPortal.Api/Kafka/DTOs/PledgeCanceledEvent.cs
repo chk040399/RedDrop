@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace BD.PublicPortal.Api.Kafka.Events;
+﻿namespace BD.PublicPortal.Api.Kafka.EventDTOs;
 
   /// <summary>
   /// Event raised when a pledge is canceled.

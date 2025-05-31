@@ -1,6 +1,5 @@
 ﻿using Ardalis.GuardClauses;
 using BD.PublicPortal.Api.Kafka;
-using BD.PublicPortal.Api.Kafka.Events;
 using BD.PublicPortal.Core.DTOs;
 using BD.PublicPortal.Core.Entities.Events;
 using Microsoft.Extensions.Options;
