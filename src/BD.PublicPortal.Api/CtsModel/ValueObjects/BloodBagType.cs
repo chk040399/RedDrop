@@ -1,6 +1,7 @@
 ﻿
 
 using BD.PublicPortal.Api.CtsModel.Exceptions;
+using BD.PublicPortal.Core.Entities.Enums;
 
 namespace BD.PublicPortal.Api.CtsModel.ValueObjects;
 
@@ -33,6 +34,21 @@ namespace BD.PublicPortal.Api.CtsModel.ValueObjects;
           }
           return false;
       }
+         public static BloodBagType FromEnum(BloodDonationType donationType) => donationType switch
+    {
+        BloodDonationType.WholeBlood => Blood(),
+        BloodDonationType.Plasma => Plasma(),
+        BloodDonationType.Platelet => Plaquette(),
+       
+        _ => throw new ArgumentException($"Unsupported donation type: {donationType}", nameof(donationType))
+    };
+     public BloodDonationType ToEnum() => Value.ToLowerInvariant() switch
+    {
+        "whole_blood" => BloodDonationType.WholeBlood,
+        "plasma" => BloodDonationType.Plasma,
+        "platelets" => BloodDonationType.Platelet,
+        _ => throw new ArgumentException($"Cannot convert {Value} to BloodDonationType")
+    };
 
       public override int GetHashCode() => Value.ToLowerInvariant().GetHashCode();
       public override string ToString() => Value;
