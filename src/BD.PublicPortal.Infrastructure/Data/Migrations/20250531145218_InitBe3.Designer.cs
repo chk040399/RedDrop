@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BD.PublicPortal.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250530213146_beCentral")]
-    partial class beCentral
+    [Migration("20250531145218_InitBe3")]
+    partial class InitBe3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,19 +93,12 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
             modelBuilder.Entity("BD.PublicPortal.Core.Entities.ApplicationUser", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("integer");
+                        .HasColumnType("uuid")
+                        .HasColumnName("Id");
 
                     b.Property<int?>("CommuneId")
                         .HasColumnType("integer")
                         .HasColumnName("CommuneId");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken()
-                        .HasColumnType("text");
 
                     b.Property<int?>("DonorAvailability")
                         .HasColumnType("integer")
@@ -122,10 +115,6 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                     b.Property<int?>("DonorContactMethod")
                         .HasColumnType("integer")
                         .HasColumnName("DonorContactMethod");
-
-                    b.Property<Guid?>("DonorCorrelationId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("DonorCorrelationId");
 
                     b.Property<bool?>("DonorExcludeFromPublicPortal")
                         .HasColumnType("boolean")
@@ -158,57 +147,14 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                         .HasColumnName("DonorWantToStayAnonymous");
 
                     b.Property<string>("Email")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("text");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
+                        .HasColumnType("text")
+                        .HasColumnName("Email");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CommuneId");
 
-                    b.HasIndex("NormalizedEmail")
-                        .HasDatabaseName("EmailIndex");
-
-                    b.HasIndex("NormalizedUserName")
-                        .IsUnique()
-                        .HasDatabaseName("UserNameIndex");
-
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("ApplicationUsers", (string)null);
                 });
 
             modelBuilder.Entity("BD.PublicPortal.Core.Entities.BloodDonationPledge", b =>
@@ -229,6 +175,9 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                     b.Property<string>("CantBeDoneReason")
                         .HasColumnType("text")
                         .HasColumnName("CantBeDoneReason");
+
+                    b.Property<Guid>("DonorId")
+                        .HasColumnType("uuid");
 
                     b.Property<int>("EvolutionStatus")
                         .HasColumnType("integer")
@@ -408,6 +357,9 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("BloodTansfusionCenterId");
 
+                    b.Property<Guid>("DonorId")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ApplicationUserId");
@@ -415,6 +367,71 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                     b.HasIndex("BloodTansfusionCenterId");
 
                     b.ToTable("DonorBloodTransferCenterSubscriptions", (string)null);
+                });
+
+            modelBuilder.Entity("BD.PublicPortal.Core.Entities.MyIdUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasDatabaseName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasDatabaseName("UserNameIndex");
+
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("BD.PublicPortal.Core.Entities.Wilaya", b =>
@@ -642,7 +659,7 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                     b.HasOne("BD.PublicPortal.Core.Entities.ApplicationUser", "ApplicationUser")
                         .WithMany("DonorBloodTransferCenterSubscriptions")
                         .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("BD.PublicPortal.Core.Entities.BloodTansfusionCenter", "BloodTansfusionCenter")
@@ -667,7 +684,7 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("BD.PublicPortal.Core.Entities.ApplicationUser", null)
+                    b.HasOne("BD.PublicPortal.Core.Entities.MyIdUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -676,7 +693,7 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("BD.PublicPortal.Core.Entities.ApplicationUser", null)
+                    b.HasOne("BD.PublicPortal.Core.Entities.MyIdUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -691,7 +708,7 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BD.PublicPortal.Core.Entities.ApplicationUser", null)
+                    b.HasOne("BD.PublicPortal.Core.Entities.MyIdUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -700,7 +717,7 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("BD.PublicPortal.Core.Entities.ApplicationUser", null)
+                    b.HasOne("BD.PublicPortal.Core.Entities.MyIdUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

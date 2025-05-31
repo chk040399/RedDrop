@@ -26,5 +26,7 @@
   <ItemGroup>
     <Folder Include="Data\SeedData\" />
     <Folder Include="Data\Services\" />
+    <Folder Include="Interfaces\Identity\" />
+    <Folder Include="Services\Identity\" />
   </ItemGroup>
 </Project>

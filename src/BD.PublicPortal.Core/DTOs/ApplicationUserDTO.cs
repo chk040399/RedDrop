@@ -12,9 +12,9 @@ namespace BD.PublicPortal.Core.DTOs
         public ApplicationUserDTO() {
         }
 
-        public ApplicationUserDTO(System.Guid? donorCorrelationId, bool? donorWantToStayAnonymous, bool? donorExcludeFromPublicPortal, DonorAvailability? donorAvailability, DonorContactMethod? donorContactMethod, string donorName, System.DateTime donorBirthDate, BloodGroup donorBloodGroup, string donorNIN, string donorTel, string donorNotesForBTC, System.DateTime? donorLastDonationDate, int? communeId) {
-          
-          this.DonorCorrelationId = donorCorrelationId;
+        public ApplicationUserDTO(Guid id, bool? donorWantToStayAnonymous, bool? donorExcludeFromPublicPortal, DonorAvailability? donorAvailability, DonorContactMethod? donorContactMethod, string donorName, DateTime donorBirthDate, BloodGroup donorBloodGroup, string donorNIN, string donorTel, string email, string donorNotesForBTC, DateTime? donorLastDonationDate, int? communeId, List<DonorBloodTransferCenterSubscriptionsDTO> donorBloodTransferCenterSubscriptions, List<BloodDonationPledgeDTO> bloodDonationPledges, CommuneDTO commune) {
+
+          this.Id = id;
           this.DonorWantToStayAnonymous = donorWantToStayAnonymous;
           this.DonorExcludeFromPublicPortal = donorExcludeFromPublicPortal;
           this.DonorAvailability = donorAvailability;
@@ -24,16 +24,20 @@ namespace BD.PublicPortal.Core.DTOs
           this.DonorBloodGroup = donorBloodGroup;
           this.DonorNIN = donorNIN;
           this.DonorTel = donorTel;
+          this.Email = email;
           this.DonorNotesForBTC = donorNotesForBTC;
           this.DonorLastDonationDate = donorLastDonationDate;
           this.CommuneId = communeId;
+          this.DonorBloodTransferCenterSubscriptions = donorBloodTransferCenterSubscriptions;
+          this.BloodDonationPledges = bloodDonationPledges;
+          this.Commune = commune;
         }
 
         #endregion
 
         #region Properties
 
-        public System.Guid? DonorCorrelationId { get; set; }
+        public Guid Id { get; set; }
 
         public bool? DonorWantToStayAnonymous { get; set; }
 
@@ -45,7 +49,7 @@ namespace BD.PublicPortal.Core.DTOs
 
         public string DonorName { get; set; }
 
-        public System.DateTime DonorBirthDate { get; set; }
+        public DateTime DonorBirthDate { get; set; }
 
         public BloodGroup DonorBloodGroup { get; set; }
 
@@ -53,22 +57,27 @@ namespace BD.PublicPortal.Core.DTOs
 
         public string DonorTel { get; set; }
 
+        public string Email { get; set; }
+
         public string DonorNotesForBTC { get; set; }
 
-        public System.DateTime? DonorLastDonationDate { get; set; }
+        public DateTime? DonorLastDonationDate { get; set; }
 
         public int? CommuneId { get; set; }
 
         #endregion
+
+        #region Navigation Properties
+
+        public List<DonorBloodTransferCenterSubscriptionsDTO> DonorBloodTransferCenterSubscriptions { get; set; }
+
+        public List<BloodDonationPledgeDTO> BloodDonationPledges { get; set; }
+
+        public CommuneDTO Commune { get; set; }
+
+        #endregion
     }
 
-    public class LoginUserCommandResultDTO
-    {
-      public ApplicationUserDTO UserDTO { get; set; } = null!;
-      public string JwToken { get; set; } = null!;
-
-      public Guid UserId { get; set; }
-    }
 
 
 }

@@ -28,7 +28,7 @@ public static class MiddlewareConfig
     app.UseAuthorization();
     
     // Auto Id Endpoints removed for now
-    //app.MapGroup("/auth").WithTags("Identity").MapIdentityApi<ApplicationUser>();
+    //app.MapGroup("/auth").WithTags("Identity").MapIdentityApi<MyIdUser>();
 
     app.UseFastEndpoints(
       c =>

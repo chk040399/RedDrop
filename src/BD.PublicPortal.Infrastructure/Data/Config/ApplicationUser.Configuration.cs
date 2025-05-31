@@ -15,9 +15,8 @@ namespace BD.PublicPortal.Infrastructure.Data.Config
         /// </summary>
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
-
-
-            builder.Property(x => x.DonorCorrelationId).HasColumnName(@"DonorCorrelationId").ValueGeneratedNever();
+            builder.ToTable(@"ApplicationUsers");
+            builder.Property(x => x.Id).HasColumnName(@"Id").IsRequired().ValueGeneratedNever();
             builder.Property(x => x.DonorWantToStayAnonymous).HasColumnName(@"DonorWantToStayAnonymous").ValueGeneratedNever();
             builder.Property(x => x.DonorExcludeFromPublicPortal).HasColumnName(@"DonorExcludeFromPublicPortal").ValueGeneratedNever();
             builder.Property(x => x.DonorAvailability).HasColumnName(@"DonorAvailability").ValueGeneratedNever();
@@ -27,12 +26,14 @@ namespace BD.PublicPortal.Infrastructure.Data.Config
             builder.Property(x => x.DonorBloodGroup).HasColumnName(@"DonorBloodGroup").IsRequired().ValueGeneratedNever();
             builder.Property(x => x.DonorNIN).HasColumnName(@"DonorNIN").IsRequired().ValueGeneratedNever();
             builder.Property(x => x.DonorTel).HasColumnName(@"DonorTel").ValueGeneratedNever();
+            builder.Property(x => x.Email).HasColumnName(@"Email").ValueGeneratedNever();
             builder.Property(x => x.DonorNotesForBTC).HasColumnName(@"DonorNotesForBTC").ValueGeneratedNever();
             builder.Property(x => x.DonorLastDonationDate).HasColumnName(@"DonorLastDonationDate").ValueGeneratedNever();
             builder.Property(x => x.CommuneId).HasColumnName(@"CommuneId").ValueGeneratedNever();
 
-            builder.HasMany(x => x.DonorBloodTransferCenterSubscriptions).WithOne(op => op.ApplicationUser).HasForeignKey(@"ApplicationUserId").IsRequired(true);
-            builder.HasMany(x => x.BloodDonationPledges).WithOne(op => op.ApplicationUser).HasForeignKey(@"ApplicationUserId").IsRequired(true);
+            builder.HasKey(@"Id");
+            builder.HasMany(x => x.DonorBloodTransferCenterSubscriptions).WithOne(op => op.ApplicationUser).OnDelete(DeleteBehavior.Restrict).HasForeignKey(@"DonorId").IsRequired(true);
+            builder.HasMany(x => x.BloodDonationPledges).WithOne(op => op.ApplicationUser).HasForeignKey(@"DonorId").IsRequired(true);
             builder.HasOne(x => x.Commune).WithMany(op => op.ApplicationUsers).HasForeignKey(@"CommuneId").IsRequired(false);
 
 

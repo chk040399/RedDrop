@@ -22,7 +22,7 @@ namespace BD.PublicPortal.Core.DTOs
             var target = new ApplicationUserDTO();
 
             // Properties
-            target.DonorCorrelationId = source.DonorCorrelationId;
+            target.Id = source.Id;
             target.DonorWantToStayAnonymous = source.DonorWantToStayAnonymous;
             target.DonorExcludeFromPublicPortal = source.DonorExcludeFromPublicPortal;
             target.DonorAvailability = source.DonorAvailability;
@@ -32,9 +32,17 @@ namespace BD.PublicPortal.Core.DTOs
             target.DonorBloodGroup = source.DonorBloodGroup;
             target.DonorNIN = source.DonorNIN;
             target.DonorTel = source.DonorTel;
+            target.Email = source.Email;
             target.DonorNotesForBTC = source.DonorNotesForBTC;
             target.DonorLastDonationDate = source.DonorLastDonationDate;
             target.CommuneId = source.CommuneId;
+
+            // Navigation Properties
+            if (level > 0) {
+              target.DonorBloodTransferCenterSubscriptions = source.DonorBloodTransferCenterSubscriptions.ToDtosWithRelated(level - 1);
+              target.BloodDonationPledges = source.BloodDonationPledges.ToDtosWithRelated(level - 1);
+              target.Commune = source.Commune.ToDtoWithRelated(level - 1);
+            }
 
             // User-defined partial method
             OnDtoCreating(source, target);
@@ -50,22 +58,24 @@ namespace BD.PublicPortal.Core.DTOs
             var target = new ApplicationUser();
 
             // Properties
-              target.DonorCorrelationId = source.DonorCorrelationId;
-              target.DonorWantToStayAnonymous = source.DonorWantToStayAnonymous;
-              target.DonorExcludeFromPublicPortal = source.DonorExcludeFromPublicPortal;
-              target.DonorAvailability = source.DonorAvailability;
-              target.DonorContactMethod = source.DonorContactMethod;
-              target.DonorName = source.DonorName;
-              target.DonorBirthDate = source.DonorBirthDate;
-              target.DonorBloodGroup = source.DonorBloodGroup;
-              target.DonorNIN = source.DonorNIN;
-              target.DonorTel = source.DonorTel;
-              target.DonorNotesForBTC = source.DonorNotesForBTC;
-              target.DonorLastDonationDate = source.DonorLastDonationDate;
-              target.CommuneId = source.CommuneId;
+            target.Id = source.Id;
+            target.DonorWantToStayAnonymous = source.DonorWantToStayAnonymous;
+            target.DonorExcludeFromPublicPortal = source.DonorExcludeFromPublicPortal;
+            target.DonorAvailability = source.DonorAvailability;
+            target.DonorContactMethod = source.DonorContactMethod;
+            target.DonorName = source.DonorName;
+            target.DonorBirthDate = source.DonorBirthDate;
+            target.DonorBloodGroup = source.DonorBloodGroup;
+            target.DonorNIN = source.DonorNIN;
+            target.DonorTel = source.DonorTel;
+            target.Email = source.Email;
+            target.DonorNotesForBTC = source.DonorNotesForBTC;
+            target.DonorLastDonationDate = source.DonorLastDonationDate;
+            target.CommuneId = source.CommuneId;
 
-              // User-defined partial method
-              OnEntityCreating(source, target);
+            // User-defined partial method
+            OnEntityCreating(source, target);
+
             return target;
         }
 

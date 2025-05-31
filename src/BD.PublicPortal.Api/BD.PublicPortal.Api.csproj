@@ -30,4 +30,8 @@
     <ProjectReference Include="..\BD.PublicPortal.Application\BD.PublicPortal.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\IdentityManagement\Users\" />
+  </ItemGroup>
+
 </Project>

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BD.PublicPortal.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class MigrationName : Migration
+    public partial class InitBe3 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,6 +24,31 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    PasswordHash = table.Column<string>(type: "text", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -48,7 +73,7 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false),
-                    Nom = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,141 +99,6 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BloodTansfusionCenters",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: true),
-                    Contact = table.Column<string>(type: "text", nullable: true),
-                    Email = table.Column<string>(type: "text", nullable: true),
-                    Tel = table.Column<string>(type: "text", nullable: true),
-                    WilayaId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BloodTansfusionCenters", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BloodTansfusionCenters_Wilayas_WilayaId",
-                        column: x => x.WilayaId,
-                        principalTable: "Wilayas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Communes",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false),
-                    Nom = table.Column<string>(type: "text", nullable: false),
-                    WilayaId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Communes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Communes_Wilayas_WilayaId",
-                        column: x => x.WilayaId,
-                        principalTable: "Wilayas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BloodDonationRequests",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    EvolutionStatus = table.Column<int>(type: "integer", nullable: false),
-                    DonationType = table.Column<int>(type: "integer", nullable: false),
-                    BloodGroup = table.Column<int>(type: "integer", nullable: false),
-                    RequestedQty = table.Column<int>(type: "integer", nullable: false),
-                    RequestDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    RequestDueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    Priority = table.Column<int>(type: "integer", nullable: false),
-                    MoreDetails = table.Column<string>(type: "text", nullable: true),
-                    ServiceName = table.Column<string>(type: "text", nullable: true),
-                    BloodTansfusionCenterId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BloodDonationRequests", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BloodDonationRequests_BloodTansfusionCenters_BloodTansfusio~",
-                        column: x => x.BloodTansfusionCenterId,
-                        principalTable: "BloodTansfusionCenters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "BloodInventories",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    BloodTansfusionCenterId = table.Column<Guid>(type: "uuid", nullable: false),
-                    BloodGroup = table.Column<int>(type: "integer", nullable: false),
-                    BloodDonationType = table.Column<int>(type: "integer", nullable: false),
-                    TotalQty = table.Column<int>(type: "integer", nullable: true),
-                    MinQty = table.Column<int>(type: "integer", nullable: true),
-                    MaxQty = table.Column<int>(type: "integer", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BloodInventories", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_BloodInventories_BloodTansfusionCenters_BloodTansfusionCent~",
-                        column: x => x.BloodTansfusionCenterId,
-                        principalTable: "BloodTansfusionCenters",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsAdmin = table.Column<bool>(type: "boolean", nullable: false),
-                    DonorWantToStayAnonymous = table.Column<bool>(type: "boolean", nullable: false),
-                    DonorExcludeFromPublicPortal = table.Column<bool>(type: "boolean", nullable: false),
-                    DonorAvailability = table.Column<int>(type: "integer", nullable: true),
-                    DonorContactMethod = table.Column<int>(type: "integer", nullable: true),
-                    DonorName = table.Column<string>(type: "text", nullable: false),
-                    DonorBirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    DonorBloodGroup = table.Column<int>(type: "integer", nullable: false),
-                    DonorNIN = table.Column<string>(type: "text", nullable: false),
-                    DonorTel = table.Column<string>(type: "text", nullable: true),
-                    DonorNotesForBTC = table.Column<string>(type: "text", nullable: true),
-                    DonorLastDonationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CommuneId = table.Column<int>(type: "integer", nullable: true),
-                    UserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    PasswordHash = table.Column<string>(type: "text", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "text", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "boolean", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "boolean", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Communes_CommuneId",
-                        column: x => x.CommuneId,
-                        principalTable: "Communes",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -297,6 +187,127 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "BloodTansfusionCenters",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    Contact = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    Tel = table.Column<string>(type: "text", nullable: true),
+                    WilayaId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BloodTansfusionCenters", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BloodTansfusionCenters_Wilayas_WilayaId",
+                        column: x => x.WilayaId,
+                        principalTable: "Wilayas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Communes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    WilayaId = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Communes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Communes_Wilayas_WilayaId",
+                        column: x => x.WilayaId,
+                        principalTable: "Wilayas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BloodDonationRequests",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    EvolutionStatus = table.Column<int>(type: "integer", nullable: true),
+                    DonationType = table.Column<int>(type: "integer", nullable: false),
+                    BloodGroup = table.Column<int>(type: "integer", nullable: false),
+                    RequestedQty = table.Column<int>(type: "integer", nullable: false),
+                    RequestDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    RequestDueDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    Priority = table.Column<int>(type: "integer", nullable: false),
+                    MoreDetails = table.Column<string>(type: "text", nullable: true),
+                    ServiceName = table.Column<string>(type: "text", nullable: true),
+                    BloodTansfusionCenterId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BloodDonationRequests", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BloodDonationRequests_BloodTansfusionCenters_BloodTansfusio~",
+                        column: x => x.BloodTansfusionCenterId,
+                        principalTable: "BloodTansfusionCenters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BloodInventories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    BloodTansfusionCenterId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BloodGroup = table.Column<int>(type: "integer", nullable: false),
+                    BloodDonationType = table.Column<int>(type: "integer", nullable: false),
+                    TotalQty = table.Column<int>(type: "integer", nullable: true),
+                    MinQty = table.Column<int>(type: "integer", nullable: true),
+                    MaxQty = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BloodInventories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BloodInventories_BloodTansfusionCenters_BloodTansfusionCent~",
+                        column: x => x.BloodTansfusionCenterId,
+                        principalTable: "BloodTansfusionCenters",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ApplicationUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DonorWantToStayAnonymous = table.Column<bool>(type: "boolean", nullable: true),
+                    DonorExcludeFromPublicPortal = table.Column<bool>(type: "boolean", nullable: true),
+                    DonorAvailability = table.Column<int>(type: "integer", nullable: true),
+                    DonorContactMethod = table.Column<int>(type: "integer", nullable: true),
+                    DonorName = table.Column<string>(type: "text", nullable: false),
+                    DonorBirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    DonorBloodGroup = table.Column<int>(type: "integer", nullable: false),
+                    DonorNIN = table.Column<string>(type: "text", nullable: false),
+                    DonorTel = table.Column<string>(type: "text", nullable: true),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    DonorNotesForBTC = table.Column<string>(type: "text", nullable: true),
+                    DonorLastDonationDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CommuneId = table.Column<int>(type: "integer", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApplicationUsers_Communes_CommuneId",
+                        column: x => x.CommuneId,
+                        principalTable: "Communes",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "BloodDonationPledges",
                 columns: table => new
                 {
@@ -308,15 +319,16 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                     PledgeNotes = table.Column<string>(type: "text", nullable: true),
                     CantBeDoneReason = table.Column<string>(type: "text", nullable: true),
                     BloodDonationRequestId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ApplicationUserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ApplicationUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DonorId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_BloodDonationPledges", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BloodDonationPledges_AspNetUsers_ApplicationUserId",
+                        name: "FK_BloodDonationPledges_ApplicationUsers_ApplicationUserId",
                         column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -333,17 +345,18 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     BloodTansfusionCenterId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ApplicationUserId = table.Column<Guid>(type: "uuid", nullable: false)
+                    ApplicationUserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DonorId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DonorBloodTransferCenterSubscriptions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DonorBloodTransferCenterSubscriptions_AspNetUsers_Applicati~",
+                        name: "FK_DonorBloodTransferCenterSubscriptions_ApplicationUsers_Appl~",
                         column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
+                        principalTable: "ApplicationUsers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_DonorBloodTransferCenterSubscriptions_BloodTansfusionCenter~",
                         column: x => x.BloodTansfusionCenterId,
@@ -351,6 +364,11 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationUsers_CommuneId",
+                table: "ApplicationUsers",
+                column: "CommuneId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -382,11 +400,6 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                 name: "EmailIndex",
                 table: "AspNetUsers",
                 column: "NormalizedEmail");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_CommuneId",
-                table: "AspNetUsers",
-                column: "CommuneId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -469,10 +482,13 @@ namespace BD.PublicPortal.Infrastructure.Data.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
                 name: "BloodDonationRequests");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "ApplicationUsers");
 
             migrationBuilder.DropTable(
                 name: "BloodTansfusionCenters");

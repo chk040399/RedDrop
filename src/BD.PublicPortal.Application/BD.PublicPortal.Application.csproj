@@ -10,4 +10,8 @@
     <ProjectReference Include="..\BD.PublicPortal.Infrastructure\BD.PublicPortal.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Identity\" />
+  </ItemGroup>
+
 </Project>

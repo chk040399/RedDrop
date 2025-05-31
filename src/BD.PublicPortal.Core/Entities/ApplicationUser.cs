@@ -8,9 +8,10 @@ using BD.SharedKernel;
 
 namespace BD.PublicPortal.Core.Entities
 {
-    public partial class ApplicationUser : IdentityUser<Guid>, IAggregateRoot {
+    public partial class ApplicationUser : EntityBase<Guid>, IAggregateRoot {
 
-        public ApplicationUser()
+
+    public ApplicationUser()
         {
             this.DonorBloodTransferCenterSubscriptions = new List<DonorBloodTransferCenterSubscriptions>();
             this.BloodDonationPledges = new List<BloodDonationPledge>();
@@ -19,7 +20,6 @@ namespace BD.PublicPortal.Core.Entities
 
 
 
-        public Guid? DonorCorrelationId { get; set; }
 
         public bool? DonorWantToStayAnonymous { get; set; }
 
@@ -39,6 +39,7 @@ namespace BD.PublicPortal.Core.Entities
 
         public string DonorTel { get; set; }
 
+        public string Email { get; set; }
         public string DonorNotesForBTC { get; set; }
 
         public DateTime? DonorLastDonationDate { get; set; }

@@ -1,6 +1,7 @@
 ﻿using BD.PublicPortal.Core.Entities;
 using BD.PublicPortal.Core.Entities.Contributors;
 using BD.SharedKernel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 
@@ -8,7 +9,7 @@ namespace BD.PublicPortal.Infrastructure.Data;
 public class AppDbContext(
     DbContextOptions<AppDbContext> options,
     IDomainEventDispatcher? dispatcher
-) : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>(options)
+) : IdentityDbContext<MyIdUser, ApplicationRole, Guid>(options)
 {
     private readonly IDomainEventDispatcher? _dispatcher = dispatcher;
 
