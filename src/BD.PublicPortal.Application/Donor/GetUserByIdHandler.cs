@@ -7,16 +7,17 @@ namespace BD.PublicPortal.Application.Identity;
 public class GetUserByIdHandler(IReadRepository<ApplicationUser> _userRepo) : IQueryHandler<GetUserByIdQuery, Result<ApplicationUserDTO>>
 {
   public async Task<Result<ApplicationUserDTO>> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
-  { 
-
-    var user = await _userRepo.GetByIdAsync<Guid>(request.UserId, cancellationToken);
+  {
+    var level = (request.Level == null) ? 0 : (int)request.Level;
+    var user = await _userRepo.FirstOrDefaultAsync(new ApplicationUserSpecificationByLevel(request.UserId,level: request.Level), cancellationToken);
+    
     if (user == null)
     {
       return Result<ApplicationUserDTO>.NotFound();
     }
 
 
-    var result = user.ToDtoWithRelated(1);
+    var result = user.ToDtoWithRelated(level);
     return Result<ApplicationUserDTO>.Success(result);
   }
 }

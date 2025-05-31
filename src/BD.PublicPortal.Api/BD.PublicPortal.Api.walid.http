@@ -128,7 +128,7 @@ Content-Type: application/json
 }
 ###
 
-@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJVc2VySWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJlbWFpbCI6IlppbW91QGV4YW1wbGUuY29tIiwibmJmIjoxNzQ4NTUwMzU0LCJleHAiOjE3NDg2MzY3NTQsImlhdCI6MTc0ODU1MDM1NCwiaXNzIjoiUmVkRHJvcE9yZ2FuaXNhdGlvbiIsImF1ZCI6IkJsb29kIERvbmF0b3JzIn0.eUV5teVYJoouncCdnLDJeO0IdOORZC_APNBUrX0CnXY
+@token =eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJVc2VySWQiOiIwMTk3MTlmYS02NzFjLTc5NTMtODRkMy1jMmZiNDAyYWZiZDkiLCJlbWFpbCI6IlppbW91QGV4YW1wbGUuY29tIiwibmJmIjoxNzQ4Njg5NTM4LCJleHAiOjE3NDg3NzU5MzgsImlhdCI6MTc0ODY4OTUzOCwiaXNzIjoiUmVkRHJvcE9yZ2FuaXNhdGlvbiIsImF1ZCI6IkJsb29kIERvbmF0b3JzIn0.P7xn9Rxx1l6k3kii2W4sDvo0SW6Cm5NSXHNgQK6RXCY
 
 
 GET {{host}}:{{port}}/auth/manage/info
@@ -169,7 +169,7 @@ GET {{host}}:{{port}}/users/?DonorExcludedFromPublicPortal=false&PaginationTake=
 ###Profile
 
 
-GET {{host}}:{{port}}/user/
+GET {{host}}:{{port}}/user/?level=2
 Authorization: Bearer {{token}}
 ###
 
@@ -187,7 +187,7 @@ PATCH {{host}}:{{port}}/donor/profile
 Authorization: Bearer {{token}}
 Content-Type: application/json
 {
-    "donorBloodGroup": 2
+    "communeId": 557
 }
 
 ###
