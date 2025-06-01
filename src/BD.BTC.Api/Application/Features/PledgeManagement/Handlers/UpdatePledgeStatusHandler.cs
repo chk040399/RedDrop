@@ -54,7 +54,7 @@ namespace Application.Features.PledgeManagement.Handlers
                 {
                     DonorId = pledge.DonorId,
                     RequestId = pledge.RequestId,
-                    PledgedAt = pledge.PledgeDate,
+                    PledgedAt = pledge.PledgeDate.HasValue ? DateOnly.FromDateTime(pledge.PledgeDate.Value) : default,
                     Status = pledge.Status
                 }, null);
             }

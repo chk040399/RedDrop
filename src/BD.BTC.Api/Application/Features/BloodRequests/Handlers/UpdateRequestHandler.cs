@@ -118,8 +118,7 @@ namespace Application.Features.BloodRequests.Handlers
                             center.Id,
                             request.Id,
                             request.RequiredQty,
-                            null,                // string? priority parameter
-                            statusEnum,          // BloodDonationRequestEvolutionStatus? status parameter 
+                            statusEnum,            // string? priority parameter       // BloodDonationRequestEvolutionStatus? status parameter 
                             request.AquiredQty,
                             priorityEnum,        // BloodDonationRequestPriority? priorityEnum parameter
                             request.DueDate

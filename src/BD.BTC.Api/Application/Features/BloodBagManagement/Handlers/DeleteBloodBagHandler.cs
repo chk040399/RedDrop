@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.DTOs;
 using Application.Features.BloodBagManagement.Commands;
 using Application.Interfaces;
+using BD.BTC.Api.Converters;
 using Domain.Events;
 using Domain.Repositories;
 using Domain.ValueObjects;
@@ -83,17 +84,23 @@ namespace Application.Features.BloodBagManagement.Handlers
                         // Decrement acquired quantity and increment required quantity
                         request.DecrementAcquiredQty();
                         await _requestRepository.UpdateAsync(request);
-                        
+                        var center = await _centerRepository.GetPrimaryAsync();
+                        if (center == null)
+                        {
+                            _logger.LogWarning("Blood transfer center not found when updating request");
+                            return (bloodBagDto, new NotFoundException("Blood transfer center not found", "delete blood bag"));
+                        }
                         // Send Kafka message to update request
                         var updateRequestTopic = _kafkaSettings.Value.Topics["UpdateRequest"];
                         var updateRequestEvent = new UpdateRequestEvent(
+                            center.Id,
                             request.Id,
-                            null,
-                            request.Status.Value,
-                            request.AquiredQty,
                             request.RequiredQty,
-                            null
-                        );
+                            RequestStatusConverter.ToEnum(request.Status),
+                            request.AquiredQty,
+                            null,
+                            null);
+
                         await _eventProducer.ProduceAsync(updateRequestTopic, updateRequestEvent);
                         _logger.LogInformation("Sent request update event for request {RequestId}", request.Id);
                     }

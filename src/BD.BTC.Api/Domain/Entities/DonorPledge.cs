@@ -9,7 +9,7 @@ namespace Domain.Entities
         public Guid DonorId { get; set; } 
         public Guid RequestId { get; private set; }
         public PledgeStatus Status { get; private set; }
-        public DateOnly? PledgeDate { get;  set; }
+        public DateTime? PledgeDate { get;  set; }
         
         // Navigation properties
         public Donor Donor { get; private set; } = null!;
@@ -19,7 +19,6 @@ namespace Domain.Entities
         private DonorPledge() 
         { 
             Status = PledgeStatus.Pledged; 
-            PledgeDate = DateOnly.FromDateTime(DateTime.Now);
         }
       /**
            public static DonorPledge FromEvent(DonorPledgeEvent @event) => new DonorPledge(
@@ -31,15 +30,14 @@ namespace Domain.Entities
       */
 
         public DonorPledge(
-            Guid donorName,
+            Guid donorId,
             Guid requestId,
-            PledgeStatus status,
             PledgeStatus pledgeStatus,
-            DateOnly pledgeDate)
+            DateTime? pledgeDate)
         {
-            DonorId = donorName;
+            DonorId = donorId;
             RequestId = requestId;
-            Status = status;
+            Status = pledgeStatus;
             PledgeDate = pledgeDate;
         }
     

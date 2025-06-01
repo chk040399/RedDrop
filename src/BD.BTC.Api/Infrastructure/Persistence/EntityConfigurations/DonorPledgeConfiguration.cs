@@ -9,14 +9,14 @@ namespace Infrastructure.Persistence.EntityConfigurations
     {
         public void Configure(EntityTypeBuilder<DonorPledge> builder)
         {
-        // Composite primary key
+            // Composite primary key
             builder.HasKey(dp => new { dp.DonorId, dp.RequestId });
         
-        // Relationship to Donor using Name as foreign key
+            // Relationship to Donor using Name as foreign key
             builder.HasOne(dp => dp.Donor)
                 .WithMany(d => d.Pledges)
                 .HasForeignKey(dp => dp.DonorId)
-                .HasPrincipalKey(d => d.Id)  // Reference Donor's Name
+                .HasPrincipalKey(d => d.Id)  
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(dp => dp.Request)
@@ -24,19 +24,20 @@ namespace Infrastructure.Persistence.EntityConfigurations
                 .HasForeignKey(dp => dp.RequestId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-                // Property configurations
+            // Property configurations
             builder.Property(dp => dp.PledgeDate)
                 .HasConversion(
-                    d => DateTime.SpecifyKind(d.ToDateTime(TimeOnly.MinValue), DateTimeKind.Utc),
-                    d => DateOnly.FromDateTime(d))
-                .IsRequired();
+                    v => v.HasValue ? v.Value : DateTime.MinValue,
+                    v => v == DateTime.MinValue ? (DateTime?)null : v);
 
-           builder.Property(dp => dp.Status)
-            .HasConversion(
-                v => v.Value,  // Convert to string for storage
-                v => PledgeStatus.FromString(v))  // Convert from string
-            .IsRequired()
-            .HasMaxLength(20); 
+            // Add configuration for CancellationDate if it exist
+
+            builder.Property(dp => dp.Status)
+                .HasConversion(
+                    v => v.Value,  // Convert to string for storage
+                    v => PledgeStatus.FromString(v))  // Convert from string
+                .IsRequired()
+                .HasMaxLength(20); 
         }
     }
 }

@@ -10,6 +10,8 @@ using Application.Interfaces;
 using Infrastructure.ExternalServices.Kafka;
 using Microsoft.Extensions.Options;
 using System.Text.Json;
+using BD.BTC.Api.Converters;
+
 
 
 namespace Application.Features.BloodBagManagement.Handlers
@@ -73,22 +75,31 @@ namespace Application.Features.BloodBagManagement.Handlers
                         var updateRequestTopic = _kafkaSettings.Value.Topics["UpdateRequest"];
                         if (request.RequiredQty == 0)
                         {
+                            var center = await _centerRepository.GetPrimaryAsync();
+                            if (center == null)
+                            {
+                                throw new NotFoundException("Primary blood transfer center not found", "creating blood bag");
+                            }
                             var requestResolvedEvent = new UpdateRequestEvent(
+                                center.Id,
                                 request.Id,
-                                null,
-                                RequestStatus.Resolved().Value,
-                                request.AquiredQty,
-                                request.RequiredQty, null);
+                                request.RequiredQty,
+                                RequestStatusConverter.ToEnum(RequestStatus.Resolved()),
+                                request.AquiredQty,null,
+                                null);
                             await _eventProducer.ProduceAsync(updateRequestTopic, requestResolvedEvent);
                         }
                         else
                         {
+                             var center = await _centerRepository.GetPrimaryAsync();
                             var updateRequestEvent = new UpdateRequestEvent(
+                                center.Id,
                                 request.Id,
-                                null,
+                                request.RequiredQty,
                                 null,
                                 request.AquiredQty,
-                                request.RequiredQty, null);
+                                null
+                              , null);
                             await _eventProducer.ProduceAsync(updateRequestTopic,updateRequestEvent);
 
                         }

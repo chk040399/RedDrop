@@ -69,7 +69,7 @@ namespace Application.Features.BloodRequests.Handlers
                     pledge.UpdateStatus(PledgeStatus.Canceled);
                     await _pledgeRepository.UpdateAsync(pledge);
                     var topic = _kafkaSettings.Value.Topics["PledgeCanceled"];
-                    var @event = new PledgeCanceledEvent(pledge.DonorId, pledge.RequestId);
+                    var @event = new PledgeCanceledEvent(pledge.DonorId, pledge.RequestId,null);
                     await _eventProducer.ProduceAsync(topic,@event);
                     expiredPledgesCount++;
                     

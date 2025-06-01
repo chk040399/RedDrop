@@ -159,9 +159,8 @@ namespace Application.Features.EventHandling.Handlers
     var pledge = new DonorPledge(
         donor.Id,
         request.Id,
-        null,
         pledgeStatus, // Now using the converted PledgeStatus value object
-        pledgeDateOnly);
+        pledgeDateOnly.ToDateTime(TimeOnly.MinValue)); // Convert DateOnly to DateTime
         
     _logger.LogInformation("Pledge created: {Pledge}", pledge);
     
