@@ -1,0 +1,11 @@
+﻿global using Ardalis.GuardClauses;
+global using Ardalis.Result;
+global using Ardalis.SmartEnum;
+global using Ardalis.Specification;
+global using MediatR;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.AspNetCore.Identity;
+global using BD.SharedKernel;
+global using System.ComponentModel.DataAnnotations;
+global using BD.Central.Core.Entities;
+global using BD.Central.Core.Entities.Enums;

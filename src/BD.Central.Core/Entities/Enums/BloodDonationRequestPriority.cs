@@ -1,0 +1,9 @@
+﻿namespace BD.Central.Core.Entities.Enums
+{
+    public enum BloodDonationRequestPriority : int
+    {
+        Low = 1,
+        Normal = 2,
+        Critical = 3
+    }
+}

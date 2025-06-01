@@ -13,10 +13,20 @@ var publicPortalPostgres =
     .WithPgAdmin()
     .WithPgWeb();
 
+//pgsql central
+var centralPostgresUser = builder.AddParameter("CentralPostgresUser", "postgres");
+var centralPostgresPassword = builder.AddParameter("CentralPortalPostgresPassword", "walidozich");
 
 
 
-//pgsql server(s)
+var centralPostgres =
+  builder.AddPostgres("CentralPortalPostgres", userName: centralPostgresUser, password: centralPostgresPassword)
+    .WithLifetime(ContainerLifetime.Persistent)
+    .WithPgAdmin()
+    .WithPgWeb();
+
+
+//pgsql ctss
 var ctsPostgresUser = builder.AddParameter("CtsPostgresUser", "postgres");
 var ctsPostgresPassword = builder.AddParameter("CtsPostgresPassword", "hikarosubahiko");
 
@@ -84,6 +94,53 @@ publicPortalApi.WithExternalHttpEndpoints();//TODO : disable if nno external acc
 publicPortalApi.WithEnvironment("DatabaseName", publicPortalDatabaseName);
 
 // api Central
+var centralApiName = "centralApi";
+var centralDatabaseName = "CentralDatabase";
+var centralDatabase = centralPostgres.AddDatabase(name: centralDatabaseName, databaseName: centralDatabaseName);// name => la resource ! 
+
+var centralApi = builder.AddProject<Projects.BD_Central_Api>(centralApiName)
+  .WithUrlForEndpoint("http", url =>
+  {
+    url.Url = "/swagger";
+    url.DisplayLocation = UrlDisplayLocation.SummaryAndDetails;
+  })
+  .WithUrlForEndpoint("https", url =>
+  {
+    url.Url = "/swagger";
+    url.DisplayLocation = UrlDisplayLocation.SummaryAndDetails;
+  })
+  //.WithEndpoint(
+  //  name: "my-https",//dont use https
+  //  port: 57679 + 10,
+  //  scheme: "https",
+  //  isExternal: true,
+  //  isProxied: false
+  //)
+  //.WithEndpoint(
+  //  name: "my-http",//dont use http
+  //    port: 57678 + 10,
+  //    scheme: "http",
+  //    isExternal: true,
+  //    isProxied: false
+  //)
+  //.WithUrlForEndpoint("my-http", url =>
+  //{
+  //  url.Url = "/swagger";
+  //  url.DisplayLocation = UrlDisplayLocation.SummaryAndDetails;
+  //})
+  //.WithUrlForEndpoint("my-https", url =>
+  //{
+  //  url.Url = "/swagger";
+  //  url.DisplayLocation = UrlDisplayLocation.SummaryAndDetails;
+  //})
+  .WithReference(centralDatabase)
+  .WithReference(kafka)
+  .WaitFor(centralDatabase)
+  .WaitFor(kafka);
+
+centralApi.WithHttpCommand(path: "/dbadmin/migrate", "Migrate Database", commandOptions: new HttpCommandOptions() { IconName = "DatabaseArrowUp" });
+centralApi.WithExternalHttpEndpoints();//TODO : disable if nno external acces is needed
+centralApi.WithEnvironment("DatabaseName", centralDatabaseName);
 
 //cts
 int ctsNr = 1;

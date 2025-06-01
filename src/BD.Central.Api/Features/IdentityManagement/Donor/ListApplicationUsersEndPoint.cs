@@ -1,0 +1,39 @@
+﻿using BD.Central.Core.DTOs;
+using BD.Central.Core.Entities.Specifications;
+using BD.Central.Application.Identity.List;
+
+namespace BD.Central.Api.Features.IdentityManagement.Users.List;
+
+public class ListApplicationUsersRequest
+{
+  [FromQuery]
+  public ApplicationUserSpecificationFilter? Filter { get; set; } = null;
+  public int? Level { get; set; } = null;
+};
+
+public class ListApplicationUsersResponse
+{
+  public IEnumerable<ApplicationUserDTO> Users { get; set; } = null!;
+}
+
+public class ListApplicationUsersEndpoint(IMediator _mediator) : Endpoint<ListApplicationUsersRequest, ListApplicationUsersResponse>
+{
+  public override void Configure()
+  {
+    Get("/users/");
+    AllowAnonymous();
+  }
+  public override async Task HandleAsync(ListApplicationUsersRequest req, CancellationToken cancellationToken)
+  {
+    var res = await _mediator.Send(new ListApplicationUsersQuery(filter: req.Filter, Level: req.Level), cancellationToken);
+    if (res.IsSuccess)
+    {
+      var lwr = new ListApplicationUsersResponse()
+      {
+        Users = res.Value
+      };
+      Response = lwr;
+    }
+  }
+
+}

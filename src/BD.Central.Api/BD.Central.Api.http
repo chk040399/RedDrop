@@ -1,0 +1,198 @@
+# For more info on HTTP files go to https://aka.ms/vs/httpfile
+@host=https://localhost:57679
+
+
+
+
+
+// List all contributors
+GET {{host}}/Contributors
+
+###
+// Get a specific contributor
+@id_to_get=2
+GET {{host}}/Contributors/{{id_to_get}}
+
+###
+// Add a new contributor
+POST {{host}}/Contributors
+Content-Type: application/json
+
+{
+  "name": "John Doe 2",
+  "email": "test@test.com",
+  "phoneNumber": "1234567890"
+}
+
+###
+// Update a contributor
+@id_to_update=3
+PUT {{host}}/Contributors/{{id_to_update}}
+Content-Type: application/json
+
+{
+  "id": {{id_to_update}},
+  "name": "ardalis2"
+}
+
+###
+// Delete a contributor
+@id_to_delete=6
+DELETE {{host}}/Contributors/{{id_to_delete}}
+
+###
+
+
+
+//********************************************************************//********************************************************************
+
+GET {{host}}/enums/BloodGroup,DonorAvailability,DonorContactMethod
+
+###
+GET {{host}}/Wilayas
+
+###
+GET {{host}}/Communes/44
+
+###
+GET {{host}}/BTC/32
+
+###
+GET {{host}}/BloodDonationRequests?&wilayaId=16&PaginationTake=10&&PaginationSkip=0&level=1
+
+###
+# @timeout = 0
+GET {{host}}/BloodDonationRequests?PaginationTake=10&level=1&illigibilityOnly=true
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTk3MDEzMy1lNDk5LTcxODEtYjhlYy01MzhkMjZiMWZmZDMiLCJVc2VySWQiOiIwMTk3MDEzMy1lNDk5LTcxODEtYjhlYy01MzhkMjZiMWZmZDMiLCJlbWFpbCI6InBhc19zaV9xdWVfY2FAZXhhbXBsZS5jb20iLCJuYmYiOjE3NDgxMDExMzAsImV4cCI6MTc0ODE4NzUzMCwiaWF0IjoxNzQ4MTAxMTMwLCJpc3MiOiJSZWREcm9wT3JnYW5pc2F0aW9uIiwiYXVkIjoiQmxvb2QgRG9uYXRvcnMifQ.42n2f_TZKybaxL8pNZRXgvJc216or58ujZhce2_0zco
+
+###
+GET {{host}}/BloodDonationRequests?PaginationTake=10&&PaginationSkip=10&level=1
+
+###
+GET {{host}}/BloodDonationRequests?PaginationTake=10&&PaginationSkip=20&level=1
+
+###
+GET {{host}}/BloodDonationRequests?PaginationTake=10&&PaginationSkip=30&level=1
+
+
+### Register a new user
+POST {{host}}/auth/register
+Content-Type: application/json
+{
+  "email": "walidozich@example.com",
+  "password": "vV@L1d@2002",
+  "confirmPassword": "vV@L1d@2002",
+  "donorWantToStayAnonymous": true,
+  "donorExcludeFromPublicPortal": false,
+  "donorAvailability": 1,
+  "donorContactMethod": 1,
+  "donorName": "CHERCHALI WALID",
+  "donorBirthDate": "2025-05-22T09:16:16.749Z",
+  "donorBloodGroup": 7,
+  "donorNIN": "123456789123456789",
+  "donorTel": "05.55.05.23.76",
+  "donorNotesForBTC": "Je suis Diab�tique Type 1",
+  "donorLastDonationDate": "2025-05-22T09:16:16.749Z",
+  "communeId": 558  
+}
+
+###
+POST {{host}}/auth/register
+Content-Type: application/json
+{
+  "email": "salim@example.com",
+  "password": "$@L1m@1975",
+  "confirmPassword": "$@L1m@1975",
+  "donorWantToStayAnonymous": true,
+  "donorExcludeFromPublicPortal": false,
+  "donorAvailability": 1,
+  "donorContactMethod": 1,
+  "donorName": "CHERCHALI SALIM",
+  "donorBirthDate": "2025-05-22T09:16:16.749Z",
+  "donorBloodGroup": 7,
+  "donorNIN": "123456789123456789",
+  "donorTel": "05.55.05.23.76",
+  "donorNotesForBTC": "Je suis Diab�tique Type 1",
+  "donorLastDonationDate": "2025-05-22T09:16:16.749Z",
+  "communeId": 558  
+}
+
+### Register a new user
+POST {{host}}/auth/register
+Content-Type: application/json
+{
+  
+  "email": "pas_si_que_ca@example.com",
+  "password": "@Vv1M1L@t0n",
+  "confirmPassword": "@Vv1M1L@t0n",
+  "donorWantToStayAnonymous": true,
+  "donorExcludeFromPublicPortal": false,
+  "donorAvailability": 1,
+  "donorContactMethod": 1,
+  "donorName": "CHERCHALI WALID",
+  "donorBirthDate": "2025-05-22T09:16:16.749Z",
+  "donorBloodGroup": 7,
+  "donorNIN": "123456789123456789",
+  "donorTel": "05.55.05.23.76",
+  "donorNotesForBTC": "Je suis Diab�tique Type 1",
+  "donorLastDonationDate": "2025-05-22T09:16:16.749Z",
+  "communeId": 558  
+}
+
+### Login
+POST {{host}}/auth/login
+Content-Type: application/json
+{  
+  "email": "pas_si_que_ca@example.com",
+  "password": "@Vv1M1L@t0n"
+}
+
+###
+POST {{host}}/auth/login
+Content-Type: application/json
+{
+  "email": "salim@example.com",
+  "password": "$@L1m@1975" 
+}
+
+###
+POST {{host}}/auth/register2
+Content-Type: application/json
+{
+  "email": "chk@example.com",
+  "password": "Karim-74",
+  "confirmPassword": "Karim-74",
+  "donorName": "CHERCHALI KARIM",
+  "donorBirthDate": "2025-05-22T09:16:16.749Z",
+  "donorBloodGroup": 7,
+  "donorNIN": "123456789123456789"  
+}
+
+###
+POST {{host}}/auth/login
+Content-Type: application/json
+{
+  "email": "walidozich@example.com",
+  "password": "vV@L1d@2002" 
+}
+
+###
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIwMTk3MTdlNi00YmM0LTcwOWMtODhhZS1hMmNmMmJmNGMxOTMiLCJVc2VySWQiOiIwMTk3MTdlNi00YmM0LTcwOWMtODhhZS1hMmNmMmJmNGMxOTMiLCJlbWFpbCI6Imhpa2lAZXhhbXBsZS5jb20iLCJuYmYiOjE3NDg0NzUwODUsImV4cCI6MTc0ODU2MTQ4NSwiaWF0IjoxNzQ4NDc1MDg1LCJpc3MiOiJSZWREcm9wT3JnYW5pc2F0aW9uIiwiYXVkIjoiQmxvb2QgRG9uYXRvcnMifQ.2McbY1bBCYcn5ya374Ye3EXUKCFD_RT-qbDT5NchVls
+
+###
+PATCH {{host}}/donor/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+{
+  
+    "donorWantToStayAnonymous": true,
+    "donorExcludeFromPublicPortal": true,
+    "donorAvailability": 3
+}
+
+
+###
+GET https://192.168.1.211:57679/BloodDonationRequests?&wilayaId=16&PaginationTake=0&&PaginationSkip=0&level=1
+
+
+###
