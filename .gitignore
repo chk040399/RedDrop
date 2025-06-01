@@ -400,3 +400,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 src/BD.PublicPortal.Api/log*.txt
+src/BD.Central.Api/log*.txt
