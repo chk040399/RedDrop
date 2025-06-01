@@ -1,4 +1,4 @@
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Repositories;
 using MediatR;
 using Application.DTOs;
@@ -101,7 +101,7 @@ namespace Application.Features.BloodRequests.Handlers
                 // Publish to Kafka
                 try
                 {
-                    await _eventProducer.ProduceAsync(topic, message);
+                    await _eventProducer.ProduceAsync("blood-request-created", message);
                     _logger.LogInformation("Published blood request creation event to Kafka for request ID: {RequestId}", newRequest.Id);
                 }
                 catch (Exception ex)
