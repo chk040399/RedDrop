@@ -10,35 +10,31 @@ namespace Infrastructure.Persistence
     {
         public ApplicationDbContext CreateDbContext(string[] args)
         {
-            // Try multiple methods to get the connection string
-            var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
+            // Get environment
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Development";
             
-            // If environment variable is not set, try reading from appsettings.json
+            // Build configuration
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", optional: false)
+                .AddJsonFile($"appsettings.{environment}.json", optional: true)
+                .AddEnvironmentVariables()
+                .Build();
+            
+            // Get connection string from configuration
+            var connectionString = configuration.GetConnectionString("DefaultConnection");
+            
             if (string.IsNullOrEmpty(connectionString))
             {
-                try 
-                {
-                    var configuration = new ConfigurationBuilder()
-                        .SetBasePath(Directory.GetCurrentDirectory())
-                        .AddJsonFile("appsettings.json", optional: true)
-                        .AddJsonFile("appsettings.Development.json", optional: true)
-                        .Build();
-
-                    connectionString = configuration.GetConnectionString("DefaultConnection");
-                }
-                catch
-                {
-                    // If we can't read from config files, use a hardcoded fallback
-                }
+                // Fallback to environment variable if not in appsettings
+                connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__DefaultConnection");
             }
             
-            // Fallback connection string if all else fails
             if (string.IsNullOrEmpty(connectionString))
             {
-                connectionString = "Host=localhost;Database=RedDrop;Username=postgres;Password=postgres";
+                throw new InvalidOperationException("No connection string found in appsettings.json or environment variables");
             }
             
-            // Configure the DbContext options and return the context
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseNpgsql(connectionString);
 

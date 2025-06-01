@@ -1,3 +1,4 @@
+using BD.PublicPortal.Core.Entities.Enums;
 using Domain.ValueObjects;
 
 namespace Domain.Events
@@ -7,8 +8,9 @@ namespace Domain.Events
         DonorData Donor,      // Reference by ID
         Guid RequestId,
         DateOnly PledgedAt,
-        PledgeStatus Status
+        BloodDonationPladgeEvolutionStatus Status // Changed from PledgeStatus to enum
     );
+    
     public sealed record DonorData(
         string DonorName,
         string Email,
@@ -17,6 +19,7 @@ namespace Domain.Events
         string Address,
         string NIN,
         DateOnly DateOfBirth,
+        BloodGroup BloodGroup, // Changed to enum
         DateOnly LastDonationDate
     );
 }

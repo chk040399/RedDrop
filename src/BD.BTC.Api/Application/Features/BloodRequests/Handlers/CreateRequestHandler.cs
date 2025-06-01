@@ -7,9 +7,8 @@ using Application.Features.BloodRequests.Commands;
 using Microsoft.Extensions.Options;
 using Domain.Events;
 using Shared.Exceptions;
-using FastEndpoints;
 using Application.Interfaces;
-using System.Text.Json;
+using BD.BTC.Api.Converters;
 
 namespace Application.Features.BloodRequests.Handlers
 {
@@ -17,41 +16,31 @@ namespace Application.Features.BloodRequests.Handlers
     {
         private readonly IRequestRepository _requestRepository;
         private readonly IEventProducer _eventProducer;
-        private readonly IBloodTransferCenterRepository _centerRepository;
         private readonly IServiceRepository _serviceRepository;
         private readonly IOptions<KafkaSettings> _kafkaSettings;
         private readonly ILogger<CreateRequestHandler> _logger;
+        private readonly IBloodTransferCenterRepository _centerRepository; // Add this
 
         public CreateRequestHandler(
             IRequestRepository requestRepository,
             ILogger<CreateRequestHandler> logger,
             IEventProducer eventProducer,
-            IBloodTransferCenterRepository centerRepository,
             IOptions<KafkaSettings> kafkaSettings,
-            IServiceRepository serviceRepository)
+            IServiceRepository serviceRepository,
+            IBloodTransferCenterRepository centerRepository) // Add this parameter
         {
-            _centerRepository = centerRepository;
             _serviceRepository = serviceRepository;
             _eventProducer = eventProducer;
             _kafkaSettings = kafkaSettings;
             _requestRepository = requestRepository;
             _logger = logger;
+            _centerRepository = centerRepository; // Initialize this
         }
 
         public async Task<RequestDto> Handle(CreateRequestCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                // Get the blood transfer center - MAKE SURE THIS IS ADDED BEFORE CREATING EVENTS
-                var center = await _centerRepository.GetAsync();
-                if (center == null)
-                {
-                    _logger.LogError("Blood transfer center not found when creating request");
-                    throw new NotFoundException("Blood transfer center not found", "CreateBloodRequest");
-                }
-                _logger.LogInformation("Creating new request for center: {CenterId} ({CenterName})", 
-    center.Id, center.Name);
-
                 // Create a new request
                 var newRequest = new Request(
                     request.BloodType,
@@ -65,7 +54,9 @@ namespace Application.Features.BloodRequests.Handlers
                     request.AquiredQty,
                     request.ServiceId,
                     request.DonorId);
-                _logger.LogInformation("new id: {RequestId}", newRequest.Id);
+                
+                _logger.LogInformation("Creating new blood request with ID: {RequestId}", newRequest.Id);
+                
                 // Save the request to the database
                 await _requestRepository.AddAsync(newRequest);
 
@@ -82,27 +73,44 @@ namespace Application.Features.BloodRequests.Handlers
                     _logger.LogError("Service not found");
                     throw new NotFoundException("Service not found", "CreateRequestHandler");
                 }
+                
+                // Fetch blood transfer center data
+                var bloodCenter = await _centerRepository.GetPrimaryAsync();
+                if (bloodCenter == null)
+                {
+                    _logger.LogWarning("Blood transfer center not found, using empty GUID for hospital ID");
+                    // Continue with empty GUID if no center is found
+                }
 
+                // Create the Kafka event
+                var topic = _kafkaSettings.Value.Topics["BloodRequests"];
                 var message = new RequestCreatedEvent(
-                    center.Id,  // Use the center ID here, not Guid.Empty
+                    bloodCenter?.Id ?? Guid.Empty, // Use center ID or empty GUID if not found
                     newRequest.Id,
-                    newRequest.BloodType,
-                    newRequest.Priority,
-                    newRequest.BloodBagType,
+                    BloodGroupConverter.ToEnum(newRequest.BloodType),
+                    PriorityConverter.ToEnum(newRequest.Priority),
+                    BloodBagTypeConverter.ToEnum(newRequest.BloodBagType),
                     newRequest.RequestDate,
                     newRequest.DueDate,
-                    newRequest.Status,  // Changed from newRequest.Status.Value
+                    RequestStatusConverter.ToEnum(newRequest.Status),
                     newRequest.MoreDetails,
                     newRequest.RequiredQty,
                     newRequest.AquiredQty,
                     service.Name);
-                var topic = _kafkaSettings.Value.Topics["BloodRequests"];
-                //await new AutoReuqestResolverEvent(newRequest).PublishAsync(Mode.WaitForNone); // Create and publish the event
-                _logger.LogInformation("Request created successfully");
+                
+                // Publish to Kafka
+                try
+                {
+                    await _eventProducer.ProduceAsync(topic, message);
+                    _logger.LogInformation("Published blood request creation event to Kafka for request ID: {RequestId}", newRequest.Id);
+                }
+                catch (Exception ex)
+                {
+                    // Log but don't fail the request creation if Kafka publishing fails
+                    _logger.LogError(ex, "Failed to publish blood request creation event to Kafka for request ID: {RequestId}", newRequest.Id);
+                }
+
                 // Return the DTO
-                // Before sending the event to Kafka
-                _logger.LogInformation("Publishing event with HospitalId: {HospitalId}", center.Id);
-                await _eventProducer.ProduceAsync(topic, message);
                 return new RequestDto
                 {
                     Id = newRequest.Id,
@@ -118,11 +126,10 @@ namespace Application.Features.BloodRequests.Handlers
                     ServiceId = newRequest.ServiceId,
                     DonorId = newRequest.DonorId
                 };
-               // Publish the event to Kafka
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error creating request");
+                _logger.LogError(ex, "Error creating blood request");
                 throw;
             }
         }

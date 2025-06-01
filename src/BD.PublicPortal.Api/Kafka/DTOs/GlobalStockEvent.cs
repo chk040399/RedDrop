@@ -1,4 +1,5 @@
 ﻿using BD.PublicPortal.Api.CtsModel.ValueObjects;
+using BD.PublicPortal.Core.Entities.Enums;
 
 namespace BD.PublicPortal.Api.Kafka.EventDTOs;
 
@@ -7,8 +8,8 @@ namespace BD.PublicPortal.Api.Kafka.EventDTOs;
       GlobalStockData GlobalStockData
   );
   public sealed record GlobalStockData(
-      BloodType BloodgGroup,
-      BloodBagType BloodBagType,
+      BloodGroup BloodgGroup,
+      BloodDonationType BloodBagType,
       int Quantity,
       int ReadyCount,
       int MinStock,

@@ -14,17 +14,43 @@ namespace Domain.ValueObjects
         public static RequestStatus Pending() => new RequestStatus("pending");
         public static RequestStatus Resolved() => new RequestStatus("resolved");
         public static RequestStatus Partial() => new RequestStatus("partial");
-        public static RequestStatus Cancled() => new RequestStatus("cancled");
+        public static RequestStatus Cancelled() => new RequestStatus("cancelled"); // Fixed typo
         public static RequestStatus Rejected() => new RequestStatus("rejected");
-        public static RequestStatus Convert(string value) => value.ToLowerInvariant() switch
+        
+        public static RequestStatus Convert(string value)
         {
-            "pending" => Pending(),
-            "resolved" => Resolved(),
-            "partial" => Partial(),
-            "Rejected" => Rejected(),
-            "cancled" => Cancled(),
-            _ => throw new ArgumentException("Invalid RequestStatus", nameof(value))
-        };
+            if (string.IsNullOrWhiteSpace(value))
+                throw new ArgumentException("Status cannot be empty", nameof(value));
+                
+            return value.ToLowerInvariant() switch
+            {
+                "pending" => Pending(),
+                "resolved" => Resolved(),
+                "partial" => Partial(),
+                "rejected" => Rejected(), // Fixed case - lowercase
+                "cancelled" => Cancelled(), // Fixed spelling
+                "canceled" => Cancelled(), // Add American spelling alternative
+                _ => throw new ArgumentException("Invalid RequestStatus", nameof(value))
+            };
+        }
+
+        // TryConvert method that doesn't throw exceptions
+        public static bool TryConvert(string value, out RequestStatus status)
+        {
+            status = null;
+            if (string.IsNullOrWhiteSpace(value))
+                return false;
+                
+            try
+            {
+                status = Convert(value.ToLowerInvariant());
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
 
         public override bool Equals(object? obj)
         {

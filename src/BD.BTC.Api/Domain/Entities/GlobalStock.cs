@@ -69,6 +69,51 @@ namespace Domain.Entities
             // Increment CountExpired to keep track of expired bags
             CountExpired += count;
         }
+        /// <summary>
+        /// Increments the count of expiring blood bags by the specified amount
+        /// </summary>
+        public void IncrementExpiringCount(int count)
+        {
+            if (count <= 0)
+                return;
+                
+            CountExpiring += count;
+        }
+
+        /// <summary>
+        /// Increments the count of expired blood bags by the specified amount
+        /// </summary>
+        public void IncrementExpiredCount(int count)
+        {
+            if (count <= 0)
+                return;
+                
+            CountExpired += count;
+        }
+
+        /// <summary>
+        /// Moves a specified count of blood bags from ready to expiring status
+        /// </summary>
+        public void MoveReadyToExpiring(int count)
+        {
+            if (count <= 0 || ReadyCount < count)
+                return;
+                
+            ReadyCount -= count;
+            CountExpiring += count;
+        }
+
+        /// <summary>
+        /// Moves a specified count of blood bags from expiring to expired status
+        /// </summary>
+        public void MoveExpiringToExpired(int count)
+        {
+            if (count <= 0 || CountExpiring < count)
+                return;
+                
+            CountExpiring -= count;
+            CountExpired += count;
+        }
         
         /// <summary>
         /// Checks if the available stock is at or below the critical threshold

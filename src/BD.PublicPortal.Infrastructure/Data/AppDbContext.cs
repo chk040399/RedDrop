@@ -3,7 +3,6 @@ using BD.PublicPortal.Core.Entities.Contributors;
 using BD.PublicPortal.Core.Entities.Events;
 using BD.SharedKernel;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 
 namespace BD.PublicPortal.Infrastructure.Data;

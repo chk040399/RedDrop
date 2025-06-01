@@ -4,5 +4,8 @@ using Shared.Exceptions;
 
 namespace Application.Features.BloodTransferCenterManagement.Queries
 {
-    public record GetBloodTransferCenterQuery() : IRequest<(BloodTransferCenterDTO? center, BaseException? err)>;
+    public class GetBloodTransferCenterQuery : IRequest<(BloodTransferCenterDTO? center, BaseException? err)>
+    {
+        // No parameters needed since we're fetching the single center
+    }
 }

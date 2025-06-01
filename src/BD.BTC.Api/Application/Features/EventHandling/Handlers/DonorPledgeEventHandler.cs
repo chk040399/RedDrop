@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Polly;
+using BD.BTC.Api.Converters;
+using BD.PublicPortal.Core.Entities.Enums;
 using Domain.Events;
 using Domain.Repositories;
 using Application.Interfaces;
@@ -73,7 +75,7 @@ namespace Application.Features.EventHandling.Handlers
             {
                 _logger.LogError(ex, "Pledge processing failed after retries");
                 var topic = _kafkaSettings.Value.Topics["PledgeFailed"];
-                await _eventProducer.ProduceAsync(topic, JsonSerializer.Serialize(new PledgeFailedEvent(command.Payload, ex.Message, DateTime.UtcNow, Guid.NewGuid())));
+                await _eventProducer.ProduceAsync(topic, new PledgeFailedEvent(command.Payload, ex.Message, DateTime.UtcNow, Guid.NewGuid()));
                 throw;
             }
         }
@@ -93,11 +95,14 @@ namespace Application.Features.EventHandling.Handlers
         // Add null check for DonorName
         string donorName = payload.Donor.DonorName ?? "Unknown Donor";
 
+        // Need to convert BloodGroup enum to BloodType value object
+        var bloodType = BloodTypeConverter.ToBloodType(payload.Donor.BloodGroup);
+
         donor = new Donor(
-            donorName,  // Use name with null check
+            donorName,
             payload.Donor.Email,
             payload.Donor.NotesBTC,
-            request.BloodType,
+            bloodType,  // Use converted bloodType
             payload.Donor.LastDonationDate,
             payload.Donor.Address,
             payload.Donor.NIN,
@@ -107,6 +112,7 @@ namespace Application.Features.EventHandling.Handlers
         await _donorRepository.AddAsync(donor);
     }
     _logger.LogInformation("Donor found: {Donor}", donor.Id);
+    
     // Check for existing pledge to prevent duplicate tracking exceptions
     var existingPledge = await _pledgeRepository.GetByDonorAndRequestIdAsync(donor.Id, request.Id);
     if (existingPledge != null)
@@ -146,12 +152,15 @@ namespace Application.Features.EventHandling.Handlers
         _logger.LogWarning("Could not determine pledge date, using current date");
     }
 
-    // Create pledge with DateOnly
+    // Convert BloodDonationPladgeEvolutionStatus enum to PledgeStatus value object
+    var pledgeStatus = PledgeStatusConverter.ToPledgeStatus(payload.Status);
+
+    // Create pledge with DateOnly and converted status
     var pledge = new DonorPledge(
         donor.Id,
         request.Id,
-         null,
-        payload.Status,
+        null,
+        pledgeStatus, // Now using the converted PledgeStatus value object
         pledgeDateOnly);
         
     _logger.LogInformation("Pledge created: {Pledge}", pledge);

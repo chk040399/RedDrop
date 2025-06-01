@@ -1,3 +1,4 @@
+using BD.PublicPortal.Core.Entities.Enums;
 using Domain.ValueObjects;
 namespace Domain.Events
 {
@@ -6,24 +7,26 @@ namespace Domain.Events
         public UpdateRequestEvent(
             Guid hospitalId,
             Guid requestId,
+            int? requiredQty,
             string? priority = null,
-            string? status = null,
+            BloodDonationRequestEvolutionStatus? status = null,
             int? acquiredQty = null,
-            int? requiredQty = null,
+            BloodDonationRequestPriority? priorityEnum = null,
             DateOnly? dueDate = null)
         {
             HospitalId = hospitalId;
             RequestId = requestId;
+            Priority = priorityEnum;
             AcquiredQty = acquiredQty;
             Status = status;
             RequiredQty = requiredQty;
             DueDate = dueDate;
         }
-        public Guid HospitalId { get; }
+        Guid HospitalId { get; set; }
         public Guid RequestId { get; }
-        public string? Priority { get; }
+        public BloodDonationRequestPriority? Priority { get; }
         public int? AcquiredQty { get; }
-        public string? Status { get; }
+        public BloodDonationRequestEvolutionStatus? Status { get; }
         public int? RequiredQty { get; }
         public DateOnly? DueDate { get; }
     }

@@ -2,26 +2,25 @@ using FastEndpoints;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Application.Features.BloodTransferCenterManagement.Queries;
-using Application.DTOs;
 using Shared.Exceptions;
 
 namespace Presentation.Endpoints.BloodTransferCenter
 {
-    public class GetBloodTransferCenter : EndpointWithoutRequest<GetBloodTransferCenterResponse>
+    public class GetBloodTransferCenterEndpoint : EndpointWithoutRequest<GetBloodTransferCenterResponse>
     {
-        private readonly ILogger<GetBloodTransferCenter> _logger;
         private readonly IMediator _mediator;
+        private readonly ILogger<GetBloodTransferCenterEndpoint> _logger;
 
-        public GetBloodTransferCenter(ILogger<GetBloodTransferCenter> logger, IMediator mediator)
+        public GetBloodTransferCenterEndpoint(IMediator mediator, ILogger<GetBloodTransferCenterEndpoint> logger)
         {
-            _logger = logger;
             _mediator = mediator;
+            _logger = logger;
         }
 
         public override void Configure()
         {
             Get("/blood-transfer-center");
-            AllowAnonymous(); // Everyone can access this endpoint
+            AllowAnonymous(); // Anyone can get the blood transfer center info
             Description(x => x
                 .WithName("GetBloodTransferCenter")
                 .WithTags("BloodTransferCenter")
@@ -35,14 +34,13 @@ namespace Presentation.Endpoints.BloodTransferCenter
             try
             {
                 var query = new GetBloodTransferCenterQuery();
-                var (center, error) = await _mediator.Send(query, ct);
+                var (center, err) = await _mediator.Send(query, ct);
 
-                if (error != null)
+                if (err != null)
                 {
-                    _logger.LogWarning("Error fetching blood transfer center: {Message}", error.Message);
-                    throw error;
+                    _logger.LogWarning("Failed to get blood transfer center: {Message}", err.Message);
+                    throw err;
                 }
-
                 if (center == null)
                 {
                     throw new NotFoundException("Blood transfer center not found", "GetBloodTransferCenter");
@@ -61,7 +59,7 @@ namespace Presentation.Endpoints.BloodTransferCenter
             }
             catch (Exception ex) when (ex is not BaseException)
             {
-                _logger.LogError(ex, "Error fetching blood transfer center");
+                _logger.LogError(ex, "Error getting blood transfer center");
                 throw new InternalServerException("An error occurred while processing your request", "GetBloodTransferCenter");
             }
         }

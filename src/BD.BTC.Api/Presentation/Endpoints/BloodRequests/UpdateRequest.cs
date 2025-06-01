@@ -3,6 +3,9 @@ using FastEndpoints;
 using Application.Features.BloodRequests.Commands;
 using Application.DTOs;
 using Domain.ValueObjects;
+using Org.BouncyCastle.Ocsp;
+using Shared.Exceptions;
+using static Presentation.Endpoints.BloodRequests.UpdateRequestRequest;
 
 
 namespace Presentation.Endpoints.BloodRequests
@@ -30,35 +33,51 @@ namespace Presentation.Endpoints.BloodRequests
         }
         public override async Task HandleAsync(UpdateRequestRequest req, CancellationToken ct)
         {
-            var Command = new UpdateRequestCommand(
-                req.id,
-                req.BloodBagType != null ? BloodBagType.Convert(req.BloodBagType) : null,
-                req.Priority != null ? Priority.Convert(req.Priority) : null,
-                req.Status != null ? RequestStatus.Convert(req.Status) : null, // Add this line
-                req.DueDate,
-                req.MoreDetails,
-                req.RequiredQty);
-            
-            var (result,err) = await _mediator.Send(Command, ct);
-            if(err != null)
+            try
             {
-                _logger.LogError("Error while updating request");
-                throw err;
+                // Use conditional logic for null values
+                var command = new UpdateRequestCommand(
+                    req.id,
+                    req.Status != null ? RequestStatus.Convert(req.Status) : null,
+                    req.BloodBagType != null ? BloodBagType.Convert(req.BloodBagType) : null,
+                    req.Priority != null ? Priority.Convert(req.Priority) : null,
+                    req.DueDate,
+                    req.MoreDetails,
+                    req.RequiredQty,  // Already nullable, no need for conversion
+                    req.AquiredQty 
+                );
+                
+                var (result, err) = await _mediator.Send(command, ct);
+                if (err != null)
+                {
+                    _logger.LogError("Error while updating request: {Error}", err.Message);
+                    throw err; 
+                }
+                
+                _logger.LogInformation("Request updated successfully with ID: {Id}, Status: {Status}", 
+                    result.Id, result.Status);
+                
+                var response = new UpdateRequestResponse(result, 200, "Request updated successfully");
+                await SendAsync(response, cancellation: ct);
             }
-            _logger.LogInformation("request updated succeffuly");
-            var response = new UpdateRequestResponse(result, 200, "request updated succesfully");
-            await SendAsync(response, cancellation:ct); 
+            catch (Exception ex) when (ex is not BaseException)
+            {
+                _logger.LogError(ex, "Unexpected error updating request {Id}", req.id);
+                throw new InternalServerException("An error occurred while updating the request", "UpdateBloodRequest");
+            }
         }  
     }
-    public class UpdateRequestRequest {
-        public required Guid id {get;set;}
+    public class UpdateRequestRequest
+    {
+        public required Guid id { get; set; }
         public string? BloodBagType { get; set; }
         public DateOnly? DueDate { get; set; }
-        public string? Priority {get;set;}
-        public string? Status { get; set; } // Add this field
+        public string? Priority { get; set; }
         public string? MoreDetails { get; set; }
         public DateOnly? RequestDate { get; set; }
-        public int RequiredQty { get; set; }
+        public int? RequiredQty { get; set; }  // Changed from int to int? to make it optional
+        public int? AquiredQty { get; set; }
+        public string? Status { get; set; }
     } 
     public class UpdateRequestResponse
     {

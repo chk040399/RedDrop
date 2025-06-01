@@ -9,6 +9,10 @@ using Shared.Exceptions;
 using MediatR;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using Domain.ValueObjects;
+using BD.BTC.Api.Converters;
+using Domain.Entities;
+using BD.PublicPortal.Core.Entities.Enums;
 
 namespace Application.Features.BloodRequests.Handlers
 {
@@ -16,21 +20,20 @@ namespace Application.Features.BloodRequests.Handlers
     public class UpdateRequestHandler : IRequestHandler<UpdateRequestCommand, (RequestDto? request, BaseException? err)>
     {
         private readonly IRequestRepository _requestRepository;
-        private readonly IBloodTransferCenterRepository _centerRepository;
         private readonly IEventProducer _eventProducer;
         private readonly IOptions<KafkaSettings> _kafkaSettings;
         private readonly ILogger<UpdateRequestHandler> _logger;
+        private readonly IBloodTransferCenterRepository _centerRepository; // Add this if needed
 
-        public UpdateRequestHandler(IRequestRepository requestRepository, 
-                                   ILogger<UpdateRequestHandler> logger, 
-                                   IEventProducer eventProducer, 
-                                   IBloodTransferCenterRepository centerRepository,
-                                   IOptions<KafkaSettings> kafkaSettings)
+        public UpdateRequestHandler(IRequestRepository requestRepository,
+                                   ILogger<UpdateRequestHandler> logger,
+                                   IEventProducer eventProducer,
+                                   IOptions<KafkaSettings> kafkaSettings, IBloodTransferCenterRepository centerRepository)
         {
             _eventProducer = eventProducer;
+            _centerRepository = centerRepository; // Initialize this if needed
             _kafkaSettings = kafkaSettings;
-            _centerRepository = centerRepository;
-        
+
             _requestRepository = requestRepository;
             _logger = logger;
         }
@@ -40,7 +43,7 @@ namespace Application.Features.BloodRequests.Handlers
         {
             try
             {
-                // Add validation for empty GUID
+                // Validation logic remains the same
                 if (command.Id == Guid.Empty)
                 {
                     _logger.LogError("Invalid request ID: empty GUID");
@@ -54,18 +57,88 @@ namespace Application.Features.BloodRequests.Handlers
                     return (null, new NotFoundException($"Request {command.Id} not found", "updating request"));
                 }
                 
-                // Update the request first
-                request.UpdateAllDetails(
-                    command.BloodBagType, 
-                    command.Priority, 
-                    command.Status,    // Pass the status to update
-                    command.DueDate, 
-                    command.MoreDetails, 
-                    command.RequiredQty);
-                await _requestRepository.UpdateAsync(request);
-                _logger.LogInformation("Request updated successfully in database");
+                // Track if any changes were made
+                bool wasModified = false;
                 
-                // Create the updated DTO first
+                // First apply explicit status update if provided
+                if (command.Status != null)
+                {
+                    wasModified = true;
+                    // Directly set status if explicitly provided
+                    if (command.Status.Value == RequestStatus.Partial().Value)
+                        request.MarkAsPartial();
+                    else if (command.Status.Value == RequestStatus.Resolved().Value)
+                        request.Resolve();
+                    else if (command.Status.Value == RequestStatus.Cancelled().Value)
+                        request.Cancel();
+                    else if (command.Status.Value == RequestStatus.Rejected().Value)
+                        request.Reject();
+                    else if (command.Status.Value == RequestStatus.Pending().Value)
+                        request.MarkAsPending();
+                }
+                
+                // Then update other details (which might override status based on quantities)
+                if (command.BloodBagType != null || command.Priority != null || 
+                    command.DueDate != null || command.MoreDetails != null || 
+                    command.RequiredQty.HasValue)
+                {
+                    wasModified = true;
+                    request.UpdateDetails(command.BloodBagType, command.Priority, command.DueDate, 
+                        command.MoreDetails, command.RequiredQty);
+                }
+                
+                // Update acquired quantity if provided
+                if (command.AquiredQty.HasValue)
+                {
+                    wasModified = true;
+                    // Only update with quantities if no explicit status was provided
+                    if (command.Status == null)
+                        request.UpdateAcquiredQuantity(command.AquiredQty.Value);
+                    else
+                        request.SetAcquiredQuantity(command.AquiredQty.Value); // Use new method instead
+                }
+                
+                // Only update in database and publish event if changes were made
+                if (wasModified)
+                {
+                    await _requestRepository.UpdateAsync(request);
+                    
+                    // Publish event for any change
+                    var center = await _centerRepository.GetPrimaryAsync();
+                    if (center != null)
+                    {
+                        // Convert status and priority to enums for the event
+                        BloodDonationRequestEvolutionStatus? statusEnum = 
+                            RequestStatusConverter.ToEnum(request.Status);
+                        BloodDonationRequestPriority priorityEnum = 
+                            PriorityConverter.ToEnum(request.Priority);
+                        
+                        var topic = _kafkaSettings.Value.Topics["UpdateRequest"];
+                        var updateRequestEvent = new UpdateRequestEvent(
+                            center.Id,
+                            request.Id,
+                            request.RequiredQty,
+                            null,                // string? priority parameter
+                            statusEnum,          // BloodDonationRequestEvolutionStatus? status parameter 
+                            request.AquiredQty,
+                            priorityEnum,        // BloodDonationRequestPriority? priorityEnum parameter
+                            request.DueDate
+                        );
+                        
+                        await _eventProducer.ProduceAsync(topic, updateRequestEvent);
+                        _logger.LogInformation("Request updated and event published successfully");
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Request updated but event not published: no primary blood transfer center found");
+                    }
+                }
+                else
+                {
+                    _logger.LogInformation("No changes detected for request {RequestId}, skipping update", command.Id);
+                }
+                
+                // Return DTO
                 var requestDto = new RequestDto
                 {
                     Id = request.Id,
@@ -81,39 +154,6 @@ namespace Application.Features.BloodRequests.Handlers
                     ServiceId = request.ServiceId,
                     DonorId = request.DonorId
                 };
-                
-                // Try to publish Kafka event, but don't fail the request update if it doesn't work
-                try {
-                    // Get the hospital/center for the Kafka message
-                    var hospital = await _centerRepository.GetAsync();
-                    if (hospital != null) 
-                    {
-                        // Always send Kafka message after any update
-                        var topic = _kafkaSettings.Value.Topics["UpdateRequest"];
-                        var updateRequestEvent = new UpdateRequestEvent(
-                            hospital.Id,
-                            command.Id,
-                            command.Priority?.Value,
-                            request.Status.Value,  // Include current status
-                            request.AquiredQty,
-                            request.RequiredQty,
-                            command.DueDate
-                        );
-                        
-                        try {
-                            await _eventProducer.ProduceAsync(topic, JsonSerializer.Serialize(updateRequestEvent));
-                            _logger.LogInformation("Kafka event published for request update: {RequestId}", command.Id);
-                        }
-                        catch (Exception kafkaEx) {
-                            // Log but don't fail - the database update already succeeded
-                            _logger.LogWarning(kafkaEx, "Failed to publish Kafka event, but database update was successful");
-                        }
-                    }
-                }
-                catch (Exception ex) {
-                    _logger.LogWarning(ex, "Error getting blood transfer center or publishing event, but database update was successful");
-                }
-                
                 return (requestDto, null);
             }
             catch(BaseException ex)

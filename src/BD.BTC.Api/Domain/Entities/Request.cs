@@ -17,7 +17,6 @@ namespace Domain.Entities
         public int AquiredQty { get; private set; } = 0;
         public Boolean autoResolve { get; private set; } = false;
 
-        // Foreign keys
         public Guid? ServiceId { get; private set; }
         public Guid? DonorId { get; private set; }
 
@@ -134,22 +133,34 @@ namespace Domain.Entities
         {
             Status = RequestStatus.Partial();
         }
-
-        // Add this method to the Request class
-        public void UpdateAllDetails(
-            BloodBagType? bloodBagType, 
-            Priority? priority, 
-            RequestStatus? status, 
-            DateOnly? dueDate, 
-            string? moreDetails, 
-            int? requiredQty)
+        public void DecrementAcquiredQty()
         {
-            if (bloodBagType is not null) BloodBagType = bloodBagType;
-            if (priority is not null) Priority = priority;
-            if (status is not null) Status = status;  // Allow changing status
-            if (dueDate is not null) DueDate = dueDate;
-            if (moreDetails is not null) MoreDetails = moreDetails;
-            if (requiredQty is not null) RequiredQty = requiredQty.Value;
+            if (AquiredQty > 0)
+            {
+                AquiredQty--;
+                RequiredQty++;
+
+                // If we had previously marked the request as resolved, revert it to pending
+                if (Status.Value == RequestStatus.Resolved().Value && RequiredQty > 0)
+                {
+                    Status = RequestStatus.Pending();
+                }
+            }
+        }
+        public void Cancel()
+        {
+            Status = RequestStatus.Cancelled();
+        }
+
+        public void MarkAsPending()
+        {
+            Status = RequestStatus.Pending();
+        }
+
+        public void SetAcquiredQuantity(int value)
+        {
+            AquiredQty = value;
+            // Does not change status - use this when explicitly setting status elsewhere
         }
     }
 }
