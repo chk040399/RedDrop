@@ -20,7 +20,8 @@ namespace Presentation.Endpoints.Service
         public override void Configure()
         {
             Put("/services/{id}");
-            Policies("RequireAdminRole"); // Restrict to admin role
+            AllowAnonymous(); // Change to [Authorize] if authentication is required
+            //Policies("RequireAdminRole"); // Restrict to admin role
             Description(x => x
                 .WithName("UpdateService")
                 .WithTags("Admin", "Services") // Add Admin tag

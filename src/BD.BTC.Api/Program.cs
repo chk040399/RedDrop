@@ -20,10 +20,10 @@ using Infrastructure.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure Kestrel explicitly
-//builder.WebHost.ConfigureKestrel(serverOptions => {
-//    serverOptions.ListenAnyIP(5000);
-//    serverOptions.AllowSynchronousIO = true;
-//});
+builder.WebHost.ConfigureKestrel(serverOptions => {
+   serverOptions.ListenAnyIP(56777);
+    serverOptions.AllowSynchronousIO = true;
+});
 
 // Database
 var databaseName = builder.Configuration["DatabaseName"];
@@ -43,13 +43,21 @@ builder.AddNpgsqlDbContext<ApplicationDbContext>(connectionName: databaseName, c
 //Console.WriteLine("Database connection string: " + builder.Configuration.GetConnectionString("DefaultConnection"));
 
 // CORS Configuration
+// Add CORS policy to allow any origin, any method, any header
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins(
+                "http://localhost:4200",      // Angular default
+                "http://localhost:3000",      // React default
+                "http://localhost:8080",      // Common alternative
+                "http://127.0.0.1:5173",      // Vite default
+                "http://localhost:5173"       // Vite default
+              )
               .AllowAnyMethod()
-              .AllowAnyHeader();
+              .AllowAnyHeader()
+              .AllowCredentials();            // This allows credentials to be sent
     });
 });
 
@@ -113,9 +121,10 @@ builder.Services.SwaggerDocument(o =>
     };
 });
 
+// Configure FastEndpoints to allow anonymous access by default
+
 
 //
-
 
 // MediatR
 

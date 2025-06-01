@@ -22,7 +22,9 @@ namespace Presentation.Endpoints.Admin.Users
         public override void Configure()
         {
             Post("/admin/users");
-            Policies("RequireAdminRole"); // Restrict to admin role
+            AllowAnonymous(); // Change to [Authorize] if authentication is required
+            
+            //Policies("RequireAdminRole"); // Restrict to admin role
             Description(x => x
                 .WithName("CreateUser")
                 .WithTags("Admin", "Users")

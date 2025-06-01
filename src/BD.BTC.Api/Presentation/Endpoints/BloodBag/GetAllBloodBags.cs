@@ -45,7 +45,8 @@ namespace Presentation.Endpoints.BloodBag
         public override void Configure()
         {
             Get("/blood-bags");
-            Roles("Admin", "User"); // Both admins and regular users can access
+            AllowAnonymous(); // Change to [Authorize] if authentication is required    
+            //Roles("Admin", "User"); // Both admins and regular users can access
             Description(x => x
                 .WithName("GetAllBloodBags")
                 .WithTags("BloodBags")

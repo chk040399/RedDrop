@@ -19,7 +19,8 @@ namespace Presentation.Endpoints.Service
         public override void Configure()
         {
             Get("/services/{id}");
-            Roles("Admin", "User"); // Correct method in FastEndpoints v5.35.0
+            AllowAnonymous(); // Change to [Authorize] if authentication is required
+            //Roles("Admin", "User"); // Correct method in FastEndpoints v5.35.0
             Description(x => x
                 .WithName("GetService")
                 .WithTags("Services") // Remove "Admin" tag since all users can access
