@@ -1,42 +1,33 @@
 ﻿namespace BD.PublicPortal.Api.Kafka;
 
 
-public class KafkaConsumerOptions
-{
-  public string[] ConsumerTopics { get; set; } = [];
-  public Dictionary<string, Type> KeyToEventType { get; set; } = new();
-
-}
 
 public static class KafkaServiceConfig
 {
   public static IServiceCollection AddKafkaServiceConfigs(this IServiceCollection services,WebApplicationBuilder builder)
   {
-    //TODO : kafka integr (temp use better integration later
-    builder.AddKafkaProducer<string, string>("kafka", o => { o.Config.AllowAutoCreateTopics = true;});
-    builder.AddKafkaConsumer<string, string>("kafka", o => { o.Config.GroupId = "PublicPortal";
+
+    // Bind Kafka configuration
+    services.Configure<KafkaSettings>(
+      builder.Configuration.GetSection(KafkaSettings.SectionName));
+
+    // Register your topic handlers with the dispatcher
+    builder.AddKafkaProducer<string, string>("kafka", o => { o.Config.AllowAutoCreateTopics = true; });
+
+    builder.AddKafkaConsumer<string, string>("kafka", o => {
+      o.Config.GroupId = "RedDropWebPortal";
       o.Config.AllowAutoCreateTopics = true;
     });
 
-    // 
-    //
-    //services.Configure<KafkaConsumerOptions>(o => { o.ConsumerTopics =  ["NewBloodRequests", "PledgesUpdates", "DonnorsUpdate"]; });
 
-    builder.Services.PostConfigure<KafkaConsumerOptions>(config =>
-    {
-      {
-        config.ConsumerTopics = ["topic1", "topic2"];
-      //config.KeyToEventType = new Dictionary<string, Type>
-      //{
-      //  { "BloodRequestCreated", typeof() },
-      //  { "BloodRequestStatusUpdated", typeof() },
-      //  { "PledgeStatusUpdated", typeof() },
-      //  { "CtsCreated", typeof() }
-      };
-    });
+    //services.AddSingleton<ITopicDispatcher, TopicDispatcher>();
 
-    services.AddHostedService<KafkaConsumerBackgroundService<string, string>>();
+    // Kafka infrastructure components
+    //TODO : Disabled not needed
+    //services.AddSingleton<KafkaTopicInitializer>();
 
+    services.AddScoped<IEventProducer, KafkaEventPublisher>();
+    services.AddHostedService<KafkaConsumerBackgroundService>();
     return services;
   }
 

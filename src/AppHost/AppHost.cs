@@ -35,10 +35,11 @@ var kafka = builder.AddKafka("kafka")
 
 
 // api Portail Public
+var publicPortalApiName = "publicPortalApi";
 var publicPortalDatabaseName = "PublicPortalDatabase";
 var publicPortalDatabase = publicPortalPostgres.AddDatabase(name: "PublicPortalDatabase", databaseName: publicPortalDatabaseName);// name => la resource ! 
 
-var publicPortalApi = builder.AddProject<Projects.BD_PublicPortal_Api>("publicPortalApi")
+var publicPortalApi = builder.AddProject<Projects.BD_PublicPortal_Api>(publicPortalApiName)
   .WithUrlForEndpoint("http", url =>
   {
     url.Url = "/swagger";
@@ -53,7 +54,7 @@ var publicPortalApi = builder.AddProject<Projects.BD_PublicPortal_Api>("publicPo
   //  name: "my-https",//dont use https
   //  port: 57679 + 10,
   //  scheme: "https",
-  //  isExternal:true,
+  //  isExternal: true,
   //  isProxied: false
   //)
   //.WithEndpoint(
@@ -91,8 +92,8 @@ for(int i = 1;i <= ctsNr; i++)
   var ctsApiName = $"cts{i}Api";
   var ctsDatabaseName = $"Cts{i}Database";
   var ctsKafkaBrokerPartionIdentifId = $"Cts{i}PartionId";
-  //var ctsHttpsExposedPort = 57677 + 10 + i;
-  //var ctsHttpExposedPort = 57676 + 10 + i;
+  var ctsHttpsExposedPort = 57689  + i;
+  var ctsHttpExposedPort = 57688 + i;
 
   var ctsDatabase =
     ctsPostgres.AddDatabase(name: ctsDatabaseName, databaseName: ctsDatabaseName); // name => la resource ! 

@@ -82,4 +82,5 @@ namespace BD.PublicPortal.Core.DTOs
     }
 
 
+
 }

@@ -18,7 +18,7 @@ public class MediatRDomainEventDispatcher : IDomainEventDispatcher
   {
     foreach (var entity in entitiesWithEvents)
     {
-      if (entity is HasDomainEventsBase hasDomainEvents)
+      if (entity is IHasDomainEvents hasDomainEvents)
       {
         var events = hasDomainEvents.DomainEvents.ToArray();
         hasDomainEvents.ClearDomainEvents();

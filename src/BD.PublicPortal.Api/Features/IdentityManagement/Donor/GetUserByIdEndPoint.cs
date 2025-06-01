@@ -1,8 +1,7 @@
 ﻿using BD.PublicPortal.Application.Identity;
 using BD.PublicPortal.Core.DTOs;
 
-
-namespace BD.PublicPortal.Api.Features.IdentityManagement.Users.GetById;
+namespace BD.PublicPortal.Api.Features.IdentityManagement.Donor;
 
 public class GetUserByIdEndpointRequest
 {
