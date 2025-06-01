@@ -98,11 +98,25 @@ namespace Application.Features.BloodRequests.Handlers
                     newRequest.AquiredQty,
                     service.Name);
                 
-                // Publish to Kafka
+                // Publish to Kafka with timeout
                 try
                 {
-                    await _eventProducer.ProduceAsync("blood-request-created", message);
-                    _logger.LogInformation("Published blood request creation event to Kafka for request ID: {RequestId}", newRequest.Id);
+                    var publishTask = _eventProducer.ProduceAsync("blood-request-created", message);
+                    
+                    // Add a timeout to prevent hanging
+                    var completedTask = await Task.WhenAny(publishTask, Task.Delay(TimeSpan.FromSeconds(5)));
+                    
+                    if (completedTask == publishTask)
+                    {
+                        // Task completed successfully
+                        await publishTask; // Get the result to propagate any exceptions
+                        _logger.LogInformation("Published blood request creation event to Kafka for request ID: {RequestId}", newRequest.Id);
+                    }
+                    else
+                    {
+                        // Task timed out
+                        _logger.LogWarning("Timed out publishing blood request creation event to Kafka for request ID: {RequestId}", newRequest.Id);
+                    }
                 }
                 catch (Exception ex)
                 {
