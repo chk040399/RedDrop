@@ -42,7 +42,7 @@ public static class InfrastructureServiceExtensions
     );
 
     // Register Identity with custom user and role
-    services.AddIdentity<ApplicationUser, ApplicationRole>()
+    services.AddIdentity<MyIdUser, ApplicationRole>()
       .AddEntityFrameworkStores<AppDbContext>()
       .AddDefaultTokenProviders(); // .AddSignInManager(); // Add this if you need SignInManager
 

@@ -24,10 +24,10 @@ dotnet tool update --global dotnet-ef
 
 Run migrations 
 
-dotnet ef migrations add MigrationName --project src/BD.PublicPortal.Infrastructure --startup-project src/BD.PublicPortal.Api --output-dir Data/Migrations
-dotnet ef database update --project src/BD.PublicPortal.Infrastructure --startup-project src/BD.PublicPortal.Api
+dotnet ef migrations add Initial --project src/BD.Central.Infrastructure --startup-project src/BD.Central.Api --output-dir Data/Migrations
+dotnet ef database update --project src/BD.Central.Infrastructure --startup-project src/BD.Central.Api
 
 
-dotnet ef migrations script --idempotent --project src/BD.PublicPortal.Infrastructure --startup-project src/BD.PublicPortal.Api -o migration.sql
+dotnet ef migrations script --idempotent --project src/BD.Central.Infrastructure --startup-project src/BD.Central.Api -o migration.sql
 
 use the custom tool !!!!

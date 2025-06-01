@@ -4325,3 +4325,123 @@ SELECT EXISTS (
 2025-06-01 03:07:53.161 +01:00 [INF] Application started. Press Ctrl+C to shut down.
 2025-06-01 03:07:53.167 +01:00 [INF] Hosting environment: Development
 2025-06-01 03:07:53.172 +01:00 [INF] Content root path: D:\RedDrop\RedDrop\src\BD.PublicPortal.Api
+2025-06-01 06:00:18.966 +01:00 [INF] Registered 8 endpoints in 652 milliseconds.
+2025-06-01 06:00:19.197 +01:00 [INF] No validators found in the system!
+2025-06-01 06:00:19.315 +01:00 [INF] User profile is available. Using 'C:\Users\CHK\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-06-01 06:00:22.827 +01:00 [WRN] Overriding address(es) 'http://0.0.0.0:57698, https://0.0.0.0:57699'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-01 06:00:22.872 +01:00 [INF] Now listening on: http://0.0.0.0:11389
+2025-06-01 06:00:22.873 +01:00 [INF] Now listening on: https://0.0.0.0:11391
+2025-06-01 06:00:22.878 +01:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-06-01 06:00:23.552 +01:00 [ERR] Kafka consume error.
+Confluent.Kafka.ConsumeException: Subscribed topic not available: global-stock: Broker: Unknown topic or partition
+   at Confluent.Kafka.Consumer`2.Consume(Int32 millisecondsTimeout)
+   at Confluent.Kafka.Consumer`2.Consume(CancellationToken cancellationToken)
+   at OpenTelemetry.Instrumentation.ConfluentKafka.InstrumentedConsumer`2.Consume(CancellationToken cancellationToken) in /_/src/Vendoring/OpenTelemetry.Instrumentation.ConfluentKafka/InstrumentedConsumer.cs:line 86
+   at BD.Central.Api.Kafka.KafkaConsumerBackgroundService.<>c__DisplayClass5_0.<<ExecuteAsync>b__0>d.MoveNext() in D:\walid-pfe\BloodDrop\src\BD.Central.Api\Kafka\KafkaConsumerBackgroundService.cs:line 38
+2025-06-01 06:00:23.659 +01:00 [ERR] Kafka consume error.
+Confluent.Kafka.ConsumeException: Subscribed topic not available: pledge-failed-events: Broker: Unknown topic or partition
+   at Confluent.Kafka.Consumer`2.Consume(Int32 millisecondsTimeout)
+   at Confluent.Kafka.Consumer`2.Consume(CancellationToken cancellationToken)
+   at OpenTelemetry.Instrumentation.ConfluentKafka.InstrumentedConsumer`2.Consume(CancellationToken cancellationToken) in /_/src/Vendoring/OpenTelemetry.Instrumentation.ConfluentKafka/InstrumentedConsumer.cs:line 86
+   at BD.Central.Api.Kafka.KafkaConsumerBackgroundService.<>c__DisplayClass5_0.<<ExecuteAsync>b__0>d.MoveNext() in D:\walid-pfe\BloodDrop\src\BD.Central.Api\Kafka\KafkaConsumerBackgroundService.cs:line 38
+2025-06-01 06:00:24.091 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-06-01 06:00:24.092 +01:00 [INF] Hosting environment: Development
+2025-06-01 06:00:24.092 +01:00 [INF] Content root path: D:\walid-pfe\BloodDrop\src\BD.Central.Api
+2025-06-01 06:01:38.427 +01:00 [INF] Registered 8 endpoints in 590 milliseconds.
+2025-06-01 06:01:38.573 +01:00 [INF] No validators found in the system!
+2025-06-01 06:01:38.626 +01:00 [INF] User profile is available. Using 'C:\Users\CHK\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-06-01 06:01:38.943 +01:00 [ERR] Kafka consume error.
+Confluent.Kafka.ConsumeException: Subscribed topic not available: global-stock: Broker: Unknown topic or partition
+   at Confluent.Kafka.Consumer`2.Consume(Int32 millisecondsTimeout)
+   at Confluent.Kafka.Consumer`2.Consume(CancellationToken cancellationToken)
+   at OpenTelemetry.Instrumentation.ConfluentKafka.InstrumentedConsumer`2.Consume(CancellationToken cancellationToken) in /_/src/Vendoring/OpenTelemetry.Instrumentation.ConfluentKafka/InstrumentedConsumer.cs:line 86
+   at BD.Central.Api.Kafka.KafkaConsumerBackgroundService.<>c__DisplayClass5_0.<<ExecuteAsync>b__0>d.MoveNext() in D:\walid-pfe\BloodDrop\src\BD.Central.Api\Kafka\KafkaConsumerBackgroundService.cs:line 38
+2025-06-01 06:01:39.007 +01:00 [ERR] Kafka consume error.
+Confluent.Kafka.ConsumeException: Subscribed topic not available: pledge-failed-events: Broker: Unknown topic or partition
+   at Confluent.Kafka.Consumer`2.Consume(Int32 millisecondsTimeout)
+   at Confluent.Kafka.Consumer`2.Consume(CancellationToken cancellationToken)
+   at OpenTelemetry.Instrumentation.ConfluentKafka.InstrumentedConsumer`2.Consume(CancellationToken cancellationToken) in /_/src/Vendoring/OpenTelemetry.Instrumentation.ConfluentKafka/InstrumentedConsumer.cs:line 86
+   at BD.Central.Api.Kafka.KafkaConsumerBackgroundService.<>c__DisplayClass5_0.<<ExecuteAsync>b__0>d.MoveNext() in D:\walid-pfe\BloodDrop\src\BD.Central.Api\Kafka\KafkaConsumerBackgroundService.cs:line 38
+2025-06-01 06:01:39.068 +01:00 [WRN] Overriding address(es) 'http://0.0.0.0:57698, https://0.0.0.0:57699'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-01 06:01:39.097 +01:00 [INF] Now listening on: http://0.0.0.0:11475
+2025-06-01 06:01:39.098 +01:00 [INF] Now listening on: https://0.0.0.0:11474
+2025-06-01 06:01:39.101 +01:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-06-01 06:01:39.710 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-06-01 06:01:39.710 +01:00 [INF] Hosting environment: Development
+2025-06-01 06:01:39.710 +01:00 [INF] Content root path: D:\walid-pfe\BloodDrop\src\BD.Central.Api
+2025-06-01 06:03:28.241 +01:00 [INF] Registered 8 endpoints in 296 milliseconds.
+2025-06-01 06:03:28.341 +01:00 [INF] No validators found in the system!
+2025-06-01 06:03:28.366 +01:00 [INF] User profile is available. Using 'C:\Users\CHK\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-06-01 06:03:28.637 +01:00 [WRN] Overriding address(es) 'http://0.0.0.0:57698, https://0.0.0.0:57699'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-01 06:03:28.670 +01:00 [INF] Now listening on: http://0.0.0.0:11672
+2025-06-01 06:03:28.671 +01:00 [INF] Now listening on: https://0.0.0.0:11670
+2025-06-01 06:03:28.675 +01:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-06-01 06:03:29.248 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-06-01 06:03:29.248 +01:00 [INF] Hosting environment: Development
+2025-06-01 06:03:29.249 +01:00 [INF] Content root path: D:\walid-pfe\BloodDrop\src\BD.Central.Api
+2025-06-01 06:03:29.409 +01:00 [ERR] Kafka consume error.
+Confluent.Kafka.ConsumeException: Subscribed topic not available: global-stock: Broker: Unknown topic or partition
+   at Confluent.Kafka.Consumer`2.Consume(Int32 millisecondsTimeout)
+   at Confluent.Kafka.Consumer`2.Consume(CancellationToken cancellationToken)
+   at OpenTelemetry.Instrumentation.ConfluentKafka.InstrumentedConsumer`2.Consume(CancellationToken cancellationToken) in /_/src/Vendoring/OpenTelemetry.Instrumentation.ConfluentKafka/InstrumentedConsumer.cs:line 86
+   at BD.Central.Api.Kafka.KafkaConsumerBackgroundService.<>c__DisplayClass5_0.<<ExecuteAsync>b__0>d.MoveNext() in D:\walid-pfe\BloodDrop\src\BD.Central.Api\Kafka\KafkaConsumerBackgroundService.cs:line 38
+2025-06-01 06:03:29.417 +01:00 [ERR] Kafka consume error.
+Confluent.Kafka.ConsumeException: Subscribed topic not available: pledge-failed-events: Broker: Unknown topic or partition
+   at Confluent.Kafka.Consumer`2.Consume(Int32 millisecondsTimeout)
+   at Confluent.Kafka.Consumer`2.Consume(CancellationToken cancellationToken)
+   at OpenTelemetry.Instrumentation.ConfluentKafka.InstrumentedConsumer`2.Consume(CancellationToken cancellationToken) in /_/src/Vendoring/OpenTelemetry.Instrumentation.ConfluentKafka/InstrumentedConsumer.cs:line 86
+   at BD.Central.Api.Kafka.KafkaConsumerBackgroundService.<>c__DisplayClass5_0.<<ExecuteAsync>b__0>d.MoveNext() in D:\walid-pfe\BloodDrop\src\BD.Central.Api\Kafka\KafkaConsumerBackgroundService.cs:line 38
+2025-06-01 06:04:59.167 +01:00 [INF] Registered 8 endpoints in 757 milliseconds.
+2025-06-01 06:04:59.360 +01:00 [INF] No validators found in the system!
+2025-06-01 06:04:59.432 +01:00 [INF] User profile is available. Using 'C:\Users\CHK\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-06-01 06:04:59.867 +01:00 [WRN] Overriding address(es) 'http://0.0.0.0:57698, https://0.0.0.0:57699'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-01 06:04:59.907 +01:00 [INF] Now listening on: http://0.0.0.0:12819
+2025-06-01 06:04:59.908 +01:00 [INF] Now listening on: https://0.0.0.0:12816
+2025-06-01 06:04:59.913 +01:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-06-01 06:04:59.962 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-06-01 06:04:59.962 +01:00 [INF] Hosting environment: Development
+2025-06-01 06:04:59.962 +01:00 [INF] Content root path: D:\walid-pfe\BloodDrop\src\BD.Central.Api
+2025-06-01 06:05:00.564 +01:00 [ERR] Kafka consume error.
+Confluent.Kafka.ConsumeException: Subscribed topic not available: global-stock: Broker: Unknown topic or partition
+   at Confluent.Kafka.Consumer`2.Consume(Int32 millisecondsTimeout)
+   at Confluent.Kafka.Consumer`2.Consume(CancellationToken cancellationToken)
+   at OpenTelemetry.Instrumentation.ConfluentKafka.InstrumentedConsumer`2.Consume(CancellationToken cancellationToken) in /_/src/Vendoring/OpenTelemetry.Instrumentation.ConfluentKafka/InstrumentedConsumer.cs:line 86
+   at BD.Central.Api.Kafka.KafkaConsumerBackgroundService.<>c__DisplayClass5_0.<<ExecuteAsync>b__0>d.MoveNext() in D:\walid-pfe\BloodDrop\src\BD.Central.Api\Kafka\KafkaConsumerBackgroundService.cs:line 38
+2025-06-01 06:05:00.642 +01:00 [ERR] Kafka consume error.
+Confluent.Kafka.ConsumeException: Subscribed topic not available: pledge-failed-events: Broker: Unknown topic or partition
+   at Confluent.Kafka.Consumer`2.Consume(Int32 millisecondsTimeout)
+   at Confluent.Kafka.Consumer`2.Consume(CancellationToken cancellationToken)
+   at OpenTelemetry.Instrumentation.ConfluentKafka.InstrumentedConsumer`2.Consume(CancellationToken cancellationToken) in /_/src/Vendoring/OpenTelemetry.Instrumentation.ConfluentKafka/InstrumentedConsumer.cs:line 86
+   at BD.Central.Api.Kafka.KafkaConsumerBackgroundService.<>c__DisplayClass5_0.<<ExecuteAsync>b__0>d.MoveNext() in D:\walid-pfe\BloodDrop\src\BD.Central.Api\Kafka\KafkaConsumerBackgroundService.cs:line 38
+2025-06-01 06:05:04.822 +01:00 [INF] Request starting HTTP/1.1 POST https://localhost:57699/dbadmin/migrate - null 0
+2025-06-01 06:05:04.947 +01:00 [INF] Request finished HTTP/1.1 POST https://localhost:57699/dbadmin/migrate - 404 0 null 133.7967ms
+2025-06-01 06:05:04.957 +01:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: POST https://localhost:57699/dbadmin/migrate, Response status code: 404
+2025-06-01 06:08:57.963 +01:00 [INF] Registered 9 endpoints in 613 milliseconds.
+2025-06-01 06:08:58.143 +01:00 [INF] No validators found in the system!
+2025-06-01 06:08:58.208 +01:00 [INF] User profile is available. Using 'C:\Users\CHK\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-06-01 06:08:58.657 +01:00 [WRN] Overriding address(es) 'http://0.0.0.0:57698, https://0.0.0.0:57699'. Binding to endpoints defined via IConfiguration and/or UseKestrel() instead.
+2025-06-01 06:08:58.709 +01:00 [INF] Now listening on: http://0.0.0.0:13121
+2025-06-01 06:08:58.710 +01:00 [INF] Now listening on: https://0.0.0.0:13125
+2025-06-01 06:08:58.715 +01:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-06-01 06:08:59.412 +01:00 [ERR] Kafka consume error.
+Confluent.Kafka.ConsumeException: Subscribed topic not available: global-stock: Broker: Unknown topic or partition
+   at Confluent.Kafka.Consumer`2.Consume(Int32 millisecondsTimeout)
+   at Confluent.Kafka.Consumer`2.Consume(CancellationToken cancellationToken)
+   at OpenTelemetry.Instrumentation.ConfluentKafka.InstrumentedConsumer`2.Consume(CancellationToken cancellationToken) in /_/src/Vendoring/OpenTelemetry.Instrumentation.ConfluentKafka/InstrumentedConsumer.cs:line 86
+   at BD.Central.Api.Kafka.KafkaConsumerBackgroundService.<>c__DisplayClass5_0.<<ExecuteAsync>b__0>d.MoveNext() in D:\walid-pfe\BloodDrop\src\BD.Central.Api\Kafka\KafkaConsumerBackgroundService.cs:line 38
+2025-06-01 06:08:59.523 +01:00 [ERR] Kafka consume error.
+Confluent.Kafka.ConsumeException: Subscribed topic not available: pledge-failed-events: Broker: Unknown topic or partition
+   at Confluent.Kafka.Consumer`2.Consume(Int32 millisecondsTimeout)
+   at Confluent.Kafka.Consumer`2.Consume(CancellationToken cancellationToken)
+   at OpenTelemetry.Instrumentation.ConfluentKafka.InstrumentedConsumer`2.Consume(CancellationToken cancellationToken) in /_/src/Vendoring/OpenTelemetry.Instrumentation.ConfluentKafka/InstrumentedConsumer.cs:line 86
+   at BD.Central.Api.Kafka.KafkaConsumerBackgroundService.<>c__DisplayClass5_0.<<ExecuteAsync>b__0>d.MoveNext() in D:\walid-pfe\BloodDrop\src\BD.Central.Api\Kafka\KafkaConsumerBackgroundService.cs:line 38
+2025-06-01 06:08:59.973 +01:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-06-01 06:08:59.973 +01:00 [INF] Hosting environment: Development
+2025-06-01 06:08:59.973 +01:00 [INF] Content root path: D:\walid-pfe\BloodDrop\src\BD.Central.Api
+2025-06-01 06:09:09.673 +01:00 [INF] Request starting HTTP/1.1 POST https://localhost:57699/dbadmin/migrate - null 0
+2025-06-01 06:09:09.753 +01:00 [INF] Executing endpoint 'HTTP: POST /dbadmin/migrate'
+2025-06-01 06:09:09.782 +01:00 [INF] Handling MigrateDatabaseCommand
+2025-06-01 06:09:10.458 +01:00 [WRN] Sensitive data logging is enabled. Log entries and exception messages may include sensitive application data; this mode should only be enabled during development.
+2025-06-01 06:09:17.048 +01:00 [INF] Handled MigrateDatabaseCommand with Ardalis.Result.Result in 7265 ms
+2025-06-01 06:09:17.057 +01:00 [INF] Executed endpoint 'HTTP: POST /dbadmin/migrate'
+2025-06-01 06:09:17.067 +01:00 [INF] Request finished HTTP/1.1 POST https://localhost:57699/dbadmin/migrate - 200 null null 7402.2616ms
