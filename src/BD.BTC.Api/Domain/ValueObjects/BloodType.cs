@@ -61,5 +61,10 @@ namespace Domain.ValueObjects
                 _ => throw new InternalServerException("Invalid BloodType", "BloodType")
             };
         }
+
+    internal static BloodType Unknown()
+    {
+      throw new NotImplementedException();
     }
+  }
 }

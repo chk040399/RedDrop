@@ -101,7 +101,7 @@ namespace Application.Features.BloodBagManagement.Handlers
                             null,
                             null);
 
-                        await _eventProducer.ProduceAsync(updateRequestTopic, updateRequestEvent);
+                        await _eventProducer.ProduceAsync("update-request", updateRequestEvent);
                         _logger.LogInformation("Sent request update event for request {RequestId}", request.Id);
                     }
                 }
@@ -203,7 +203,7 @@ namespace Application.Features.BloodBagManagement.Handlers
                     stockData
                 );
                 
-                await _eventProducer.ProduceAsync(topic, globalStockEvent);
+                await _eventProducer.ProduceAsync("global-stock", globalStockEvent);
                 _logger.LogInformation("Published global stock update for {BloodType} {BloodBagType} after blood bag deletion", 
                     bloodType.Value, bloodBagType.Value);
             }

@@ -67,14 +67,22 @@ namespace Presentation.Endpoints.DonorPledges
                 throw err;
             }
 
+            // Instead of throwing an error, return an empty array
             if (pledges == null || pledges.Count == 0)
             {
                 _logger.LogWarning("No pledges found");
-                throw new NotFoundException("No pledges found", "pledges_not_found");
+                await SendAsync(new GetAllPledgesResponse
+                {
+                    Pledges = new List<DonorPledgeListDTO>(),
+                    Total = 0,
+                    Message = "No pledges found",
+                    StatusCode = 200 // Return 200 OK instead of 404
+                }, StatusCodes.Status200OK, ct);
+                return;
             }
 
             _logger.LogInformation("Fetched {Count} pledges", pledges.Count);
-
+            
             var response = new GetAllPledgesResponse
             {
                 Pledges = pledges,

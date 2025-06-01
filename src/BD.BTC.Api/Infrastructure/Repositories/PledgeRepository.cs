@@ -3,15 +3,18 @@ using Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Infrastructure.Persistence;
 using Domain.Repositories;
+using Microsoft.Extensions.Logging;
 namespace Infrastructure.Repositories
 {
-    public class PledgeRepository : IPledgeRepository
+public class PledgeRepository : IPledgeRepository
 {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<PledgeRepository> _logger;
 
-        public PledgeRepository(ApplicationDbContext context)
+        public PledgeRepository(ApplicationDbContext context, ILogger<PledgeRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<DonorPledge?> GetByIdAsync(Guid donorId, Guid requestId)
@@ -36,9 +39,36 @@ namespace Infrastructure.Repositories
 
         public async Task AddAsync(DonorPledge pledge)
         {
+            try 
+    {
+        // Ensure PledgeDate is in UTC format for PostgreSQL
+        if (pledge.PledgeDate.HasValue && pledge.PledgeDate.Value.Kind != DateTimeKind.Utc)
+        {
+            pledge.PledgeDate = DateTime.SpecifyKind(pledge.PledgeDate.Value, DateTimeKind.Utc);
+        }
+        
+        // Check if it exists already
+        var existingPledge = await GetByDonorAndRequestIdAsync(pledge.DonorId, pledge.RequestId);
+        if (existingPledge != null)
+        {
+            // Update existing instead of adding new
+            _context.Entry(existingPledge).CurrentValues.SetValues(pledge);
+        }
+        else
+        {
+            // New entity
             await _context.Pledges.AddAsync(pledge);
-            await _context.SaveChangesAsync();
-        }   
+        }
+        
+        // Save changes - this was missing!
+        await _context.SaveChangesAsync();
+    }
+    catch (Exception ex)
+    {
+        _logger.LogError(ex, "Error saving pledge to database: {Message}", ex.Message);
+        throw;
+    }
+}   
 
         public async Task UpdateAsync(DonorPledge pledge)
         {

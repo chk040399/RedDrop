@@ -16,8 +16,7 @@ using Infrastructure.ExternalServices.Kafka;
 
 namespace Application.Features.EventHandling.Handlers
 {
-    public class DonorPledgeEventHandler
-        : IRequestHandler<DonorPledgeCommand, Unit>
+    public class DonorPledgeEventHandler : IRequestHandler<DonorPledgeCommand, Unit> // Changed back to IRequestHandler<DonorPledgeCommand, Unit>
     {
         private readonly IRequestRepository _requestRepository;
         private readonly IDonorRepository _donorRepository;
@@ -65,7 +64,7 @@ namespace Application.Features.EventHandling.Handlers
 
             try
             {
-                return await policy.ExecuteAsync(async () => 
+                await policy.ExecuteAsync(async () => 
                 {
                     await ProcessPledge(command.Payload, ct);
                     return await Task<Unit>.FromResult(Unit.Value);
@@ -78,12 +77,27 @@ namespace Application.Features.EventHandling.Handlers
                 await _eventProducer.ProduceAsync(topic, new PledgeFailedEvent(command.Payload, ex.Message, DateTime.UtcNow, Guid.NewGuid()));
                 throw;
             }
+
+            return Unit.Value; // Return Unit.Value
         }
 
        private async Task ProcessPledge(DonorPledgeEvent payload, CancellationToken ct)
 {
+    // Validate payload and request
+    if (payload == null)
+    {
+        _logger.LogError("Payload is null");
+        throw new ArgumentNullException(nameof(payload));
+    }
+
+    if (payload.Donor == null)
+    {
+        _logger.LogError("Donor data is null in payload");
+        throw new ArgumentException("Donor data cannot be null", nameof(payload));
+    }
+
     var request = await _requestRepository.GetByIdAsync(payload.RequestId)
-        ?? throw new NotFoundException($"Request {payload.RequestId} not found","donor-pledge consumer");
+        ?? throw new NotFoundException($"Request {payload.RequestId} not found", "donor-pledge consumer");
 
     var donor = await _donorRepository.GetByNINAsync(payload.Donor.NIN);
 
@@ -95,18 +109,25 @@ namespace Application.Features.EventHandling.Handlers
         // Add null check for DonorName
         string donorName = payload.Donor.DonorName ?? "Unknown Donor";
 
-        // Need to convert BloodGroup enum to BloodType value object
-        var bloodType = BloodTypeConverter.ToBloodType(payload.Donor.BloodGroup);
+        // Safely convert BloodGroup enum to BloodType value object with null check
+        BloodType bloodType;
+        try {
+            bloodType = BloodTypeConverter.ToBloodType(payload.Donor.BloodGroup);
+        }
+        catch (Exception ex) {
+            _logger.LogError(ex, "Error converting blood group {BloodGroup} to blood type", payload.Donor.BloodGroup);
+            bloodType = BloodType.Unknown();
+        }
 
         donor = new Donor(
             donorName,
-            payload.Donor.Email,
+            payload.Donor.Email ?? string.Empty,
             payload.Donor.NotesBTC,
-            bloodType,  // Use converted bloodType
+            bloodType,
             payload.Donor.LastDonationDate,
-            payload.Donor.Address,
+            payload.Donor.Address ?? string.Empty,
             payload.Donor.NIN,
-            payload.Donor.PhoneNumber,
+            payload.Donor.PhoneNumber ?? string.Empty,
             payload.Donor.DateOfBirth);
             
         await _donorRepository.AddAsync(donor);
@@ -156,11 +177,15 @@ namespace Application.Features.EventHandling.Handlers
     var pledgeStatus = PledgeStatusConverter.ToPledgeStatus(payload.Status);
 
     // Create pledge with DateOnly and converted status
+    var pledgeDateTime = pledgeDateOnly.ToDateTime(TimeOnly.MinValue);
+    // Convert to UTC
+    pledgeDateTime = DateTime.SpecifyKind(pledgeDateTime, DateTimeKind.Utc);
+
     var pledge = new DonorPledge(
         donor.Id,
         request.Id,
-        pledgeStatus, // Now using the converted PledgeStatus value object
-        pledgeDateOnly.ToDateTime(TimeOnly.MinValue)); // Convert DateOnly to DateTime
+        pledgeStatus,
+        pledgeDateTime); // Now using UTC DateTime
         
     _logger.LogInformation("Pledge created: {Pledge}", pledge);
     

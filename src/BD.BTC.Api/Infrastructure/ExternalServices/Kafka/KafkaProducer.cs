@@ -24,17 +24,30 @@ namespace Infrastructure.ExternalServices.Kafka
             {
                 var message = new Message<string, string>
                 {
-                    Key = "CtsCreated",
+                    Key = Guid.NewGuid().ToString(),
                     Value = JsonSerializer.Serialize(@event)
                 };
 
-                var result = await _producer.ProduceAsync(topic, message);
-                _logger.LogDebug($"Delivered to {result.TopicPartitionOffset}");
+                try
+                {
+                    await _producer.ProduceAsync(topic, message);
+                    _logger.LogDebug($"Delivered to topic {topic}");
+                }
+                catch (ObjectDisposedException ex)
+                {
+                    _logger.LogWarning(ex, "Kafka producer was disposed. Message will not be sent to topic {Topic}", topic);
+                    // Continue execution - don't let Kafka issues stop the process
+                }
+                catch (KafkaException kex)
+                {
+                    _logger.LogError(kex, "Kafka error when producing to topic {Topic}", topic);
+                    // Continue execution - don't let Kafka issues stop the process
+                }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Message production failed");
-                throw;
+                _logger.LogError(ex, "Failed to serialize or send message to Kafka topic {Topic}", topic);
+                // Continue execution - don't let Kafka issues stop the process
             }
         }
 

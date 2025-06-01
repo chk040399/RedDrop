@@ -37,5 +37,11 @@ public class CreateBloodBagValidator : Validator<CreateBloodBagRequest>
         RuleFor(x => x.RequestId)
             .Must(requestId => requestId == null || Guid.TryParse(requestId.ToString(), out _))
             .WithMessage("Invalid Request ID.");
+
+        RuleFor(x => x.Status)
+            .Must(status => status == null || 
+                new[] { "aquired", "ready", "expired", "used", "outforexpired", "out for other" }
+                    .Contains(status.ToLowerInvariant()))
+            .WithMessage("Invalid blood bag status. Valid statuses are: aquired, ready, expired, used, outforexpired, out for other");
     }
 }

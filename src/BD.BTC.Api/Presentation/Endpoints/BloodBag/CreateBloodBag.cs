@@ -21,7 +21,8 @@ namespace Presentation.Endpoints.BloodBag
         public override void Configure()
         {
             Post("/blood-bags");
-            Roles("Admin", "User"); // Both admins and regular users can access
+            AllowAnonymous(); // Change to [Authorize] if authentication is required
+            //Roles("Admin", "User"); // Both admins and regular users can access
             Description(x => x
                 .WithName("CreateBloodBag")
                 .WithTags("BloodBags")
@@ -36,35 +37,42 @@ namespace Presentation.Endpoints.BloodBag
             try
             {
                 var command = new CreateBloodBagCommand(
-                    BloodType.FromString(req.BloodGroup), // Convert string to BloodType
+                    BloodType.FromString(req.BloodGroup), 
                     BloodBagType.Convert(req.BloodBagType),
                     req.ExpirationDate,
                     req.AquieredDate,
                     (Guid)req.DonorId!,
-                    req.RequestId
+                    req.RequestId,
+                    req.Status != null ? BloodBagStatus.Convert(req.Status) : null
                 );
 
                 var result = await _mediator.Send(command, ct);
 
-                if (result.bloodBag == null || result.err == null)
+                if (result.err != null)
                 {
-                    _logger.LogError("CreateBloodBagHandler returned null");
-                    throw new InvalidOperationException("CreateBloodBagHandler returned null: CreateBloodBag");
+                    _logger.LogError("Error creating blood bag: {Error}", result.err.Message);
+                    throw result.err;
                 }
 
-                _logger.LogInformation("CreateBloodBagHandler success returned {result}", result);
+                if (result.bloodBag == null)
+                {
+                    _logger.LogError("CreateBloodBagHandler returned null result");
+                    throw new InternalServerException("Failed to create blood bag", "CreateBloodBag");
+                }
+
+                _logger.LogInformation("Blood bag created successfully with ID: {Id}", result.bloodBag.Id);
                 var response = new CreateBloodBagResponse
                 {
                     content = result.bloodBag,
                     success = true,
                     Error = null
                 };
-                await SendAsync(response, cancellation: ct);
+                await SendAsync(response, StatusCodes.Status201Created, ct);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not BaseException)
             {
-                _logger.LogError(ex, "Invalid Input");
-                throw new ValidationException(ex.Message,"create_blood_bag");
+                _logger.LogError(ex, "Unexpected error creating blood bag");
+                throw new ValidationException(ex.Message, "create_blood_bag");
             }
         }
     }
@@ -77,6 +85,7 @@ namespace Presentation.Endpoints.BloodBag
         public DateOnly? AquieredDate { get; set; }
         public Guid? DonorId { get; set; }
         public Guid? RequestId { get; set; }
+        public string? Status { get; set; } // Add this field
     }
 
     public class CreateBloodBagResponse

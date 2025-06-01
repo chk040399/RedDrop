@@ -220,9 +220,19 @@ app.UseCors("AllowAll");
 
 
 // Register your topic handlers with the dispatcher
-//TODO : Disabled - compile error
-//var topicDispatcher = app.Services.GetRequiredService<ITopicDispatcher>();
-//topicDispatcher.Register<DonorPledgeCommand>("donors-pledges");
+var topicDispatcher = app.Services.GetRequiredService<ITopicDispatcher>();
+try {
+    // Register DonorPledge handler
+    ((Infrastructure.ExternalServices.TopicDispatcher)topicDispatcher).RegisterDonorPledge("donors-pledges");
+    
+    // Register PledgeCanceled handler
+    ((Infrastructure.ExternalServices.TopicDispatcher)topicDispatcher).RegisterPledgeCanceled("pledge-canceled-events");
+    
+    app.Logger.LogInformation("Successfully registered Kafka event handlers");
+}
+catch (Exception ex) {
+    app.Logger.LogError(ex, "Failed to register Kafka event handlers: {Message}", ex.Message);
+}
 
 
 app.MapDefaultEndpoints();// ASPIRE  --> Middle ware

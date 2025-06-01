@@ -15,6 +15,7 @@ namespace Infrastructure.ExternalServices.Kafka
         private readonly KafkaSettings _settings;
         private readonly ITopicDispatcher _dispatcher;
         private readonly CancellationTokenSource _cts = new();
+        private readonly IServiceProvider _serviceProvider; // Add this
         private IConsumer<string, string> _consumer;
 
         public KafkaConsumerService(
@@ -22,13 +23,15 @@ namespace Infrastructure.ExternalServices.Kafka
             IOptions<KafkaSettings> settings,
             IMediator mediator,
             ITopicDispatcher dispatcher,
-            IConsumer<string, string> consumer)
+            IConsumer<string, string> consumer,
+            IServiceProvider serviceProvider) // Add this parameter
         {
             _logger = logger;
             _mediator = mediator;
             _settings = settings.Value;
             _dispatcher = dispatcher;
             _consumer = consumer;
+            _serviceProvider = serviceProvider; // Initialize the field
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -134,13 +137,22 @@ namespace Infrastructure.ExternalServices.Kafka
                 }
 
                 var request = Activator.CreateInstance(handlerType, message);
-                if (request is not IRequest mediatorRequest)
+                
+                // Change this check to handle both IRequest and IRequest<T>
+                if (request == null || !typeof(IBaseRequest).IsAssignableFrom(request.GetType()))
                 {
                     _logger.LogError($"Invalid request type for topic {topic}");
                     return;
                 }
 
-                await _mediator.Send(mediatorRequest);
+                // Create a scope for resolving scoped dependencies
+                using (var scope = _serviceProvider.CreateScope())
+                {
+                    // Use the scoped mediator instead of the singleton one
+                    var scopedMediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+                    await scopedMediator.Send(request);
+                }
+                
                 _consumer!.Commit(result);
             }
             catch (Exception ex)

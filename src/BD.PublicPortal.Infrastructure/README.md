@@ -31,3 +31,5 @@ dotnet ef database update --project src/BD.PublicPortal.Infrastructure --startup
 dotnet ef migrations script --idempotent --project src/BD.PublicPortal.Infrastructure --startup-project src/BD.PublicPortal.Api -o migration.sql
 
 use the custom tool !!!!
+
+dotnet ef migrations script --idempotent -o migration.sql

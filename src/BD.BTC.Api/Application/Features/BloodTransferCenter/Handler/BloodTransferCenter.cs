@@ -86,8 +86,14 @@ namespace Application.Features.BloodTransferCenterManagement.Handlers
                 );
                 _logger.LogInformation("Producing CtsData event to topic: {Topic}", topic);
                 _logger.LogInformation("CtsData event details: {@InitEvent}", initEvent);
-                await _eventProducer.ProduceAsync("cts-init", initEvent);
-               
+                try {
+                    await _eventProducer.ProduceAsync("cts-init", initEvent);
+                    _logger.LogInformation("CTS data published to Kafka");
+                }
+                catch (Exception kafkaEx) {
+                    _logger.LogWarning(kafkaEx, "Failed to publish CTS data to Kafka, but center was created successfully");
+                    // Continue execution - don't let Kafka issues prevent successful creation
+                }
 
                 return (new BloodTransferCenterDTO
                 {

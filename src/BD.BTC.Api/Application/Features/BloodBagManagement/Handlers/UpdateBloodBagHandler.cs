@@ -231,7 +231,7 @@ namespace Application.Features.BloodBagManagement.Handlers
                     stockData
                 );
                 
-                await _eventProducer.ProduceAsync(topic,globalStockEvent);
+                await _eventProducer.ProduceAsync(topic,"global-stock");
                 _logger.LogInformation("Published global stock update for {BloodType} {BloodBagType}", 
                     bloodType.Value, bloodBagType.Value);
             }

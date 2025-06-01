@@ -87,7 +87,7 @@ namespace Application.Features.BloodBagManagement.Handlers
                                 RequestStatusConverter.ToEnum(RequestStatus.Resolved()),
                                 request.AquiredQty,null,
                                 null);
-                            await _eventProducer.ProduceAsync(updateRequestTopic, requestResolvedEvent);
+                            await _eventProducer.ProduceAsync("update-request", requestResolvedEvent);
                         }
                         else
                         {
@@ -100,7 +100,7 @@ namespace Application.Features.BloodBagManagement.Handlers
                                 request.AquiredQty,
                                 null
                               , null);
-                            await _eventProducer.ProduceAsync(updateRequestTopic,updateRequestEvent);
+                            await _eventProducer.ProduceAsync("update-request",updateRequestEvent);
 
                         }
                     }
@@ -195,7 +195,7 @@ namespace Application.Features.BloodBagManagement.Handlers
                     hospital.Id,
                     subMessage
                 );
-                await _eventProducer.ProduceAsync(globalStockTopic, message);
+                await _eventProducer.ProduceAsync("global-stock", message);
 
                 return (new BloodBagDTO
                 {

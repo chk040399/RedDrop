@@ -124,7 +124,7 @@ namespace Application.Features.BloodRequests.Handlers
                             request.DueDate
                         );
                         
-                        await _eventProducer.ProduceAsync(topic, updateRequestEvent);
+                        await _eventProducer.ProduceAsync("update-request", updateRequestEvent);
                         _logger.LogInformation("Request updated and event published successfully");
                     }
                     else

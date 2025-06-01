@@ -1,5 +1,4 @@
-﻿
-using Application.Interfaces;
+﻿using Application.Interfaces;
 using MediatR;
 // Infrastructure/ExternalServices/Kafka/TopicDispatcher.cs
 namespace Infrastructure.ExternalServices
@@ -8,7 +7,8 @@ namespace Infrastructure.ExternalServices
     private readonly Dictionary<string, Type> _handlerRegistry = new();
     private readonly Dictionary<string, Type> _messageRegistry = new();
 
-    public void Register<TCommand>(string topic) where TCommand : IRequest
+    /// <inheritdoc/>
+    void ITopicDispatcher.Register<TCommand>(string topic)
     {
         var commandType = typeof(TCommand);
         var messageType = commandType
@@ -17,6 +17,24 @@ namespace Infrastructure.ExternalServices
             .GetParameters()
             .First()
             .ParameterType;
+
+        _handlerRegistry[topic] = commandType;
+        _messageRegistry[topic] = messageType;
+    }
+
+    public void RegisterDonorPledge(string topic)
+    {
+        var commandType = typeof(Application.Features.EventHandling.Commands.DonorPledgeCommand);
+        var messageType = typeof(Domain.Events.DonorPledgeEvent);
+
+        _handlerRegistry[topic] = commandType;
+        _messageRegistry[topic] = messageType;
+    }
+
+    public void RegisterPledgeCanceled(string topic)
+    {
+        var commandType = typeof(Application.Features.EventHandling.Commands.PledgeCanceledCommand);
+        var messageType = typeof(Domain.Events.PledgeCanceledEvent);
 
         _handlerRegistry[topic] = commandType;
         _messageRegistry[topic] = messageType;
