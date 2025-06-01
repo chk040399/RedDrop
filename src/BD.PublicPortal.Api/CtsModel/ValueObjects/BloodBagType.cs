@@ -28,26 +28,20 @@ namespace BD.PublicPortal.Api.CtsModel.ValueObjects;
 
       public override bool Equals(object? obj)
       {
-          if (obj is BloodBagType other)
-          {
-              return Value.Equals(other.Value, StringComparison.OrdinalIgnoreCase);
-          }
-          return false;
+        if (obj is BloodBagType other)
+        {
+          return Value.Equals(other.Value, StringComparison.OrdinalIgnoreCase);
+        }
+
+        return false;
       }
-         public static BloodBagType FromEnum(BloodDonationType donationType) => donationType switch
-    {
-        BloodDonationType.WholeBlood => Blood(),
-        BloodDonationType.Plasma => Plasma(),
-        BloodDonationType.Platelet => Plaquette(),
-       
-        _ => throw new ArgumentException($"Unsupported donation type: {donationType}", nameof(donationType))
-    };
-     public BloodDonationType ToEnum() => Value.ToLowerInvariant() switch
+
+      public static BloodDonationType ToEnum(string val) => val switch
     {
         "whole_blood" => BloodDonationType.WholeBlood,
         "plasma" => BloodDonationType.Plasma,
         "platelets" => BloodDonationType.Platelet,
-        _ => throw new ArgumentException($"Cannot convert {Value} to BloodDonationType")
+        _ => throw new ArgumentException($"Cannot convert {val} to BloodDonationType")
     };
 
       public override int GetHashCode() => Value.ToLowerInvariant().GetHashCode();

@@ -49,7 +49,7 @@ public class BloodType
     };
 
     // New method: Convert from BloodType to enum
-    public BloodGroup ToEnum() => Value.ToUpperInvariant() switch
+    public static BloodGroup ToEnum(string val) => val.ToUpperInvariant() switch
     {
         "A-" => BloodGroup.A_NEGATIVE,
         "A+" => BloodGroup.A_POSITIVE,
@@ -59,7 +59,7 @@ public class BloodType
         "AB+" => BloodGroup.AB_POSITIVE,
         "O-" => BloodGroup.O_NEGATIVE,
         "O+" => BloodGroup.O_POSITIVE,
-        _ => throw new ArgumentException($"Cannot convert {Value} to BloodGroup")
+        _ => throw new ArgumentException($"Cannot convert {val} to BloodGroup")
     };
     
     public override bool Equals(object? obj)

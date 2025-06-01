@@ -7,6 +7,7 @@ namespace BD.PublicPortal.Core.DTOs
 
     public partial class BloodDonationRequestDTO
     {
+        
         #region Constructors
 
         public BloodDonationRequestDTO() {

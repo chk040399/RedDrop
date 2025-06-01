@@ -39,10 +39,11 @@ public class KafkaConsumerBackgroundService : BackgroundService
           if (result != null)
           {
             _logger.LogInformation("Received message on topic {Topic}: {Value}", result.Topic, result.Message.Value);
+            using var scope = _scopeFactory.CreateScope();
 
             if (result.Topic == "cts-init")
             {
-              using var scope = _scopeFactory.CreateScope();
+              
               var repo = scope.ServiceProvider.GetRequiredService<IRepository<BloodTansfusionCenter>>();
 
               var ctsData = CtsData.FromJson(result.Message.Value);
@@ -64,6 +65,23 @@ public class KafkaConsumerBackgroundService : BackgroundService
             }
             else if (result.Topic == "blood-request-created")
             {
+              var repo = scope.ServiceProvider.GetRequiredService<IRepository<BloodDonationRequest>>();
+              var rce = RequestCreatedEvent.FromJson(result.Message.Value);
+              if (rce != null)
+              {
+                var reqDto = rce.ToDto();
+                var ctsEntity = await repo.GetByIdAsync(reqDto.Id);
+                if (ctsEntity == null)
+                {
+                  _logger.LogInformation("!!! KAFKA : creating Blood request");
+                  var created = await repo.AddAsync(reqDto.ToEntity(), stoppingToken);
+                  _logger.LogInformation($"!!! KAFKA : Request created :{created.Id}");
+                }
+              }
+              else
+              {
+                _logger.LogError($"!!! KAFKA : creating BTC, Can't deserialize: {result.Message.Value}");
+              }
 
             }
             else if (result.Topic == "update-request")
