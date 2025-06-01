@@ -13,140 +13,165 @@ namespace Infrastructure.Persistence
             try
             {
                 using var scope = serviceProvider.CreateScope();
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                
-                // Get logger using factory instead of generic logger
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 var loggerFactory = scope.ServiceProvider.GetRequiredService<ILoggerFactory>();
                 var logger = loggerFactory.CreateLogger("DatabaseSeeder");
                 
-                // Fix for the PostgreSQL subquery constraint issue
-                try
+                // Check if database exists
+                bool dbExists = await db.Database.CanConnectAsync();
+                
+                if (!dbExists)
                 {
-                    await context.Database.ExecuteSqlRawAsync(@"
-                        ALTER TABLE ""BloodTransferCenters"" DROP CONSTRAINT IF EXISTS ""CK_SingleBloodTransferCenter"";
-                        
-                        DO $$ 
-                        BEGIN
-                            IF NOT EXISTS (SELECT 1 FROM information_schema.columns 
-                                          WHERE table_name = 'BloodTransferCenters' 
-                                          AND column_name = 'SingletonCheck') THEN
-                                ALTER TABLE ""BloodTransferCenters"" ADD COLUMN ""SingletonCheck"" INTEGER NOT NULL DEFAULT 1;
-                            END IF;
-                        END $$;
-                        
-                        DO $$
-                        BEGIN
-                            IF NOT EXISTS (SELECT 1 FROM pg_indexes 
-                                          WHERE tablename = 'BloodTransferCenters' 
-                                          AND indexname = 'IX_BloodTransferCenters_SingletonCheck') THEN
-                                CREATE UNIQUE INDEX ""IX_BloodTransferCenters_SingletonCheck"" ON ""BloodTransferCenters"" (""SingletonCheck"");
-                            END IF;
-                        END $$;
-                    ");
+                    logger.LogInformation("Database does not exist. Creating database...");
+                    await db.Database.EnsureCreatedAsync();
                 }
-                catch (Exception ex)
+                else
                 {
-                    // Use logger instead of Console.WriteLine
-                    logger.LogWarning($"Constraint fix failed: {ex.Message}");
+                    // Check if tables exist by trying a simple query
+                    try
+                    {
+                        // Try a simple query to check if tables exist
+                        await db.Database.ExecuteSqlRawAsync("SELECT 1 FROM \"Users\" LIMIT 1");
+                        logger.LogInformation("Database schema verified.");
+                    }
+                    catch (Npgsql.PostgresException ex) when (ex.SqlState == "42P01") // 42P01 = relation does not exist
+                    {
+                        // Tables don't exist, create them
+                        logger.LogWarning("Tables don't exist. Creating database schema...");
+                        await db.Database.EnsureCreatedAsync();
+                    }
                 }
                 
-                // Continue with migrations
-                await context.Database.MigrateAsync();
-
-                // Fix: Load all users first and then check in memory
-                var anyAdminExists = await context.Users
-                    .AsNoTracking()  // For better performance since we're just reading
-                    .ToListAsync()    // Get all users (this moves processing to client side)
-                    .ContinueWith(t => t.Result.Any(u => u.Role.Role == UserRole.Admin().Role));
-
-                if (!anyAdminExists)
-                {
-                    logger.LogInformation("Seeding admin user...");
-                    var adminUser = new User(
-                        name: "Admin",
-                        email: "admin@hsts.com",
-                        password: "Admin123!", // In a real app, this would be hashed
-                        role: UserRole.Admin(),
-                        dateOfBirth: new DateTime(1990, 1, 1, 0, 0, 0, DateTimeKind.Utc), // Fix: Specify UTC DateTime
-                        phoneNumber: "0000000000",
-                        address: "Admin Address"
-                    );
-
-                    context.Users.Add(adminUser);
-                    await context.SaveChangesAsync();
-                    logger.LogInformation("Admin user seeded successfully");
-                }
-
-                // Additional seeding can be added here
-                var anyWilayasExist = await context.Wilayas.AsNoTracking().AnyAsync();
-                if (!anyWilayasExist)
-                {
-                  context.Wilayas.Add(new Wilaya(1, "Adrar"));
-                  context.Wilayas.Add(new Wilaya(2, "Chlef"));
-                  context.Wilayas.Add(new Wilaya(3, "Laghouat"));
-                  context.Wilayas.Add(new Wilaya(4, "Oum El Bouaghi"));
-                  context.Wilayas.Add(new Wilaya(5, "Batna"));
-                  context.Wilayas.Add(new Wilaya(6, "Béjaïa"));
-                  context.Wilayas.Add(new Wilaya(7, "Biskra"));
-                  context.Wilayas.Add(new Wilaya(8, "Béchar"));
-                  context.Wilayas.Add(new Wilaya(9, "Blida"));
-                  context.Wilayas.Add(new Wilaya(10, "Bouira"));
-                  context.Wilayas.Add(new Wilaya(11, "Tamanrasset"));
-                  context.Wilayas.Add(new Wilaya(12, "Tébessa"));
-                  context.Wilayas.Add(new Wilaya(13, "Tlemcen"));
-                  context.Wilayas.Add(new Wilaya(14, "Tiaret"));
-                  context.Wilayas.Add(new Wilaya(15, "Tizi Ouzou"));
-                  context.Wilayas.Add(new Wilaya(16, "Alger"));
-                  context.Wilayas.Add(new Wilaya(17, "Djelfa"));
-                  context.Wilayas.Add(new Wilaya(18, "Jijel"));
-                  context.Wilayas.Add(new Wilaya(19, "Sétif"));
-                  context.Wilayas.Add(new Wilaya(20, "Saïda"));
-                  context.Wilayas.Add(new Wilaya(21, "Skikda"));
-                  context.Wilayas.Add(new Wilaya(22, "Sidi Bel Abbès"));
-                  context.Wilayas.Add(new Wilaya(23, "Annaba"));
-                  context.Wilayas.Add(new Wilaya(24, "Guelma"));
-                  context.Wilayas.Add(new Wilaya(25, "Constantine"));
-                  context.Wilayas.Add(new Wilaya(26, "Médéa"));
-                  context.Wilayas.Add(new Wilaya(27, "Mostaganem"));
-                  context.Wilayas.Add(new Wilaya(28, "M'Sila"));
-                  context.Wilayas.Add(new Wilaya(29, "Mascara"));
-                  context.Wilayas.Add(new Wilaya(30, "Ouargla"));
-                  context.Wilayas.Add(new Wilaya(31, "Oran"));
-                  context.Wilayas.Add(new Wilaya(32, "El Bayadh"));
-                  context.Wilayas.Add(new Wilaya(33, "Illizi"));
-                  context.Wilayas.Add(new Wilaya(34, "Bordj Bou Arreridj"));
-                  context.Wilayas.Add(new Wilaya(35, "Boumerdès"));
-                  context.Wilayas.Add(new Wilaya(36, "El Tarf"));
-                  context.Wilayas.Add(new Wilaya(37, "Tindouf"));
-                  context.Wilayas.Add(new Wilaya(38, "Tissemsilt"));
-                  context.Wilayas.Add(new Wilaya(39, "El Oued"));
-                  context.Wilayas.Add(new Wilaya(40, "Khenchela"));
-                  context.Wilayas.Add(new Wilaya(41, "Souk Ahras"));
-                  context.Wilayas.Add(new Wilaya(42, "Tipaza"));
-                  context.Wilayas.Add(new Wilaya(43, "Mila"));
-                  context.Wilayas.Add(new Wilaya(44, "Aïn Defla"));
-                  context.Wilayas.Add(new Wilaya(45, "Naâma"));
-                  context.Wilayas.Add(new Wilaya(46, "Aïn Témouchent"));
-                  context.Wilayas.Add(new Wilaya(47, "Ghardaïa"));
-                  context.Wilayas.Add(new Wilaya(48, "Relizane"));
-                  context.Wilayas.Add(new Wilaya(49, "Timimoun"));
-                  context.Wilayas.Add(new Wilaya(50, "Bordj Badji Mokhtar"));
-                  context.Wilayas.Add(new Wilaya(51, "Ouled Djellal"));
-                  context.Wilayas.Add(new Wilaya(52, "Béni Abbès"));
-                  context.Wilayas.Add(new Wilaya(53, "In Salah"));
-                  context.Wilayas.Add(new Wilaya(54, "In Guezzam"));
-                  context.Wilayas.Add(new Wilaya(55, "Touggourt"));
-                  context.Wilayas.Add(new Wilaya(56, "Djanet"));
-                  context.Wilayas.Add(new Wilaya(57, "El Meghaier"));
-                  context.Wilayas.Add(new Wilaya(58, "El Menia"));
-                  await context.SaveChangesAsync();
-                  logger.LogInformation("Wilayas seeded successfully");
-        }
+                // Continue with seeding (after tables exist)
+                await SeedUsers(db, logger);
+                await SeedWilayas(db, logger);
+                
+                logger.LogInformation("Database seeding completed successfully");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Fatal error during database seeding: {ex.Message}");
                 throw;
+            }
+        }
+
+        private static async Task SeedUsers(ApplicationDbContext db, ILogger logger)
+        {
+            // Check if any admin exists - using a simpler query that can be translated
+            bool anyAdminExists = false;
+            try
+            {
+                // Use string comparison instead of value object comparison
+                anyAdminExists = await db.Users.AnyAsync(u => u.Email == "admin@hsts.com");
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning($"Error checking for admin users: {ex.Message}");
+            }
+
+            if (!anyAdminExists)
+            {
+                logger.LogInformation("Seeding admin user...");
+                try
+                {
+                    var adminUser = new User(
+                        name: "Admin",
+                        email: "admin@hsts.com",
+                        password: "Admin123!",
+                        role: UserRole.Admin(),
+                        dateOfBirth: new DateTime(1990, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                        phoneNumber: "0000000000",
+                        address: "Admin Address"
+                    );
+
+                    db.Users.Add(adminUser);
+                    await db.SaveChangesAsync();
+                    logger.LogInformation("Admin user seeded successfully");
+                }
+                catch (DbUpdateException ex) when (ex.InnerException is Npgsql.PostgresException npgEx && npgEx.SqlState == "23505")
+                {
+                    // Handle the case where admin already exists (unique constraint violation)
+                    logger.LogInformation("Admin user already exists (detected duplicate key)");
+                }
+            }
+        }
+
+        private static async Task SeedWilayas(ApplicationDbContext db, ILogger logger)
+        {
+            // Check if any wilayas exist
+            bool anyWilayasExist = false;
+            try
+            {
+                anyWilayasExist = await db.Wilayas.AnyAsync();
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning($"Error checking for wilayas: {ex.Message}");
+            }
+
+            if (!anyWilayasExist)
+            {
+                // Add all wilayas (your existing code)
+                db.Wilayas.Add(new Wilaya(1, "Adrar"));
+                db.Wilayas.Add(new Wilaya(2, "Chlef"));
+                db.Wilayas.Add(new Wilaya(3, "Laghouat"));
+                db.Wilayas.Add(new Wilaya(4, "Oum El Bouaghi"));
+                db.Wilayas.Add(new Wilaya(5, "Batna"));
+                db.Wilayas.Add(new Wilaya(6, "Béjaïa"));
+                db.Wilayas.Add(new Wilaya(7, "Biskra"));
+                db.Wilayas.Add(new Wilaya(8, "Béchar"));
+                db.Wilayas.Add(new Wilaya(9, "Blida"));
+                db.Wilayas.Add(new Wilaya(10, "Bouira"));
+                db.Wilayas.Add(new Wilaya(11, "Tamanrasset"));
+                db.Wilayas.Add(new Wilaya(12, "Tébessa"));
+                db.Wilayas.Add(new Wilaya(13, "Tlemcen"));
+                db.Wilayas.Add(new Wilaya(14, "Tiaret"));
+                db.Wilayas.Add(new Wilaya(15, "Tizi Ouzou"));
+                db.Wilayas.Add(new Wilaya(16, "Alger"));
+                db.Wilayas.Add(new Wilaya(17, "Djelfa"));
+                db.Wilayas.Add(new Wilaya(18, "Jijel"));
+                db.Wilayas.Add(new Wilaya(19, "Sétif"));
+                db.Wilayas.Add(new Wilaya(20, "Saïda"));
+                db.Wilayas.Add(new Wilaya(21, "Skikda"));
+                db.Wilayas.Add(new Wilaya(22, "Sidi Bel Abbès"));
+                db.Wilayas.Add(new Wilaya(23, "Annaba"));
+                db.Wilayas.Add(new Wilaya(24, "Guelma"));
+                db.Wilayas.Add(new Wilaya(25, "Constantine"));
+                db.Wilayas.Add(new Wilaya(26, "Médéa"));
+                db.Wilayas.Add(new Wilaya(27, "Mostaganem"));
+                db.Wilayas.Add(new Wilaya(28, "M'Sila"));
+                db.Wilayas.Add(new Wilaya(29, "Mascara"));
+                db.Wilayas.Add(new Wilaya(30, "Ouargla"));
+                db.Wilayas.Add(new Wilaya(31, "Oran"));
+                db.Wilayas.Add(new Wilaya(32, "El Bayadh"));
+                db.Wilayas.Add(new Wilaya(33, "Illizi"));
+                db.Wilayas.Add(new Wilaya(34, "Bordj Bou Arreridj"));
+                db.Wilayas.Add(new Wilaya(35, "Boumerdès"));
+                db.Wilayas.Add(new Wilaya(36, "El Tarf"));
+                db.Wilayas.Add(new Wilaya(37, "Tindouf"));
+                db.Wilayas.Add(new Wilaya(38, "Tissemsilt"));
+                db.Wilayas.Add(new Wilaya(39, "El Oued"));
+                db.Wilayas.Add(new Wilaya(40, "Khenchela"));
+                db.Wilayas.Add(new Wilaya(41, "Souk Ahras"));
+                db.Wilayas.Add(new Wilaya(42, "Tipaza"));
+                db.Wilayas.Add(new Wilaya(43, "Mila"));
+                db.Wilayas.Add(new Wilaya(44, "Aïn Defla"));
+                db.Wilayas.Add(new Wilaya(45, "Naâma"));
+                db.Wilayas.Add(new Wilaya(46, "Aïn Témouchent"));
+                db.Wilayas.Add(new Wilaya(47, "Ghardaïa"));
+                db.Wilayas.Add(new Wilaya(48, "Relizane"));
+                db.Wilayas.Add(new Wilaya(49, "Timimoun"));
+                db.Wilayas.Add(new Wilaya(50, "Bordj Badji Mokhtar"));
+                db.Wilayas.Add(new Wilaya(51, "Ouled Djellal"));
+                db.Wilayas.Add(new Wilaya(52, "Béni Abbès"));
+                db.Wilayas.Add(new Wilaya(53, "In Salah"));
+                db.Wilayas.Add(new Wilaya(54, "In Guezzam"));
+                db.Wilayas.Add(new Wilaya(55, "Touggourt"));
+                db.Wilayas.Add(new Wilaya(56, "Djanet"));
+                db.Wilayas.Add(new Wilaya(57, "El Meghaier"));
+                db.Wilayas.Add(new Wilaya(58, "El Menia"));
+                await db.SaveChangesAsync();
+                logger.LogInformation("Wilayas seeded successfully");
             }
         }
     }

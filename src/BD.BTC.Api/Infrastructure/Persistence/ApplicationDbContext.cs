@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
- // Ensure this namespace matches the location of your domain entities
 
 namespace Infrastructure.Persistence
 {
@@ -15,15 +14,15 @@ namespace Infrastructure.Persistence
 
         // Define DbSets for each entity. These correspond to tables in the database.
         public DbSet<User> Users { get; set; }
-        public DbSet<Donor> Donors { get; set; } // Renamed to reflect entity name
-        public DbSet<BloodBag> BloodBags { get; set; } // Renamed to reflect entity name
+        public DbSet<Donor> Donors { get; set; }
+        public DbSet<BloodBag> BloodBags { get; set; }
         public DbSet<GlobalStock> GlobalStocks { get; set; }
         public DbSet<Service> Services { get; set; }
         public DbSet<Request> Requests { get; set; }
         public DbSet<Commune> Communes { get; set; }
         public DbSet<Wilaya> Wilayas { get; set; }
-        public DbSet<DonorPledge> Pledges { get; set; } // Renamed to reflect entity name
-        public DbSet<BloodTransferCenter> BloodTransferCenters { get; set; } // Added DbSet for BloodTransferCenter
+        public DbSet<DonorPledge> Pledges { get; set; }
+        public DbSet<BloodTransferCenter> BloodTransferCenters { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<PushSubscription> PushSubscriptions { get; set; }
 
