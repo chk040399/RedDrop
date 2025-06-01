@@ -1,0 +1,45 @@
+﻿#nullable disable
+
+using BD;
+
+namespace BD.Central.Core.Entities
+{
+    public partial class BloodTansfusionCenter : EntityBase<Guid>, IAggregateRoot {
+
+        public BloodTansfusionCenter()
+        {
+      DonorBloodTransferCenterSubscriptions = new List<DonorBloodTransferCenterSubscriptions>();
+      BloodDonationRequests = new List<BloodDonationRequest>();
+            OnCreated();
+        }
+
+
+        public string Name { get; set; }
+
+        public string Address { get; set; }
+
+        public string Contact { get; set; }
+
+        public string Email { get; set; }
+
+        public string Tel { get; set; }
+
+        public int WilayaId { get; set; }
+
+        public virtual IList<DonorBloodTransferCenterSubscriptions> DonorBloodTransferCenterSubscriptions { get; set; }
+
+        public virtual IList<BloodDonationRequest> BloodDonationRequests { get; set; }
+
+        public virtual Wilaya Wilaya { get; set; }
+
+
+        public virtual IList<BloodInventory> BloodInventories { get; set; }
+
+        #region Extensibility Method Definitions
+
+        partial void OnCreated();
+
+        #endregion
+    }
+
+}

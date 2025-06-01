@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.Result" />
+    <PackageReference Include="MediatR" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Identity\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BD.Central.Core\BD.Central.Core.csproj" />
+    <ProjectReference Include="..\BD.Central.Infrastructure\BD.Central.Infrastructure.csproj" />
+  </ItemGroup>
+
+</Project>

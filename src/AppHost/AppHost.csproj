@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BD.BTC.Api\HSTS-Back.csproj" />
+    <ProjectReference Include="..\BD.Central.Api\BD.Central.Api.csproj" />
     <ProjectReference Include="..\BD.PublicPortal.Api\BD.PublicPortal.Api.csproj" />
   </ItemGroup>
 

@@ -1,0 +1,85 @@
+﻿using System.Runtime.CompilerServices;
+using Ardalis.ListStartupServices;
+using BD.Central.Core.Entities;
+using BD.Central.Infrastructure.Data;
+using BD.Central.Infrastructure.Data.SeedData;
+
+namespace BD.Central.Api.Configurations;
+
+public static class MiddlewareConfig
+{
+  public static async Task<IApplicationBuilder> UseAppMiddlewareAndSeedDatabase(this WebApplication app)
+  {
+    if (app.Environment.IsDevelopment())
+    {
+      app.UseDeveloperExceptionPage();
+      app.UseShowAllServicesMiddleware(); // see https://github.com/ardalis/AspNetCoreStartupServices
+    }
+    else
+    {
+      app.UseDefaultExceptionHandler(); // from FastEndpoints
+      app.UseHsts();
+    }
+
+    app.UseAuthentication();
+    app.UseAuthorization();
+    
+    // Auto Id Endpoints removed for now
+    //app.MapGroup("/auth").WithTags("Identity").MapIdentityApi<MyIdUser>();
+
+    app.MapDefaultEndpoints();// ASPIRE
+
+    app.UseFastEndpoints(
+      c =>
+      {
+        // TODO: fixed this
+        // c.Endpoints.RoutePrefix = "api"; 
+        // Includes AddFileServer and static files middleware
+        c.Errors.UseProblemDetails(
+          x =>
+          {
+            x.AllowDuplicateErrors = true; //allows duplicate errors for the same error name
+            x.IndicateErrorCode = true; //serializes the fluentvalidation error code
+            x.IndicateErrorSeverity = true; //serializes the fluentvalidation error severity
+            x.TypeValue = "https://www.rfc-editor.org/rfc/rfc7231#section-6.5.1";
+            x.TitleValue = "One or more validation errors occurred.";
+            x.TitleTransformer = pd => pd.Status switch
+            {
+              400 => "Validation Error",
+              404 => "Not Found",
+              _ => "One or more errors occurred!"
+            };
+          });
+      }).UseSwaggerGen(); // Includes AddFileServer and static files middleware
+
+    app.UseHttpsRedirection(); // Note this will drop Authorization headers
+
+    app.UseCors("AllowAll");
+
+    await SeedDatabase(app);
+
+    return app;
+  }
+
+  static Task SeedDatabase(WebApplication app)
+  {
+    return Task.CompletedTask;
+    
+    // Temporary DISABLED
+    //using var scope = app.Services.CreateScope();
+    //var services = scope.ServiceProvider;
+
+    //try
+    //{
+    //  var context = services.GetRequiredService<AppDbContext>();
+    //  //          context.Database.Migrate();
+    //  context.Database.EnsureCreated();
+    //  await ContributorsSeedData.InitializeAsync(context);
+    //}
+    //catch (Exception ex)
+    //{
+    //  var logger = services.GetRequiredService<ILogger<Program>>();
+    //  logger.LogError(ex, "An error occurred seeding the DB. {exceptionMessage}", ex.Message);
+    //}
+  }
+}
