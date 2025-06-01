@@ -401,3 +401,4 @@ FodyWeavers.xsd
 *.sln.iml
 src/BD.PublicPortal.Api/log*.txt
 src/BD.Central.Api/log*.txt
+src/BD.Central.Api/log*.txt
