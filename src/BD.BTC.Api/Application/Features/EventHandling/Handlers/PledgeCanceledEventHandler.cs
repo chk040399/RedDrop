@@ -51,7 +51,7 @@ namespace Application.Features.EventHandling.Handlers
             {
                 // If PledgeDate is provided, only update the date
                 _logger.LogInformation("Updating pledge date to: {PledgeDate}", payload.PledgeDate.Value);
-                pledge.PledgeDate = payload.PledgeDate.Value;
+                pledge.PledgeDate = new DateTime(payload.PledgeDate.Value.Year, payload.PledgeDate.Value.Month, payload.PledgeDate.Value.Day);
             }
             else
             {

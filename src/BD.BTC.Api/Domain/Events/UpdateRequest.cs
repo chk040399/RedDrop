@@ -8,7 +8,6 @@ namespace Domain.Events
             Guid hospitalId,
             Guid requestId,
             int? requiredQty,
-            string? priority = null,
             BloodDonationRequestEvolutionStatus? status = null,
             int? acquiredQty = null,
             BloodDonationRequestPriority? priorityEnum = null,
@@ -22,7 +21,8 @@ namespace Domain.Events
             RequiredQty = requiredQty;
             DueDate = dueDate;
         }
-        Guid HospitalId { get; set; }
+        public Guid HospitalId { get; set; }
+        
         public Guid RequestId { get; }
         public BloodDonationRequestPriority? Priority { get; }
         public int? AcquiredQty { get; }

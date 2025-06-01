@@ -54,7 +54,7 @@ namespace Application.Features.PledgeManagement.Handlers
                         DonorName = donor?.Name ?? "Unknown",
                         RequestId = pledge.RequestId,
                         BloodType = pledge.Request?.BloodType?.Value ?? "Unknown",
-                        PledgeDate = pledge.PledgeDate,
+                        PledgeDate = pledge.PledgeDate.HasValue ? DateOnly.FromDateTime(pledge.PledgeDate.Value) : DateOnly.MinValue,
                         Status = pledge.Status.Value
                     });
                 }
