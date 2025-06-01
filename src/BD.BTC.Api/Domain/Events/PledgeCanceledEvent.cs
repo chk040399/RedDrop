@@ -4,6 +4,7 @@ namespace Domain.Events
 {
     public record PledgeCanceledEvent(
         Guid DonorId,
-        Guid RequestId
+        Guid RequestId,
+        DateOnly? PledgeDate
     );
 }

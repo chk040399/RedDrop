@@ -18,6 +18,8 @@ namespace Domain.ValueObjects
         public static PledgeStatus Pledged => _statuses["Pledged"];
         public static PledgeStatus Fulfilled => _statuses["Fulfilled"];
         public static PledgeStatus Canceled => _statuses["Canceled"];
+        public static PledgeStatus Rejected => _statuses["Rejected"];
+        public static PledgeStatus Expired => _statuses["Expired"];   
 
         public string Value { get; }
 

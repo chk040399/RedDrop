@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Domain.Events;
 using Shared.Exceptions;
 using Application.Interfaces;
+using BD.BTC.Api.Converters;
 
 namespace Application.Features.BloodRequests.Handlers
 {
@@ -86,12 +87,12 @@ namespace Application.Features.BloodRequests.Handlers
                 var message = new RequestCreatedEvent(
                     bloodCenter?.Id ?? Guid.Empty, // Use center ID or empty GUID if not found
                     newRequest.Id,
-                    newRequest.BloodType,
-                    newRequest.Priority,
-                    newRequest.BloodBagType,
+                    BloodGroupConverter.ToEnum(newRequest.BloodType),
+                    PriorityConverter.ToEnum(newRequest.Priority),
+                    BloodBagTypeConverter.ToEnum(newRequest.BloodBagType),
                     newRequest.RequestDate,
                     newRequest.DueDate,
-                    newRequest.Status,
+                    RequestStatusConverter.ToEnum(newRequest.Status),
                     newRequest.MoreDetails,
                     newRequest.RequiredQty,
                     newRequest.AquiredQty,

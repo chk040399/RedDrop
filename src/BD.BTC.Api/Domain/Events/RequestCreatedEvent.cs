@@ -1,18 +1,28 @@
-﻿using Domain.Entities;
-using Domain.ValueObjects;
-
+﻿using BD.PublicPortal.Core.Entities.Enums;
 
 namespace Domain.Events
 {
     public class RequestCreatedEvent
     {
-        public RequestCreatedEvent(Guid hospitalId,Guid id, BloodType bloodType, Priority priority, BloodBagType bloodBagType, DateOnly requestDate, DateOnly? dueDate, RequestStatus status, string? moreDetails, int requiredQty, int aquiredQty, string name)
+        public RequestCreatedEvent(
+            Guid hospitalId,
+            Guid id, 
+            BloodGroup bloodGroup, 
+            BloodDonationRequestPriority priority, 
+            BloodDonationType donationType, 
+            DateOnly requestDate, 
+            DateOnly? dueDate, 
+            BloodDonationRequestEvolutionStatus status, 
+            string? moreDetails, 
+            int requiredQty, 
+            int aquiredQty, 
+            string name)
         {
             HospitalId = hospitalId;
             Id = id;
-            BloodType = bloodType;
+            BloodGroup = bloodGroup;
             Priority = priority;
-            BloodBagType = bloodBagType;
+            DonationType = donationType;
             RequestDate = requestDate;
             DueDate = dueDate;
             Status = status;
@@ -23,16 +33,15 @@ namespace Domain.Events
         }
         public Guid HospitalId { get; set; }
         public Guid Id { get; set; }
-        public BloodType BloodType { get; set; }
-        public Priority Priority { get; set; }
-        public BloodBagType BloodBagType { get; set; }
+        public BloodGroup BloodGroup { get; set; } // Changed from BloodType
+        public BloodDonationRequestPriority Priority { get; set; } // Changed from Priority
+        public BloodDonationType DonationType { get; set; } // Changed from BloodBagType
         public DateOnly RequestDate { get; set; }
         public DateOnly? DueDate { get; set; }
-        public RequestStatus Status { get; set; }
+        public BloodDonationRequestEvolutionStatus Status { get; set; } // Changed from RequestStatus
         public string? MoreDetails { get; set; }
         public int RequiredQty { get; set; }
         public int AquiredQty { get; set; }
-        public string?  ServiceName { get; set; }
-        
+        public string? ServiceName { get; set; }
     }
 }

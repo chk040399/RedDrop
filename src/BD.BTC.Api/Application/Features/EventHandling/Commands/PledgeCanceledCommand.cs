@@ -1,15 +1,15 @@
-﻿using MediatR;
-using Domain.Events;
+﻿using Domain.Events;
+using MediatR;
 
 namespace Application.Features.EventHandling.Commands
 {
     public class PledgeCanceledCommand : IRequest<Unit>
     {
-        public PledgeCanceledEvent Payload { get; }
+        public PledgeCanceledEvent Event { get; }
 
-        public PledgeCanceledCommand(PledgeCanceledEvent payload)
+        public PledgeCanceledCommand(PledgeCanceledEvent @event)
         {
-            Payload = payload;
+            Event = @event;
         }
     }
 }
